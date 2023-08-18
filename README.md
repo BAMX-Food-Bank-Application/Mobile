@@ -21,9 +21,9 @@ The mobile app is aimed for two types of users: Providers and BAMX volunteers/dr
     - Expiration date
     - Any additional information
 
-These proposals structure will ensure accurate donation standards, and will make it easier for the BAMX administrators to decide whether to accept the proposal or not.
+    These proposals structure will ensure accurate donation standards, and will make it easier for the BAMX administrators to decide whether to accept the proposal or not.
 
- Providers are also able to track the progress of each of their current proposals, notifying them on their status.
+    Providers are also able to track the progress of each of their current proposals, notifying them on their status.
 
 - __Scheduled Pick-ups__: Should a given proposal be accepted, providers will recieve a confirmation order stating pick-up date and time details.
 
