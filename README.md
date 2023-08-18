@@ -42,4 +42,5 @@ In addition to the mobile app, there will also be a web page aimed for the BAMX 
 
 ## Additional Information
 Check out our [Figma](https://www.figma.com/file/5oSU2v4PJvEKnWpgKa5u4r/Mobile-Design?type=design&node-id=215-128&mode=design&t=PTZ7YHq3hnEneuat-0)!
+
 Link to our [Jira](https://juanjosalco.atlassian.net/jira/software/projects/TC2007B/boards/1)
