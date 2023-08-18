@@ -41,6 +41,6 @@ The mobile app is aimed for two types of users: Providers and BAMX volunteers/dr
 In addition to the mobile app, there will also be a web page aimed for the BAMX administrators. In this web page, BAMX can recieve all the donation proposals from any provider, evaluate them and decide whether they should accept or deny them (depending on aspects such as the expiration date of the product). The BAMX admin will also be able to visualize through the web page the current and future pick-up schedules and a possible route to gather all the corresponding products in an efficient way. However it is up to BAMX wether to follow these routes, or perform their own. 
 
 ## Additional Information
-Check out our [Figma](https://www.figma.com/file/5oSU2v4PJvEKnWpgKa5u4r/Mobile-Design?type=design&node-id=215-128&mode=design&t=PTZ7YHq3hnEneuat-0)!
+Check out our [Figma](https://www.figma.com/file/5oSU2v4PJvEKnWpgKa5u4r/Mobile-Design?type=design&node-id=215%3A128&mode=design&t=yOainrZwURZPwvTA-1)!
 
 Link to our [Jira](https://juanjosalco.atlassian.net/jira/software/projects/TC2007B/boards/1)
