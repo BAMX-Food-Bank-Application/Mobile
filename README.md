@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Welcome to our BAMX Logistics Management proposal (final name pending). This app is designed with the purpose of enhancing and streamlining the interaction between BAMX and its commercial donators (providers). 
+Welcome to our BAMX proposal (final name pending). This app is designed with the purpose of enhancing and streamlining the interaction between BAMX and its commercial donators (providers). 
 
-This app intends to help with the logistics behind the food bank, as well as the other associated BAMX services, such as the clothing and medicine bank, managing tasks such as donation cargos, shipments, routes, and inventory.
+This app intends to help with associated BAMX services, such as the clothing and medicine bank, managing tasks such as donation cargos, shipments, routes, and inventory.
 
 With this app, BAMX will ensure the timely notification, transportation, collection, and management of donations and goods.
 
