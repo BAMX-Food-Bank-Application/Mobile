@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1043818646012",
+    "project_id": "bamx-cc64f",
+    "storage_bucket": "bamx-cc64f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043818646012:android:ae6a992b5b025882154a79",
+        "android_client_info": {
+          "package_name": "com.foodbankapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1043818646012-0gij2sjpb54cgdruo8meqliqkfp5161d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foodbankapp",
+            "certificate_hash": "1c9e2ff894ccc66ac53e302c6d2c9acb494a7b64"
+          }
+        },
+        {
+          "client_id": "1043818646012-u98eiorintrvsnehmeg5hcvr75et7u3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa9jRMJZwGdgs_lH3fUm-fNF3TjwSnBjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1043818646012-d81ik779lpb8tcvq06v07p4tlcjol731.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
