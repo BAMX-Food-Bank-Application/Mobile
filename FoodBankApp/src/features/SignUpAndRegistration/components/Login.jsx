@@ -18,13 +18,12 @@ const Login = () => {
       colors={['#f3b246', '#e01e40']}
       style={styles.linearGradient}>
       <View style={styles.screen}>
-        <View style={{alignItems: 'center', display: 'flex'}}>
+        <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
           <Image
             source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=cb9d7322-205e-448f-9288-24e81fe46bf5'}}
             style={styles.logo}
           />
           <TextInput
-            inlineImageLeft = {{uri:'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcorreo.png?alt=media&token=59f6425b-3305-4f4d-91a2-847e83610de8'}}
             placeholder="Email"
             style={isFocused ? styles.inputFocused : styles.input}
             onFocus={() => {
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 2,
     borderColor: '#EFEFEF',
+    paddingHorizontal: 24,
   },
   inputFocused: {
     width: '100%',
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(67, 58, 194, .5)',
     borderStyle: 'solid',
     borderRadius: 25,
+    paddingHorizontal: 24,
   },
   button: {
     flex: 1,
@@ -104,6 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     textAlign: 'center',
     marginTop: 20,
+    marginHorizontal: 32,
   },
   logo: {
     width: 300,

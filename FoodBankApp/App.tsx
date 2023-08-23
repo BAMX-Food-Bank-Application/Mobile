@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import Login from './src/features/SignUp/components/Login';
+import Login from './src/features/SignUpAndRegistration/components/Login';
+import Registration from './src/features/SignUpAndRegistration/components/Registration';
 
 const App = () => {
   return(
-    <Login></Login>
+    <Registration></Registration>
   );
 };
 
