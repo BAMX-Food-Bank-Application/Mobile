@@ -25,7 +25,7 @@ const Login = () => {
           />
           <TextInput
             placeholder="Email"
-            style={isFocused ? styles.inputFocused : styles.input}
+            style={[isFocused ? styles.inputFocused : styles.input, styles.poppinsregular]}
             onFocus={() => {
               setIsFocused(true);
             }}
@@ -34,7 +34,7 @@ const Login = () => {
             }}></TextInput>
           <TextInput
             placeholder="Contraseña"
-            style={isFocused2 ? styles.inputFocused : styles.input}
+            style={[isFocused2 ? styles.inputFocused : styles.input, styles.poppinsregular]}
             onFocus={() => {
               setIsFocused2(true);
             }}
@@ -45,10 +45,10 @@ const Login = () => {
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity style={[styles.button, {marginRight: 16}]}>
-            <Text>Registrarse</Text>
+            <Text style={styles.poppinsmedium}>Registrarse</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button}>
-            <Text>Ingresar</Text>
+            <Text style={styles.poppinsmedium}>Ingresar</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -62,12 +62,18 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
+  poppinsregular: {
+    fontFamily: 'Poppins-Regular', 
+  },
+  poppinsmedium: {
+    fontFamily: 'Poppins-Medium', 
+  },
   screen: {
     flex: 1,
     justifyContent: 'center',
     background:
       'linear-gradient(0deg, rgba(243,178,70,.8) 0%, rgba(224,30,64,.8) 100%)',
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Regular',
   },
   input: {
     width: '100%',
