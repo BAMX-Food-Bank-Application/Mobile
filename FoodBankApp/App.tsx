@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -52,6 +53,16 @@ function Section({children, title}: SectionProps): JSX.Element {
         {children}
       </Text>
     </View>
+=======
+import React, {useState} from 'react';
+import AppNavigation from './src/navigation/appNavigation';
+//import Registration from './src/features/SignUpAndRegistration/components/Registration'
+
+
+const App = () => {
+  return(
+    <AppNavigation />
+>>>>>>> Stashed changes
   );
 }
 
