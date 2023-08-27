@@ -12,12 +12,12 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		35F0D6268B5E4A3894FC23B7 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9559C6F848F44B3E9EDD3C44 /* Poppins-SemiBold.ttf */; };
+		3CD6CC436E84487681F89663 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 919673E6A0AC439194EB4DA8 /* Poppins-Regular.ttf */; };
+		498A7D73C7A247DC8071D6CD /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BA6E29B75F9414D85A8877C /* Poppins-ExtraBold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-FoodBankApp-FoodBankAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-FoodBankApp-FoodBankAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		498A7D73C7A247DC8071D6CD /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BA6E29B75F9414D85A8877C /* Poppins-ExtraBold.ttf */; };
 		BF4A6108F5F74A20A51068E1 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */; };
-		3CD6CC436E84487681F89663 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 919673E6A0AC439194EB4DA8 /* Poppins-Regular.ttf */; };
-		35F0D6268B5E4A3894FC23B7 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9559C6F848F44B3E9EDD3C44 /* Poppins-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,17 +41,17 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = FoodBankApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = FoodBankApp/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-FoodBankApp-FoodBankAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FoodBankApp-FoodBankAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BA6E29B75F9414D85A8877C /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-FoodBankApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodBankApp.debug.xcconfig"; path = "Target Support Files/Pods-FoodBankApp/Pods-FoodBankApp.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-FoodBankApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodBankApp.release.xcconfig"; path = "Target Support Files/Pods-FoodBankApp/Pods-FoodBankApp.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-FoodBankApp-FoodBankAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodBankApp-FoodBankAppTests.debug.xcconfig"; path = "Target Support Files/Pods-FoodBankApp-FoodBankAppTests/Pods-FoodBankApp-FoodBankAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-FoodBankApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FoodBankApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = FoodBankApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-FoodBankApp-FoodBankAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodBankApp-FoodBankAppTests.release.xcconfig"; path = "Target Support Files/Pods-FoodBankApp-FoodBankAppTests/Pods-FoodBankApp-FoodBankAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		919673E6A0AC439194EB4DA8 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		9559C6F848F44B3E9EDD3C44 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
+		9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		1BA6E29B75F9414D85A8877C /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; name = "Poppins-ExtraBold.ttf"; path = "../assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		919673E6A0AC439194EB4DA8 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9559C6F848F44B3E9EDD3C44 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +146,18 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		AC1C728E85E046A4859BFE10 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1BA6E29B75F9414D85A8877C /* Poppins-ExtraBold.ttf */,
+				9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */,
+				919673E6A0AC439194EB4DA8 /* Poppins-Regular.ttf */,
+				9559C6F848F44B3E9EDD3C44 /* Poppins-SemiBold.ttf */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,18 +168,6 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
-		};
-		AC1C728E85E046A4859BFE10 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				1BA6E29B75F9414D85A8877C /* Poppins-ExtraBold.ttf */,
-				9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */,
-				919673E6A0AC439194EB4DA8 /* Poppins-Regular.ttf */,
-				9559C6F848F44B3E9EDD3C44 /* Poppins-SemiBold.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
