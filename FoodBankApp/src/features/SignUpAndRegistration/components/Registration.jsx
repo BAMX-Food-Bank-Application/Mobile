@@ -56,6 +56,12 @@ const Registration = () => {
 
   return (
     <View style={styles.screen}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
+        <Image
+              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
+              style={styles.arrow}
+              />
+      </TouchableOpacity>
       <View
         style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
         <Image
@@ -92,7 +98,7 @@ const Registration = () => {
         <TouchableOpacity
           style={[styles.button, {marginRight: 16}]}
           onPress={handleSignUp}>
-          <Text>Registrarse</Text>
+          <Text style={styles.poppinsmedium} >Registrarse</Text>
         </TouchableOpacity>
         <View style={[styles.flexRow]}>
           <Text style={[styles.flex]}>Ya tienes una cuenta? </Text>
@@ -119,10 +125,20 @@ const styles = StyleSheet.create({
     height: 300,
     marginBottom: 16,
   },
+  arrow: {
+    width: 24,
+    height: 24,
+  },
+  arrowbtn: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 24,
+  },
   input: {
     width: '100%',
     borderBottomWidth: 1,
     padding: 10,
+    fontFamily: 'Poppins-Regular',
   },
   button: {
     marginTop: 16,
@@ -141,6 +157,15 @@ const styles = StyleSheet.create({
   },
   linkedText: {
     color: '#E8042C',
+    fontFamily: 'Poppins-Medium', 
+  },
+  poppinsregular: {
+    fontFamily: 'Poppins-Regular', 
+  },
+  poppinsmedium: {
+    fontFamily: 'Poppins-Medium', 
+    fontSize: 16,
+    color: 'black',
   },
 });
 
