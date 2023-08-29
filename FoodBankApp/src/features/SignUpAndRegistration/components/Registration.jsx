@@ -6,20 +6,18 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // Initialize Firebase
 import app from '../../../config/FirebaseConnection';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {getAuth} from 'firebase/auth';
-import {doc, setDoc} from 'firebase/firestore';
+import {createUserWithEmailAndPassword, signOut, getAuth, onAuthStateChanged, sendEmailVerification} from 'firebase/auth';
+import {collection, addDoc} from 'firebase/firestore';
 
 const auth = getAuth(app);
 
 const Registration = () => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isFocused2, setIsFocused2] = useState(false);
 
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
@@ -28,34 +26,86 @@ const Registration = () => {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
+  
+
   const handleSignUp = async () => {
-    if (email && password) {
-      try {
-        // User Creation
-        await createUserWithEmailAndPassword(auth, email, password);
 
-        // Firestore UserData Creation
-        const user = auth.currentUser;
-        if (user) {
-          const userDocRef = doc(firestore, 'users', user.uid);
+    
+    // We create the Regex variables so it's easier to read
 
-          await setDoc(userDocRef, {
-            email: user.email,
-            hashedPass: '',
-            salt: '',
-            name: name,
-            phone: phoneNumber,
-            role: 'Supplier',
-          });
-        }
-      } catch (error) {
-        return false;
-      }
+    const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
+    const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    // We start validation
+
+    // Check if everything is filled
+    if (name === '' || email === '' || password === '' || passwordC === '') {
+      Alert.alert('Campos vacíos', 'Por favor llena todos los campos');
+      return false;
     }
-  };
+    // Check if name is valid
+    if (!nameRegex.test(name)) {
+      Alert.alert('Nombre inválido', 'El nombre ingresado no es válido');
+      return false;
+    }
+    // Check if email is valid
+    if (!emailRegex.test(email)) {
+      Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+      return false;
+    }
+    // Check if phone number is valid
+    
+    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
+      return false;
+    }
+    
+    // Check if password is valid
+    if (!passwordRegex.test(password)) {
+      Alert.alert("Contraseña inválida", "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número");
+      return false;
+    }
+    if (password !== passwordC) {
+      Alert.alert('Contraseñas no coinciden', 'Las contraseñas no coinciden');
+      return false;
+    }
 
+    // If everything is valid, we proceed to create the user
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Send verification email
+        sendEmailVerification(auth.currentUser)
+          .then(() => {
+            // Email sent
+            console.log('Email sent');
+          })
+          .catch((error) => {
+            console.log('Error sending email verification', error);
+          });
+      })
+      .catch((error) => {
+        console.log('Error creating user', error);
+      });
+    
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          navigation.navigate('EmailCheck');
+        }
+      }
+    });
+    
   return (
     <View style={styles.screen}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
+        <Image
+              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
+              style={styles.arrow}
+              />
+      </TouchableOpacity>
       <View
         style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
         <Image
@@ -64,19 +114,31 @@ const Registration = () => {
           }}
           style={styles.logo}
         />
-        <TextInput
+        <TextInput  
           placeholder="Nombre Completo *"
           style={styles.input}
-          autoCapitalize={'words'}></TextInput>
+          onChangeText={setName}
+          value={name}
+          autoCapitalize={'words'}
+          
+          ></TextInput>
         <TextInput
           placeholder="Email *"
           value={email}
           onChangeText={setEmail}
           style={styles.input}
-          autoCapitalize={'none'}></TextInput>
+          autoCapitalize={'none'}
+          keyboardType={'email-address'}
+          ></TextInput>
+          
         <TextInput
           placeholder="Número de teléfono *"
-          style={styles.input}></TextInput>
+          style={styles.input}
+          maxLength={10}
+          onChangeText={setPhoneNumber}
+          value={phoneNumber}
+          keyboardType={'phone-pad'}
+          ></TextInput>
         <TextInput
           placeholder="Contraseña *"
           value={password}
@@ -141,6 +203,15 @@ const styles = StyleSheet.create({
   },
   linkedText: {
     color: '#E8042C',
+  },
+  arrow: {
+    width: 24,
+    height: 24,
+  },
+  arrowbtn: {
+    width: 24,
+    height: 24,
+    marginHorizontal: 24,
   },
 });
 

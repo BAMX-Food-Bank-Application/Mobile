@@ -7,7 +7,7 @@ import {Text, TouchableOpacity, Alert} from 'react-native';
 
 // Firebase
 import app from '../../../config/FirebaseConnection';
-import {getAuth} from 'firebase/auth';
+import {getAuth, signOut} from 'firebase/auth';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
@@ -15,21 +15,25 @@ const HomeScreen = () => {
 
   const navigation = useNavigation();
 
-  const signOut = async () => {
-    try {
-      await auth.signOut();
-      navigation.navigate('Login');
-      return true;
-    } catch (error) {
-      Alert.alert('No pudimos cerrar tu sesion');
-      return false;
-    }
-  };
+  const handleSignOut = async() => {
+    signOut(auth).
+      then(() => {
+        // Sign-out successful.
+        console.log(auth.currentUser)
+        console.log('Sign-out successful');
+        console.log(auth.currentUser);
+        navigation.navigate('Login')
+      }
+      ).catch((error) => {
+        // An error happened.
+        console.log('Error signing out', error);
+      });
+    };
 
   return (
     <SafeAreaView>
       <Text>Welcome to the Home Screen</Text>
-      <TouchableOpacity onPress={() => signOut()}>
+      <TouchableOpacity onPress={() => handleSignOut()}>
         <Text>LogOut</Text>
       </TouchableOpacity>
     </SafeAreaView>

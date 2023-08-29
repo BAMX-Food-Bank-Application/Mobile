@@ -8,6 +8,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -18,8 +19,6 @@ import { useNavigation } from '@react-navigation/native';
 import app from '../../../config/FirebaseConnection'
 import { getAuth } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-
-import { GoogleSignin, statusCodes } from '@reac-native-google-signin/google-signin'; // WIP
 
 
 const auth = getAuth(app);
@@ -35,19 +34,34 @@ const Login = () => {
 
 
     const handleLogin = async () => {
-    if(email && password){
-      try {
-        const user = signInWithEmailAndPassword(auth, email, password);
-        if(user){
-            navigation.navigate('Home');
+      signInWithEmailAndPassword(auth,email, password)
+      .then(userCredential => {
+        // Authentication successful
+        const user = userCredential.user;
+        navigation.navigate('Home');
+      })
+      .catch(error => {
+        // Handle authentication error
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorCode === 'auth/invalid-email') {
+          // Invalid email
+          Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+        } else if (errorCode === 'auth/wrong-password') {
+          // Incorrect password
+          Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es incorrecta');
+        } else if (errorCode === 'auth/user-not-found') {
+          // User not found
+          Alert.alert('Usuario no encontrado', 'El usuario ingresado no existe');
+        } else if(errorCode === 'auth/missing-password'){
+          // Password missing
+          Alert.alert('Contraseña no ingresada', 'Por favor ingresa una contraseña');
         }
-        else{
-            Alert.alert('Wrong answer dude');
+        else {
+          // Other error cases
+          Alert.alert('Error', errorMessage);
         }
-      } catch (error) {
-        Alert.alert('Error code: ', error.message);
-      }
-    }
+      });
   };
 
   return (
@@ -59,7 +73,8 @@ const Login = () => {
           <Image
             source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=bb2f494f-d3dc-41bc-87f7-b677e0e966d7'}}
             style={styles.logo}
-          />
+          />        
+
           <TextInput
             placeholder="Email"
             style={isFocused ? styles.inputFocused : styles.input}
