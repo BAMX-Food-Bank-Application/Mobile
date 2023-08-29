@@ -29,29 +29,35 @@ const Registration = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleSignUp = async () => {
-    if (email && password) {
-      try {
-        // User Creation
-        await createUserWithEmailAndPassword(auth, email, password);
+    navigation.navigate('Confirmation', {
+      email: email, 
+      password: password, 
+      name: name, 
+      phoneNumber: phoneNumber,
+    })
+    // if (email && password) {
+    //   try {
+    //     // User Creation
+    //     await createUserWithEmailAndPassword(auth, email, password);
 
-        // Firestore UserData Creation
-        const user = auth.currentUser;
-        if (user) {
-          const userDocRef = doc(firestore, 'users', user.uid);
+    //     // Firestore UserData Creation
+    //     const user = auth.currentUser;
+    //     if (user) {
+    //       const userDocRef = doc(firestore, 'users', user.uid);
 
-          await setDoc(userDocRef, {
-            email: user.email,
-            hashedPass: '',
-            salt: '',
-            name: name,
-            phone: phoneNumber,
-            role: 'Supplier',
-          });
-        }
-      } catch (error) {
-        return false;
-      }
-    }
+    //       await setDoc(userDocRef, {
+    //         email: user.email,
+    //         hashedPass: '',
+    //         salt: '',
+    //         name: name,
+    //         phone: phoneNumber,
+    //         role: 'Supplier',
+    //       });
+    //     }
+    //   } catch (error) {
+    //     return false;
+    //   }
+    // }
   };
 
   return (
@@ -71,8 +77,9 @@ const Registration = () => {
           style={styles.logo}
         />
         <TextInput
-          placeholder="Nombre Completo *"
+          placeholder="Nombre Completo"
           style={styles.input}
+          onChangeText={setName}
           autoCapitalize={'words'}></TextInput>
         <TextInput
           placeholder="Email *"
@@ -82,6 +89,7 @@ const Registration = () => {
           autoCapitalize={'none'}></TextInput>
         <TextInput
           placeholder="Número de teléfono *"
+          onChangeText={setPhoneNumber}
           style={styles.input}></TextInput>
         <TextInput
           placeholder="Contraseña *"
@@ -118,7 +126,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: '#EFEFEF',
-    fontFamily: 'Poppins',
   },
   logo: {
     width: 300,
