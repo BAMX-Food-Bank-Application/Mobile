@@ -9,6 +9,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../features/SignUpAndRegistration/components/Login';
 import Registration from '../features/SignUpAndRegistration/components/Registration';
 import Confirmation from '../features/SignUpAndRegistration/components/Confirmation';
+import Wait from '../features/SignUpAndRegistration/components/Wait';
+import Password from '../features/SignUpAndRegistration/components/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 
 const Stack = createNativeStackNavigator();
@@ -36,6 +38,8 @@ export default function AppNavigation() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Registration" component={Registration} />
           <Stack.Screen name="Confirmation" component={Confirmation} />
+          <Stack.Screen name="Wait" component={Wait} />
+          <Stack.Screen name="Password" component={Password} />
         </Stack.Navigator>
       </NavigationContainer>
     );
