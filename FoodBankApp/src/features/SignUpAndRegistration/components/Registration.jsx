@@ -26,10 +26,12 @@ const Registration = () => {
   const [password, setPassword] = useState('');
   const [passwordC, setPasswordC] = useState('');
   const [name, setName] = useState('');
+  const [nameCorp, setNameCorp] = useState('');
+  const [location, setLocation] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleSignUp = async () => {
-    navigation.navigate('Confirmation', {
+    navigation.navigate('Wait', {
       email: email, 
       password: password, 
       name: name, 
@@ -77,15 +79,25 @@ const Registration = () => {
           style={styles.logo}
         />
         <TextInput
-          placeholder="Nombre Completo"
+          placeholder="Nombre Completo *"
           style={styles.input}
           onChangeText={setName}
           autoCapitalize={'words'}></TextInput>
         <TextInput
-          placeholder="Email *"
+          placeholder="Correo *"
           value={email}
           onChangeText={setEmail}
           style={styles.input}
+          autoCapitalize={'none'}></TextInput>
+        <TextInput
+          placeholder="Nombre de Empresa *"
+          style={styles.input}
+          onChangeText={setNameCorp}
+          autoCapitalize={'none'}></TextInput>
+        <TextInput
+          placeholder="Ubicación de la Empresa *"
+          style={styles.input}
+          onChangeText={setLocation}
           autoCapitalize={'none'}></TextInput>
         <TextInput
           placeholder="Número de teléfono *"
@@ -128,8 +140,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#EFEFEF',
   },
   logo: {
-    width: 300,
-    height: 300,
+    width: 280,
+    height: 280,
     marginBottom: 16,
   },
   arrow: {

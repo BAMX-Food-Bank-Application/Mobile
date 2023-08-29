@@ -93,6 +93,9 @@ const Login = () => {
             <Text style={styles.poppinsmedium}>Ingresar</Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Password')}>
+          <Text style={[styles.linkedText]}>¿Olvidaste tu contraseña?</Text>
+        </TouchableOpacity>
       </View>
     </LinearGradient>
   );
@@ -161,5 +164,14 @@ const styles = StyleSheet.create({
   poppinsmedium: {
     fontFamily: 'Poppins-Medium', 
   },
+  linkedText: {
+    color: 'white',
+    fontFamily: 'Poppins-Regular', 
+    alignSelf: 'center',
+  },
+  link: {
+    marginTop: 32,
+    marginHorizontal: 90,
+  }
 });
 export default Login;
