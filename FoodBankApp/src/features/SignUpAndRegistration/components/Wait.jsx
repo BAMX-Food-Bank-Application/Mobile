@@ -6,21 +6,22 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useNavigation} from '@react-navigation/native';
 
-const Wait = ( {route} ) => {
-  const {email, name, password, phoneNumber} = route.params
+const Wait = () => {
   const navigation = useNavigation();
+
+  const removeAsync = async () => {
+    try {
+        await AsyncStorage.removeItem('SignUpRequest');
+      } catch (error) {
+      }
+  }
 
   return (
     <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Registration')} style={styles.arrowbtn}>
-        <Image
-              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
-              style={styles.arrow}
-              />
-      </TouchableOpacity>
       <View style = {styles.container}>
         <Image
             source={{
@@ -33,6 +34,10 @@ const Wait = ( {route} ) => {
             <Text style={styles.text}>El Banco de Alimentos está revisando tu solicitud de registro</Text>
         </View>
       </View>
+      <TouchableOpacity
+          onPress={removeAsync}>
+          <Text>Remover Async</Text>
+        </TouchableOpacity>
     </View>
   );
 };

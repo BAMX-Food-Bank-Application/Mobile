@@ -7,19 +7,10 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
-// Initialize Firebase
-import app from '../../../config/FirebaseConnection';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {getAuth} from 'firebase/auth';
-import {doc, setDoc} from 'firebase/firestore';
-
-const auth = getAuth(app);
-
 const Registration = () => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isFocused2, setIsFocused2] = useState(false);
 
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
@@ -27,39 +18,18 @@ const Registration = () => {
   const [passwordC, setPasswordC] = useState('');
   const [name, setName] = useState('');
   const [nameCorp, setNameCorp] = useState('');
-  const [location, setLocation] = useState('');
+  const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleSignUp = async () => {
-    navigation.navigate('Wait', {
-      email: email, 
-      password: password, 
-      name: name, 
-      phoneNumber: phoneNumber,
-    })
-    // if (email && password) {
-    //   try {
-    //     // User Creation
-    //     await createUserWithEmailAndPassword(auth, email, password);
-
-    //     // Firestore UserData Creation
-    //     const user = auth.currentUser;
-    //     if (user) {
-    //       const userDocRef = doc(firestore, 'users', user.uid);
-
-    //       await setDoc(userDocRef, {
-    //         email: user.email,
-    //         hashedPass: '',
-    //         salt: '',
-    //         name: name,
-    //         phone: phoneNumber,
-    //         role: 'Supplier',
-    //       });
-    //     }
-    //   } catch (error) {
-    //     return false;
-    //   }
-    // }
+    try {
+      await AsyncStorage.setItem(
+        'SignUpRequest',
+        'Done',
+      );
+    } catch (error) {
+    }
+    navigation.navigate('Wait')
   };
 
   return (
@@ -97,7 +67,7 @@ const Registration = () => {
         <TextInput
           placeholder="Ubicación de la Empresa *"
           style={styles.input}
-          onChangeText={setLocation}
+          onChangeText={setAddress}
           autoCapitalize={'none'}></TextInput>
         <TextInput
           placeholder="Número de teléfono *"
