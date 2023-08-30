@@ -10,15 +10,13 @@ import Login from '../features/SignUpAndRegistration/components/Login';
 import Registration from '../features/SignUpAndRegistration/components/Registration';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Confirmation from '../features/SignUpAndRegistration/components/Confirmation';
-import EmailCheck from '../features/SignUpAndRegistration/components/EmailCheck';
-
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   const {user} = userAuth();
 
-  if (user) {
+  if (user && user.emailVerified) {
     return (
       <NavigationContainer>
         <Stack.Navigator
@@ -38,7 +36,6 @@ export default function AppNavigation() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Registration" component={Registration} />
           <Stack.Screen name="Confirmation" component={Confirmation} />
-          <Stack.Screen name="EmailCheck" component={EmailCheck} />
         </Stack.Navigator>
       </NavigationContainer>
     );

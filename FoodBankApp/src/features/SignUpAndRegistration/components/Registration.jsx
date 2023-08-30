@@ -11,9 +11,9 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 // Initialize Firebase
-import app from '../../../config/FirebaseConnection';
-import {createUserWithEmailAndPassword, signOut, getAuth, onAuthStateChanged, sendEmailVerification} from 'firebase/auth';
-import {collection, addDoc} from 'firebase/firestore';
+import {app, db} from '../../../config/FirebaseConnection';
+import {createUserWithEmailAndPassword, getAuth, onAuthStateChanged} from '@react-native-firebase/auth';
+import {collection, addDoc, Firestore} from '@react-native-firebase/firestore';
 
 const auth = getAuth(app);
 
@@ -28,8 +28,19 @@ const Registration = () => {
 
   
 
-  const handleSignUp = async () => {
+  /*   This exports everything to the confirmation screen
 
+  navigation.navigate('Wait', {
+      email: email, 
+      password: password, 
+      name: name, 
+      phoneNumber: phoneNumber,
+    })
+  */
+
+
+  const handleSignUp = async () => {
+    
     
     // We create the Regex variables so it's easier to read
 
@@ -74,15 +85,24 @@ const Registration = () => {
     // If everything is valid, we proceed to create the user
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Send verification email
-        sendEmailVerification(auth.currentUser)
-          .then(() => {
-            // Email sent
-            console.log('Email sent');
-          })
-          .catch((error) => {
-            console.log('Error sending email verification', error);
-          });
+        console.log('User created: '+ userCredential.user.uid);
+        // We create the user in the database firestore with reference to the user's uid
+        Firestore.collection('userData')
+        .doc(userCredential.user.uid)
+        .set({
+          name: name,
+          phoneNumber: phoneNumber,
+          store: 'store',
+          address: 'adress',
+          role: 'supplier',
+          status: false,
+        })
+        .then((docRef) => {
+          console.log('Document written with ID: ', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+        });
       })
       .catch((error) => {
         console.log('Error creating user', error);
@@ -93,7 +113,7 @@ const Registration = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         if (user.emailVerified) {
-          navigation.navigate('EmailCheck');
+          navigation.navigate('Confirmation');
         }
       }
     });
@@ -173,7 +193,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#fffefc',
     fontFamily: 'Poppins',
   },
   logo: {

@@ -17,9 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 
 // Firebase
 import app from '../../../config/FirebaseConnection'
-import { getAuth } from 'firebase/auth';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-
+import { getAuth, signInWithEmailAndPassword } from '@react-native-firebase/auth';
 
 const auth = getAuth(app);
 
@@ -38,7 +36,6 @@ const Login = () => {
       .then(userCredential => {
         // Authentication successful
         const user = userCredential.user;
-        navigation.navigate('Home');
       })
       .catch(error => {
         // Handle authentication error

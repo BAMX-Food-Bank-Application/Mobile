@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
-import {getAuth} from 'firebase/auth';
+import {getAuth} from '@react-native-firebase/auth';
 import app from '../../../config/FirebaseConnection';
 
 // handleConfirmation
@@ -21,11 +21,9 @@ const handleConfirmation = async (confirm, code) => {
   }
 };
 
-
-
-
 const Confirmation = ( {route} ) => {
-  const {email, name, password, phoneNumber} = route.params
+
+  
   const auth = getAuth(app);
   const navigation = useNavigation();
   const firstInput = useRef();
