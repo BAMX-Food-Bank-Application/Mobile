@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Navigator
 import { useNavigation } from '@react-navigation/native';
@@ -32,6 +33,18 @@ const Login = () => {
   const [password, setPassword]= useState ('');
 
   const navigation = useNavigation();
+
+  const _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('SignUpRequest');
+      if (value !== null) {
+        navigation.navigate('Wait');
+      }
+    } catch (error) {
+    }
+  };
+
+  _retrieveData();
 
 
     const handleLogin = async () => {
