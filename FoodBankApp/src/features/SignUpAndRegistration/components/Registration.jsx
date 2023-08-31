@@ -6,9 +6,17 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {createUserWithEmailAndPassword, sendEmailVerification} from 'firebase/auth';
+
+import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
+
+import {auth} from '../../../config/FirebaseConnection';
+
 
 const Registration = () => {
 
@@ -21,16 +29,88 @@ const Registration = () => {
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
+  
+  const dev = false;
+
   const handleSignUp = async () => {
-    try {
-      await AsyncStorage.setItem(
-        'SignUpRequest',
-        'Done',
-      );
-    } catch (error) {
+    if(!dev){
+      const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
+      const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      // We start validation
+
+      // Check if everything is filled
+      if (name === '' || email === '' || password === '' || passwordC === '') {
+        Alert.alert('Campos vacíos', 'Por favor llena todos los campos');
+        return false;
+      }
+      // Check if name is valid
+      if (!nameRegex.test(name)) {
+        Alert.alert('Nombre inválido', 'El nombre ingresado no es válido');
+        return false;
+      }
+      // Check if email is valid
+      if (!emailRegex.test(email)) {
+        Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+        return false;
+      }
+      // Check if phone number is valid
+
+      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+      if (!phoneRegex.test(phoneNumber)) {
+        Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
+        return false;
+      }
+
+      // Check if password is valid
+      if (!passwordRegex.test(password)) {
+        Alert.alert("Contraseña inválida", "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número");
+        return false;
+      }
+      if (password !== passwordC) {
+        Alert.alert('Contraseñas no coinciden', 'Las contraseñas no coinciden');
+        return false;
+      }
     }
-    navigation.navigate('Wait')
-  };
+    else{
+      console.log('Dev mode');
+      setName('Dev');
+      setEmail('geekdeer@gmail.com');
+      setPhoneNumber('1234567890');
+      setPassword('Dev123456');
+      setNameCorp('DevCorp');
+      setAddress('DevAddress');
+    }
+    
+
+    // If everything is valid, we proceed to create the user
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log('User created: '+ userCredential.user.uid);
+        
+        firestore().collection('userData').doc(userCredential.user.uid).set({
+          name: name,
+          email: email,
+          nameCorp: nameCorp,
+          address: address,
+          phoneNumber: Number(phoneNumber), 
+          status: Boolean (false),         
+        }).then(() => {
+          console.log('User data added');
+          sendEmailVerification(auth.currentUser).then(() => {
+            navigation.navigate('Wait');
+          }).catch((error) => {
+            console.log('Error sending email verification: ', error);
+          });
+        }
+        ).catch((error) => {
+          console.log('Error adding user data to firestore: ', error);
+        });        
+      })
+      .catch((error) => {
+        console.log('Error creating user: ', error);
+      });
+    };
 
   return (
     <View style={styles.screen}>
@@ -58,7 +138,8 @@ const Registration = () => {
           value={email}
           onChangeText={setEmail}
           style={styles.input}
-          autoCapitalize={'none'}></TextInput>
+          autoCapitalize={'none'}
+          keyboardType={'email-address'}></TextInput>
         <TextInput
           placeholder="Nombre de Empresa *"
           style={styles.input}
@@ -71,8 +152,11 @@ const Registration = () => {
           autoCapitalize={'none'}></TextInput>
         <TextInput
           placeholder="Número de teléfono *"
+          style={styles.input}
+          maxLength={10}
           onChangeText={setPhoneNumber}
-          style={styles.input}></TextInput>
+          value={phoneNumber}
+          keyboardType={'phone-pad'}></TextInput>
         <TextInput
           placeholder="Contraseña *"
           value={password}

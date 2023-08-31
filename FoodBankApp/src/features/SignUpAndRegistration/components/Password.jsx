@@ -5,15 +5,48 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert,
 } from 'react-native';
 
+
 import {useNavigation} from '@react-navigation/native';
+import firebase from '@react-native-firebase/app';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../../config/FirebaseConnection';
+
 
 const Password = () => {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
+
+
+  const handleNewToken = () => {
+
+    const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
+    if (!emailRegex.test(email)) {
+      Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+      return false;
+    }else{
+
+    }
+      sendPasswordResetEmail(auth, email).then(() => {
+        Alert.alert('Correo enviado', 'Se ha enviado un correo para restablecer tu contraseña');
+        navigation.navigate('Login');
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorCode === 'auth/user-not-found') {
+          // User not found
+          Alert.alert('Usuario no encontrado', 'El usuario no existe');
+        } else {
+          Alert.alert('Error', errorMessage);
+        }
+      });
+    }
+
+
 
   return (
     <View style={styles.screen}>
@@ -36,6 +69,7 @@ const Password = () => {
         </View>
         <TouchableOpacity
           style={[styles.button, {marginRight: 16}]}
+          onPress={() => handleNewToken()}
           >
           <Text style={styles.poppinsmedium} >Continuar</Text>
         </TouchableOpacity>

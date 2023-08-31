@@ -8,9 +8,9 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Navigator
 import { useNavigation } from '@react-navigation/native';
@@ -19,9 +19,6 @@ import { useNavigation } from '@react-navigation/native';
 import app from '../../../config/FirebaseConnection'
 import { getAuth } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-
-import { GoogleSignin, statusCodes } from '@reac-native-google-signin/google-signin'; // WIP
-
 
 const auth = getAuth(app);
 
@@ -34,34 +31,37 @@ const Login = () => {
 
   const navigation = useNavigation();
 
-  const _retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('SignUpRequest');
-      if (value !== null) {
-        navigation.navigate('Wait');
+  const handleLogin = async () => {
+    signInWithEmailAndPassword(auth,email, password)
+    .then(userCredential => {
+      // Authentication successful fwq
+      const user = userCredential.user.uid;
+      console.log('User: ', user);
+    })
+    .catch(error => {
+      // Handle authentication error
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      if (errorCode === 'auth/invalid-email') {
+        // Invalid email
+        Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+      } else if (errorCode === 'auth/wrong-password') {
+        // Incorrect password
+        Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es incorrecta');
+      } else if (errorCode === 'auth/user-not-found') {
+        // User not found
+        Alert.alert('Usuario no encontrado', 'El usuario ingresado no existe');
+      } else if(errorCode === 'auth/missing-password'){
+        // Password missing
+        Alert.alert('Contraseña no ingresada', 'Por favor ingresa una contraseña');
       }
-    } catch (error) {
-    }
-  };
-
-  _retrieveData();
-
-
-    const handleLogin = async () => {
-    if(email && password){
-      try {
-        const user = signInWithEmailAndPassword(auth, email, password);
-        if(user){
-            navigation.navigate('Home');
-        }
-        else{
-            Alert.alert('Wrong answer dude');
-        }
-      } catch (error) {
-        Alert.alert('Error code: ', error.message);
+      else {
+        // Other error cases
+        Alert.alert('Error', errorMessage);
       }
-    }
-  };
+    
+    });
+  }
 
   return (
     <LinearGradient

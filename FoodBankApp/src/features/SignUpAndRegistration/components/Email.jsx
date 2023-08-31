@@ -17,34 +17,24 @@ import { auth } from '../../../config/FirebaseConnection';
 
 
 
-const Wait = () => {
+const Email = () => {
   const navigation = useNavigation();
-  
-  const checkVerification = async () => {
-    const data = await firestore().collection('userData').doc(auth.currentUser.uid).get();
-    if (data.data().status === true) {
-      if(AsyncStorage.getItem('SignUpRequest') != null ) AsyncStorage.removeItem('SignUpRequest');
-      navigation.navigate('Email');
-    }
-  };
 
-  checkVerification();
   return (
     <View style={styles.screen}>
       
       <View style = {styles.container}>
         <Image
             source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fprocessing.png?alt=media&token=7cb7b032-ccef-463b-96c8-ce7d0a2a6446',
+                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcorreo.png?alt=media&token=59f6425b-3305-4f4d-91a2-847e83610de8',
             }}
             style={styles.logo}
         />
         <View style={styles.texts}>
-            <Text style={styles.message}>Espere</Text>
-            <Text style={styles.text}>El Banco de Alimentos está revisando tu solicitud de registro.</Text>
+            <Text style={styles.message}>Ya casi!</Text>
+            <Text style={styles.text}>Se ha enviado un correo de confirmación, por favor revise su bandeja de entrada.</Text>
         </View>
       </View>
-
     </View>
   );
 };
@@ -92,4 +82,4 @@ const styles = StyleSheet.create({
       }
 });
 
-export default Wait;
+export default Email;
