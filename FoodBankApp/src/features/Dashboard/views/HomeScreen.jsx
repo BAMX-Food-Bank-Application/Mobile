@@ -9,6 +9,7 @@ import {Text, TouchableOpacity, Alert} from 'react-native';
 import app from '../../../config/FirebaseConnection';
 import {getAuth} from 'firebase/auth';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import NewRequest from '../components/NewRequest';
 
 const HomeScreen = () => {
   const auth = getAuth(app);
@@ -32,6 +33,7 @@ const HomeScreen = () => {
       <TouchableOpacity onPress={() => signOut()}>
         <Text>LogOut</Text>
       </TouchableOpacity>
+      <NewRequest></NewRequest>
     </SafeAreaView>
   );
 };

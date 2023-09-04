@@ -12,6 +12,7 @@ import Confirmation from '../features/SignUpAndRegistration/components/Confirmat
 import Wait from '../features/SignUpAndRegistration/components/Wait';
 import Password from '../features/SignUpAndRegistration/components/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
+import Request from '../features/Dashboard/views/Request';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,11 +36,12 @@ export default function AppNavigation() {
           initialRouteName="Login"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Login" component={HomeScreen} />
           <Stack.Screen name="Registration" component={Registration} />
           <Stack.Screen name="Confirmation" component={Confirmation} />
           <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Password" component={Password} />
+          <Stack.Screen name="Request" component={Request} />
         </Stack.Navigator>
       </NavigationContainer>
     );
