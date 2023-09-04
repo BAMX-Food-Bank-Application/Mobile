@@ -7,28 +7,45 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {useNavigation} from '@react-navigation/native';
-import firebase from '@react-native-firebase/app';
 import  firestore  from '@react-native-firebase/firestore';
 import { auth } from '../../../config/FirebaseConnection';
-
-
-
 
 
 const Wait = () => {
   const navigation = useNavigation();
   
-  const checkVerification = async () => {
-    const data = await firestore().collection('userData').doc(auth.currentUser.uid).get();
-    if (data.data().status === true) {
-      if(AsyncStorage.getItem('SignUpRequest') != null ) AsyncStorage.removeItem('SignUpRequest');
-      navigation.navigate('Email');
-    }
-  };
+
+    const checkVerification = async () => {
+
+        try{
+          const signUpRequest = AsyncStorage.getItem('SignUpRequest');
+          console.log('Current user: ', auth.currentUser.uid);
+          const UID = auth.currentUser.uid;
+          const verification = (await firestore().collection('userData').doc(UID).get()).data().status;
+          
+          AsyncStorage.setItem('SignUpRequest', 'true');
+
+          if (signUpRequest && verification) {
+            // Item exists, remove it
+            AsyncStorage.removeItem('SignUpRequest');
+            navigation.navigate('Email');
+          } else {
+            setTimeout(() => {
+              console.log('Waiting for verification');
+              checkVerification();
+            }, 10000);
+          }
+        }
+        catch (error){
+          console.log('Error checking verification: ', error);
+        }    
+      
+    };
+  
 
   checkVerification();
+
   return (
     <View style={styles.screen}>
       

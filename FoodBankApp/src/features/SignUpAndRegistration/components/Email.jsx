@@ -20,13 +20,32 @@ import { auth } from '../../../config/FirebaseConnection';
 const Email = () => {
   const navigation = useNavigation();
 
+  const checkMail = async () => {
+    // get current user if email is verified
+    const user = auth.currentUser;
+    if(user.emailVerified){
+      try {
+        navigation.navigate('Confirmation');
+      } catch (error) {
+        console.log('Error: ', error);
+      }
+    } else {
+      // if email is not verified, wait 5 seconds and check again
+      setTimeout(() => {
+        auth.currentUser.reload();
+        checkMail();
+      }, 5000);
+    }
+  };
+
+  checkMail();
   return (
     <View style={styles.screen}>
       
       <View style = {styles.container}>
         <Image
             source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcorreo.png?alt=media&token=59f6425b-3305-4f4d-91a2-847e83610de8',
+                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2FsentEmail.png?alt=media&token=16517312-d681-4682-8ac0-41676115b8d0',
             }}
             style={styles.logo}
         />

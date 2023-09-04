@@ -1,41 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import firebase from '@react-native-firebase/app';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { auth, db } from '../config/FirebaseConnection';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth } from '../config/FirebaseConnection';
 
 
-async function loadData() {
-  const user = auth.currentUser.uid;
+export async function loadData(user) {
   const userData = await firestore().collection('userData').doc(user).get();
   return userData;
 }
 
-export default function useAuth() {
+// Check if user has phone otp verified
+export async function checkPhone(user) {
+  return user.phoneVerified;
+}
+
+// Check if user has email verified
+export async function checkEmail(user) {
+  return user.emailVerified;
+}
+
+// Check if user's status is true
+export async function checkStatus(user) {
+  return user.status;
+}
+
+export default function userAuth() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (userAuth) => {
-
-      if (userAuth !== null) {
-        setUser(userAuth);
-        loadData().then((data) => {  
-            if(data.data.status === false) navigation.navigate('Wait');
-          else if(data.data.status === true) navigation.navigate('Home');
-        }).catch((error) => {
-            console.log('Error: ', error);
-          });
-        
-        } else {
-          setUser(null);
-        }
-      
+    const unsubscribe = onAuthStateChanged(auth, async () => {
+      setUser(auth.currentUser);
+      if (user) {
+          console.log('User logged: ', user.uid);
+        } 
+      else {
+        setUser(null);
+      }
     });
     return () => unsubscribe();
   }, []);
-
-
   return { user };
 }
 

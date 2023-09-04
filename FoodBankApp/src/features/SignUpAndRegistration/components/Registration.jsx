@@ -10,9 +10,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-import {createUserWithEmailAndPassword, sendEmailVerification} from 'firebase/auth';
-
-import firebase from '@react-native-firebase/app';
+import { createUserWithEmailAndPassword, sendEmailVerification, createCustomToken, signInWithEmailAndPassword } from 'firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 import {auth} from '../../../config/FirebaseConnection';
@@ -80,30 +78,41 @@ const Registration = () => {
       setPassword('Dev123456');
       setNameCorp('DevCorp');
       setAddress('DevAddress');
-    }
-    
+    }   
 
     // If everything is valid, we proceed to create the user
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        // Creating user data in firestore
         console.log('User created: '+ userCredential.user.uid);
         
         firestore().collection('userData').doc(userCredential.user.uid).set({
           name: name,
-          email: email,
           nameCorp: nameCorp,
           address: address,
           phoneNumber: Number(phoneNumber), 
           status: Boolean (false),         
-        }).then(() => {
+        })
+
+        .then(() => {
+
+          // Sending email verification to the user
           console.log('User data added');
-          sendEmailVerification(auth.currentUser).then(() => {
-            navigation.navigate('Wait');
-          }).catch((error) => {
+          sendEmailVerification(userCredential.user).then(() => {
+            AsyncStorage.setItem('SignUpRequest', 'true');
+            AsyncStorage.setItem('e', JSON.stringify(email));
+            AsyncStorage.setItem('p', JSON.stringify(password));
+
+            navigation.pop();
+          }).then(() => {
+            console.log('Email verification sent');
+          })
+          .catch((error) => {
             console.log('Error sending email verification: ', error);
           });
         }
-        ).catch((error) => {
+        )
+        .catch((error) => {
           console.log('Error adding user data to firestore: ', error);
         });        
       })

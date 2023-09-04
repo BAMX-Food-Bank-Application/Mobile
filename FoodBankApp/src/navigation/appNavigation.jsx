@@ -14,7 +14,6 @@ import Wait from '../features/SignUpAndRegistration/components/Wait';
 import Password from '../features/SignUpAndRegistration/components/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Email from '../features/SignUpAndRegistration/components/Email';
-import { counterEvent } from 'react-native/Libraries/Performance/Systrace';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +21,7 @@ const _retrieveData = async () => {
   try {
     const value = await AsyncStorage.getItem('SignUpRequest');
     if (value !== null) return true;
+    
     else return false;
     
   } catch (error) {
@@ -29,56 +29,56 @@ const _retrieveData = async () => {
   }
 };
 
+
+
 export default function AppNavigation() {
+
   const {user} = userAuth();
-  if(_retrieveData() === true){
-    console.log('Waiting for verification');
-    return (      
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Wait"
-          screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Wait" component={Wait} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  } else if (user == null) {
-    console.log('No user logged in');
+
+  if(user != null){
+    if(_retrieveData() == true){
+      console.log('Waiting for verification');
+      return (      
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Wait"
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Wait" component={Wait} />
+            <Stack.Screen name="Email" component={Email} />
+            <Stack.Screen name="Confirmation" component={Confirmation} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }
+    else{
+      console.log('User logged: '+ user.uid)
+      return (      
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="HomeScreen"
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="Email" component={Email} />
+            <Stack.Screen name="Wait" component={Wait} />
+            <Stack.Screen name="Confirmation" component={Confirmation} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    } 
+  }
+  else if(user == null){
+    console.log('No access token');
     return (
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Registration" component={Registration} />
           <Stack.Screen name="Confirmation" component={Confirmation} />
-          <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Password" component={Password} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  } 
-  else if(user && user.emailVerified === false){
-    console.log('Email not verified');
-    return (
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Wait"
-          screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Email" component={Email} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
-  else if (user && user.emailVerified === true) {
-    console.log('User logged in');
-    return (
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Home" component={HomeScreen}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

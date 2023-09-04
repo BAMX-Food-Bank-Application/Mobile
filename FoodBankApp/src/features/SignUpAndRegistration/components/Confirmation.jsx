@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,30 +6,44 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
+
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
-import {getAuth} from 'firebase/auth';
-import app from '../../../config/FirebaseConnection';
+import firestore from '@react-native-firebase/firestore';
+import auth from '../../../config/FirebaseConnection';
 
-const Confirmation = ( {route} ) => {
-  const {email, name, password, phoneNumber} = route.params
-  const auth = getAuth(app);
+const Confirmation = ( ) => {
   const navigation = useNavigation();
   const firstInput = useRef();
   const secondInput = useRef();
   const thirdInput = useRef();
   const fourthInput = useRef();
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: ''});
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  useEffect(() => {
+    const fetchPhoneNumber = async () => {
+      try {
+        const value = (
+          await firestore()
+            .collection('userData')
+            .doc(auth.currentUser.uid)
+            .get()
+        ).data().phoneNumber;
+        setPhoneNumber(value);
+      } catch (error) {
+        console.log('Error getting phone number: ', error);
+      }
+    };
+
+    fetchPhoneNumber();
+  }, []);
+
 
   return (
     <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Registration')} style={styles.arrowbtn}>
-        <Image
-              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
-              style={styles.arrow}
-              />
-      </TouchableOpacity>
       <Image
           source={{
             uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Flock.png?alt=media&token=217ac8fd-7d81-4625-9059-ee323a20c838',
