@@ -71,6 +71,7 @@ export default function AppNavigation() {
           <Stack.Screen name="Confirmation" component={Confirmation} />
           <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Password" component={Password} />
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Request" component={Request} />
         </Stack.Navigator>
       </NavigationContainer>
