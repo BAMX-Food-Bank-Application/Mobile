@@ -1,16 +1,13 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import {useNavigation} from '@react-navigation/native';
-import firebase from '@react-native-firebase/app';
-import  firestore  from '@react-native-firebase/firestore';
 import { auth } from '../../../config/FirebaseConnection';
 
 
@@ -25,7 +22,8 @@ const Email = () => {
     const user = auth.currentUser;
     if(user.emailVerified){
       try {
-        navigation.navigate('Confirmation');
+       navigation.navigate('Confirmation');
+       console.log('YAY');
       } catch (error) {
         console.log('Error: ', error);
       }

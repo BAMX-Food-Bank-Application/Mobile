@@ -4,7 +4,7 @@ import userAuth from '../hooks/userAuth';
 // Libs
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 // Screens
 import Login from '../features/SignUpAndRegistration/components/Login';
@@ -14,18 +14,21 @@ import Wait from '../features/SignUpAndRegistration/components/Wait';
 import Password from '../features/SignUpAndRegistration/components/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Email from '../features/SignUpAndRegistration/components/Email';
+import { auth } from '../config/FirebaseConnection';
 
 const Stack = createNativeStackNavigator();
 
 const _retrieveData = async () => {
   try {
-    const value = await AsyncStorage.getItem('SignUpRequest');
-    if (value !== null) return true;
+    const user = auth.currentUser;
+    const check1 = (await firestore().collection('userData').doc(user.uid).get()).data().status;
+    const check2 = user.emailVerified;
+    if (check1 == true || check2) return true;
     
     else return false;
     
   } catch (error) {
-    console.log('Error with async storage: ', error)
+    console.log('Error (0x1): ', error)
   }
 };
 
@@ -36,7 +39,7 @@ export default function AppNavigation() {
   const {user} = userAuth();
 
   if(user != null){
-    if(_retrieveData() == true){
+    if(_retrieveData()){
       console.log('Waiting for verification');
       return (      
         <NavigationContainer>
@@ -58,9 +61,7 @@ export default function AppNavigation() {
             initialRouteName="HomeScreen"
             screenOptions={{headerShown: false}}>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen name="Email" component={Email} />
-            <Stack.Screen name="Wait" component={Wait} />
-            <Stack.Screen name="Confirmation" component={Confirmation} />
+            
           </Stack.Navigator>
         </NavigationContainer>
       );
@@ -76,9 +77,9 @@ export default function AppNavigation() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Registration" component={Registration} />
+          <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="Confirmation" component={Confirmation} />
           <Stack.Screen name="Password" component={Password} />
-          <Stack.Screen name="Email" component={Email} />
         </Stack.Navigator>
       </NavigationContainer>
     );

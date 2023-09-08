@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import { createUserWithEmailAndPassword, sendEmailVerification, createCustomToken, signInWithEmailAndPassword } from 'firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -95,18 +94,9 @@ const Registration = () => {
         })
 
         .then(() => {
-
           // Sending email verification to the user
           console.log('User data added');
-          sendEmailVerification(userCredential.user).then(() => {
-            AsyncStorage.setItem('SignUpRequest', 'true');
-            AsyncStorage.setItem('e', JSON.stringify(email));
-            AsyncStorage.setItem('p', JSON.stringify(password));
-
-            navigation.pop();
-          }).then(() => {
-            console.log('Email verification sent');
-          })
+          sendEmailVerification(userCredential.user)
           .catch((error) => {
             console.log('Error sending email verification: ', error);
           });

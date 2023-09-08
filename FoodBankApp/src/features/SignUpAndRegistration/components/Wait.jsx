@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -19,16 +19,10 @@ const Wait = () => {
     const checkVerification = async () => {
 
         try{
-          const signUpRequest = AsyncStorage.getItem('SignUpRequest');
-          console.log('Current user: ', auth.currentUser.uid);
           const UID = auth.currentUser.uid;
           const verification = (await firestore().collection('userData').doc(UID).get()).data().status;
-          
-          AsyncStorage.setItem('SignUpRequest', 'true');
-
-          if (signUpRequest && verification) {
+          if (verification) {
             // Item exists, remove it
-            AsyncStorage.removeItem('SignUpRequest');
             navigation.navigate('Email');
           } else {
             setTimeout(() => {
@@ -38,7 +32,7 @@ const Wait = () => {
           }
         }
         catch (error){
-          console.log('Error checking verification: ', error);
+          console.log('Error (0x2): ', error);
         }    
       
     };

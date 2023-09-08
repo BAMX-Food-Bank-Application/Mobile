@@ -19,7 +19,6 @@ import { useNavigation } from '@react-navigation/native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '../../../config/FirebaseConnection';
 import firestore from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const auth = getAuth(app);
 
@@ -29,57 +28,25 @@ const Login = () => {
   const [isFocused2, setIsFocused2] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword]= useState ('');
+  const [loading, setLoading] = useState(false);
   
   const navigation = useNavigation();
-  
-  const checkPersistence = async () => {
-    try {
-      const req = await AsyncStorage.getItem('SignUpRequest');
-      const e = await AsyncStorage.getItem('e');
-      const p = await AsyncStorage.getItem('p');
-
-
-      if (req !== null && e !== null && p !== null) {
-        console.log('SignUpRequest: ', req ? 'true' : 'false');
-
-        signInWithEmailAndPassword(auth, e.substring(1, e.length - 1), p.substring(1, p.length - 1)).then(x => {navigation.navigate('Wait'); }).catch(error => { console.log('Patata: ', error)});
-      }
-      else{
-        return false;
-      }
-    } catch (error) {
-      console.log('Error with async storage: ', error)
-    }
-  };
 
   const handleLogin = async () => {
+    setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       // Check if status is true in firestore
       const user = userCredential.user;
       const userData = firestore().collection('userData').doc(user.uid).get();
-      if(userData.status === true){
-        // Check if email is verified
-        if(user.emailVerified === true){
-          // Check if phone is verified
-          if(user.phoneVerified === true){
-            // Navigate to home
-            navigation.navigate('HomeScreen');
-          }
-          else{
-            // Navigate to phone verification
-            navigation.navigate('Phone');
-          }
-        }
-        else{
-          // Navigate to email verification
-          navigation.navigate('Email');
-        }
-      }
-      else{
-        // Navigate to wait
-        navigation.navigate('Wait');
-      }
+      const check1 = userData.data().status;
+      const check2 = user.emailVerified;
+      const check3 = user.phoneVerified;
+
+      if (check1 && check2 && check3) navigation.navigate('HomeScreen');
+      else if (!check1) navigation.navigate('Wait');
+      else if (!check2) navigation.navigate('Email');
+      else if (!check3) navigation.navigate('Confirmation')
     })
     .catch(error => {
       // Handle authentication error
@@ -104,9 +71,8 @@ const Login = () => {
       }
     
     });
+    setLoading(false);
   }
-
-  checkPersistence();
 
   return (
     <LinearGradient

@@ -7,21 +7,23 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
-import auth from '../../../config/FirebaseConnection';
+import {auth} from '../../../config/FirebaseConnection';
+import {RecaptchaVerifier} from 'firebase/auth';
 
-const Confirmation = ( ) => {
+
+const Confirmation = () => {
   const navigation = useNavigation();
   const firstInput = useRef();
   const secondInput = useRef();
   const thirdInput = useRef();
   const fourthInput = useRef();
-  const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: ''});
+  const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '' });
   const [phoneNumber, setPhoneNumber] = useState('');
+  const reCaptchaVer = useRef(null);
 
   useEffect(() => {
     const fetchPhoneNumber = async () => {
@@ -107,7 +109,8 @@ const Confirmation = ( ) => {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => console.log(otp)}>
+        onPress={() => 
+        console.log("WIP")}>
         <Text style={styles.poppinsmedium}>Verificar</Text>
       </TouchableOpacity>
       <View style={[styles.flexRow]}>

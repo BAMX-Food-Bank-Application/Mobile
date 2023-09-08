@@ -15,6 +15,6 @@ const App = () => {
   return(
     <AppNavigation></AppNavigation>
   );
-};
+};    
 
 export default App;
