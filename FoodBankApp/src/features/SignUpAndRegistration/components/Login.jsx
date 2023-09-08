@@ -9,8 +9,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // Navigator
 import { useNavigation } from '@react-navigation/native';
@@ -76,49 +79,53 @@ const Login = () => {
     <LinearGradient
       colors={['#f3b246', '#e01e40']}
       style={styles.linearGradient}>
-      <View style={styles.screen}>
-        <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
-          <Image
-            source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=bb2f494f-d3dc-41bc-87f7-b677e0e966d7'}}
-            style={styles.logo}
-          />
-          <TextInput
-            placeholder="Email"
-            style={[isFocused ? styles.inputFocused : styles.input, styles.poppinsregular]}
-            onFocus={() => {
-              setIsFocused(true);
-            }}
-            onBlur={() => {
-              setIsFocused(false);
-            }}
-            value={email} onChangeText={setEmail}
-            >
-            </TextInput>
-          <TextInput
-            placeholder="Contraseña"
-            style={[isFocused2 ? styles.inputFocused : styles.input, styles.poppinsregular]}
-            onFocus={() => {
-              setIsFocused2(true);
-            }}
-            onBlur={() => {
-              setIsFocused2(false);
-            }}
-            secureTextEntry
-            value={password} onChangeText={setPassword}
-            ></TextInput>
-        </View>
-        <View style={styles.buttons}>
-          <TouchableOpacity style={[styles.button, {marginRight: 16}]} onPress={() => navigation.navigate('Registration')}>
-            <Text style={styles.poppinsmedium}>Registrarse</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
-            <Text style={styles.poppinsmedium}>Ingresar</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Password')}>
-          <Text style={[styles.linkedText]}>¿Olvidaste tu contraseña?</Text>
-        </TouchableOpacity>
-      </View>
+      <SafeAreaView style={styles.screen}>
+          <ScrollView>
+            <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
+              <View style={styles.logocon}>
+                <Image
+                  source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=bb2f494f-d3dc-41bc-87f7-b677e0e966d7'}}
+                  style={styles.logo}
+                />
+              </View>
+              <TextInput
+                placeholder="Email"
+                style={[isFocused ? styles.inputFocused : styles.input, styles.poppinsregular]}
+                onFocus={() => {
+                  setIsFocused(true);
+                }}
+                onBlur={() => {
+                  setIsFocused(false);
+                }}
+                value={email} onChangeText={setEmail}
+                >
+                </TextInput>
+              <TextInput
+                placeholder="Contraseña"
+                style={[isFocused2 ? styles.inputFocused : styles.input, styles.poppinsregular]}
+                onFocus={() => {
+                  setIsFocused2(true);
+                }}
+                onBlur={() => {
+                  setIsFocused2(false);
+                }}
+                secureTextEntry
+                value={password} onChangeText={setPassword}
+                ></TextInput>
+            </View>
+            <View style={styles.buttons}>
+              <TouchableOpacity style={[styles.button, {marginRight: 16}]} onPress={() => navigation.navigate('Registration')}>
+                <Text style={styles.poppinsmedium}>Registrarse</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
+                <Text style={styles.poppinsmedium}>Ingresar</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Password')}>
+              <Text style={[styles.linkedText]}>¿Olvidaste tu contraseña?</Text>
+            </TouchableOpacity>
+          </ScrollView>
+      </SafeAreaView>
     </LinearGradient>
   );
 };
@@ -162,7 +169,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#EFEFEF',
     borderRadius: 25,
     paddingVertical: 10,
-    paddingHorizontal: 30,
     alignItems: 'center',
     elevation: 10,
   },
@@ -170,14 +176,16 @@ const styles = StyleSheet.create({
     alignSelf: 'auto',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    textAlign: 'center',
     marginTop: 20,
     marginHorizontal: 32,
   },
-  logo: {
-    width: 300,
+  logocon:{
+    width: 200,
     height: 300,
+  },
+  logo: {
+    width: '100%',
+    height: '100%',
     marginBottom: 16,
   },
   poppinsregular: {

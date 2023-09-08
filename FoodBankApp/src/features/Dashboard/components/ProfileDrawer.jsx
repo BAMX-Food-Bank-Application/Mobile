@@ -77,9 +77,8 @@ const styles = StyleSheet.create({
     },
     icon:{
         alignItems: 'center',
-        padding: 30,
-        marginTop: 40,
-        marginBottom: 16,
+        padding: 16,
+        marginTop: '5%',
     },
     image:{
         width: 100,
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     option:{
         flexDirection: 'row',
         paddingHorizontal: 20,
-        paddingVertical: 32,
+        paddingVertical: '6%',
         width: 200,
         alignItems: 'center',
     },
