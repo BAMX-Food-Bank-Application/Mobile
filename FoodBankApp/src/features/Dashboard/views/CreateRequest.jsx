@@ -20,7 +20,7 @@ const CreateRequest = () => {
 
   const navigation = useNavigation();
 
-  const regexDate = /^(((0[1-9]|[12][0-9]|3[01])[- /.](0[13578]|1[02])|(0[1-9]|[12][0-9]|30)[- /.](0[469]|11)|(0[1-9]|1\d|2[0-8])[- /.]02)[- /.]\d{4}|29[- /.]02[- /.](\d{2}(0[48]|[2468][048]|[13579][26])|([02468][048]|[1359][26])00))$/;
+  const regexDate = /^[0-9]$/;
 
   // Labels data for dropdown
   const productTypes = [
@@ -36,8 +36,44 @@ const CreateRequest = () => {
     { label: "Otros",            typeValue: "OT" },
   ];
 
-  // Handle everything
+  // Force date input to be date format dd/mm/yyyy, if not, it will be deleted
+  const handleDate = (text, index) => {
+    if (!regexDate.test(text)) return;
+    if (text.length == 2 || text.length == 5) handleInputChange(text + '/', index, 'expirationDate');
+    else if (text.length == 3 || text.length == 6) handleInputChange(text.substring(0, text.length - 1), index, 'expirationDate');
+    else if (text.length == 1 && text > 3) handleInputChange('', index, 'expirationDate');
+    else handleInputChange(text, index, 'expirationDate');
+  };
 
+  // Validation
+    const validateInputs = () => {
+    let isValid = true;
+    inputs.forEach((input) => {
+      if (input.productName === '' || input.weight === '' || input.type === '' || input.unit === '' || input.expirationDate === '') {
+        Alert.alert('Error', 'Por favor, llena todos los campos');
+        isValid = false;
+      }
+      else if (input.productName === '') {
+        Alert.alert('Error', 'Ingresa el nombre del producto');
+        isValid = false;
+      } else if (input.weight === '') {
+        Alert.alert('Error', 'Ingresa la cantidad del producto');
+        isValid = false;
+      } else if (input.type === '') {
+        Alert.alert('Error', 'Selecciona el tipo de producto');
+        isValid = false;
+      } else if (input.unit === '') {
+        Alert.alert('Error', 'Selecciona la unidad del producto');
+        isValid = false;
+      } else if (input.expirationDate === '') {
+        Alert.alert('Error', 'Ingresa la fecha de caducidad del producto');
+        isValid = false;
+      } 
+    });
+    return isValid;
+  };
+
+  // Handle everything
   const handleUnitTypes = (index, _typeValue) => {
     const updatedUnits = [...unitTypes]; 
 
@@ -87,15 +123,16 @@ const CreateRequest = () => {
       'Si sales ahora, tu solicitud no será guardada',
       [
         {
-          text: 'Cancelar',
-          onPress: () => console.log('Cancel pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Salir',
+          text: 'Cancelar cargamento',
           onPress: () => navigation.navigate('HomeScreen'),
           style: 'destructive',
         },
+        {
+          text: 'Volver',
+          onPress: () => console.log('Cancel pressed'),
+          style: 'cancel',
+        },
+        
       ],
       {cancelable: false},
     ); 
@@ -103,12 +140,16 @@ const CreateRequest = () => {
 
   
   // Final method for request creation
-  const createRequest = async () => {
+  const handleRequest = async () => {
     let nameArray = [];
     let typeArray = [];
     let weightArray = [];
     let unitArray = [];
     let expirationDateArray = [];
+
+    if (!validateInputs()) {
+      return;
+    }
 
     inputs.forEach((input) => {
       nameArray.push(input.productName);
@@ -152,12 +193,6 @@ const CreateRequest = () => {
   return (
 
     <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.arrowbtn}>
-        <Image
-              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
-              style={styles.arrow}
-              />
-      </TouchableOpacity>
       <View style={[styles.flexContainer, styles.cardScreen]}>
         <ScrollView contentContainerStyle={{flexGrow:0}}>
         {inputs.map((input, index) => (
@@ -213,7 +248,9 @@ const CreateRequest = () => {
                 placeholder="DD/MM/AAAA"
                 value={inputs[index].expirationDate}
                 type="date"
-                onChangeText={(text) => handleInputChange(text, index, 'expirationDate')}
+                maxLength={10}
+                keyboardType='numeric'
+                onChangeText={(text) => handleDate(text, index)}
                 style={[styles.flexItem, styles.input]}
               />
           </View>
@@ -225,7 +262,7 @@ const CreateRequest = () => {
         </View>
         </ScrollView>
         <View style={[styles.flexContainer, {flexDirection: 'row'}]}>
-          <TouchableOpacity onPress={() => createRequest()}>
+          <TouchableOpacity onPress={() => handleRequest()}>
             <Text style={[styles.button, {backgroundColor: '#38B503'}]}>Guardar</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleExit()}>
