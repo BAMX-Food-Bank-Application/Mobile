@@ -8,20 +8,17 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Navigator
 import { useNavigation } from '@react-navigation/native';
 
 // Firebase
-import app from '../../../config/FirebaseConnection'
-import { getAuth } from 'firebase/auth';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-
-import { GoogleSignin, statusCodes } from '@reac-native-google-signin/google-signin'; // WIP
-
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import app from '../../../config/FirebaseConnection';
+import firestore from '@react-native-firebase/firestore';
 
 const auth = getAuth(app);
 
@@ -31,37 +28,51 @@ const Login = () => {
   const [isFocused2, setIsFocused2] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword]= useState ('');
-
+  const [loading, setLoading] = useState(false);
+  
   const navigation = useNavigation();
 
-  const _retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('SignUpRequest');
-      if (value !== null) {
-        navigation.navigate('Wait');
+  const handleLogin = async () => {
+    setLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+    .then(userCredential => {
+      // Check if status is true in firestore
+      const user = userCredential.user;
+      const userData = firestore().collection('userData').doc(user.uid).get();
+      const check1 = userData.data().status;
+      const check2 = user.emailVerified;
+      const check3 = user.phoneVerified;
+
+      if (check1 && check2 && check3) navigation.navigate('HomeScreen');
+      else if (!check1) navigation.navigate('Wait');
+      else if (!check2) navigation.navigate('Email');
+      else if (!check3) navigation.navigate('Confirmation')
+    })
+    .catch(error => {
+      // Handle authentication error
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      if (errorCode === 'auth/invalid-email') {
+        // Invalid email
+        Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+      } else if (errorCode === 'auth/wrong-password') {
+        // Incorrect password
+        Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es incorrecta');
+      } else if (errorCode === 'auth/user-not-found') {
+        // User not found
+        Alert.alert('Usuario no encontrado', 'El usuario ingresado no existe');
+      } else if(errorCode === 'auth/missing-password'){
+        // Password missing
+        Alert.alert('Contraseña no ingresada', 'Por favor ingresa una contraseña');
       }
-    } catch (error) {
-    }
-  };
-
-  _retrieveData();
-
-
-    const handleLogin = async () => {
-    if(email && password){
-      try {
-        const user = signInWithEmailAndPassword(auth, email, password);
-        if(user){
-            navigation.navigate('Home');
-        }
-        else{
-            Alert.alert('Wrong answer dude');
-        }
-      } catch (error) {
-        Alert.alert('Error code: ', error.message);
+      else {
+        // Other error cases
+        Alert.alert('Error', errorMessage);
       }
-    }
-  };
+    
+    });
+    setLoading(false);
+  }
 
   return (
     <LinearGradient
