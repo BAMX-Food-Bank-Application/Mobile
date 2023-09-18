@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1043818646012:android:ae6a992b5b025882154a79",
+        "mobilesdk_app_id": "1:1043818646012:android:3bede521c697afa6154a79",
         "android_client_info": {
           "package_name": "com.foodbankapp"
         }
@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBa9jRMJZwGdgs_lH3fUm-fNF3TjwSnBjE"
+          "current_key": "AIzaSyBi6WlKLtdRi9GS6vjusbwXG2AasyebRA0"
         }
       ],
       "services": {
