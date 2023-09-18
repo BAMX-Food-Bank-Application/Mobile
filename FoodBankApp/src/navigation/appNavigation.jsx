@@ -14,6 +14,7 @@ import Password from '../features/SignUpAndRegistration/views/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Email from '../features/SignUpAndRegistration/views/Email';
 import CreateRequest from '../features/Dashboard/views/CreateRequest';
+import RequestDetails from '../features/Dashboard/views/RequestDetails'
 import { auth } from '../config/FirebaseConnection';
 
 const Stack = createNativeStackNavigator();
@@ -52,7 +53,6 @@ export default function AppNavigation() {
             <Stack.Screen name="Wait" component={Wait} />
             <Stack.Screen name="Email" component={Email} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen name="CreateRequest" component={CreateRequest} />
           </Stack.Navigator>
         </NavigationContainer>
       );
@@ -64,6 +64,8 @@ export default function AppNavigation() {
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="CreateRequest" component={CreateRequest} />
+          <Stack.Screen name = "RequestDetails" component={RequestDetails}/>
+          
         </Stack.Navigator>
       </NavigationContainer>
     }
@@ -76,7 +78,7 @@ export default function AppNavigation() {
             screenOptions={{headerShown: false}}>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="CreateRequest" component={CreateRequest} />
-            
+            <Stack.Screen name = "RequestDetails" component={RequestDetails}/>
           </Stack.Navigator>
         </NavigationContainer>
       );

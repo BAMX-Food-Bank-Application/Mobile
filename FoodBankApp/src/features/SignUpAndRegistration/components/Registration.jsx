@@ -69,8 +69,7 @@ const Registration = () => {
         return false;
       }
       // Check if phone number is valid
-
-      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+      
       if (!phoneRegex.test(phoneNumber)) {
         Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
         return false;
