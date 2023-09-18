@@ -7,12 +7,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import firestore from '@react-native-firebase/firestore';
 
 // Screens
-import Login from '../features/SignUpAndRegistration/components/Login';
-import Registration from '../features/SignUpAndRegistration/components/Registration';
-import Wait from '../features/SignUpAndRegistration/components/Wait';
-import Password from '../features/SignUpAndRegistration/components/Password';
+import Login from '../features/SignUpAndRegistration/views/Login';
+import Registration from '../features/SignUpAndRegistration/views/Registration';
+import Wait from '../features/SignUpAndRegistration/views/Wait';
+import Password from '../features/SignUpAndRegistration/views/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
-import Email from '../features/SignUpAndRegistration/components/Email';
+import Email from '../features/SignUpAndRegistration/views/Email';
 import CreateRequest from '../features/Dashboard/views/CreateRequest';
 import { auth } from '../config/FirebaseConnection';
 
@@ -64,7 +64,6 @@ export default function AppNavigation() {
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="CreateRequest" component={CreateRequest} />
-          <Stack.Screen name = "RequestDetails" component={RequestDetails}/>
         </Stack.Navigator>
       </NavigationContainer>
     }
@@ -77,6 +76,7 @@ export default function AppNavigation() {
             screenOptions={{headerShown: false}}>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="CreateRequest" component={CreateRequest} />
+            
           </Stack.Navigator>
         </NavigationContainer>
       );
