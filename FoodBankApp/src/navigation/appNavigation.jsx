@@ -23,9 +23,12 @@ const _retrieveData = async () => {
     const user = auth.currentUser;
     const check1 = (await firestore().collection('userData').doc(user.uid).get()).data().status;
     const check2 = user.emailVerified;
-    if (check1 == true || check2) return true;
+    if (check1 == true) {
+      if(check2 == true) return 2;
+      return 1;
+    }
     
-    else return false;
+    else return 0;
     
   } catch (error) {
     console.log('Error (0x1): ', error)
@@ -39,7 +42,7 @@ export default function AppNavigation() {
   const {user} = userAuth();
 
   if(user != null){
-    if(_retrieveData()){
+    if(_retrieveData()==1){
       console.log('Waiting for verification');
       return (      
         <NavigationContainer>
@@ -50,10 +53,19 @@ export default function AppNavigation() {
             <Stack.Screen name="Email" component={Email} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="CreateRequest" component={CreateRequest} />
-            
           </Stack.Navigator>
         </NavigationContainer>
       );
+    }
+    else if(_retrieveData()==2){
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="HomeScreen"
+          screenOptions={{headerShown: false}}>
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="CreateRequest" component={CreateRequest} />
+        </Stack.Navigator>
+      </NavigationContainer>
     }
     else{
       console.log('User logged: '+ user.uid)

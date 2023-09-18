@@ -35,18 +35,16 @@ const Login = () => {
   const handleLogin = async () => {
     setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
+    .then(async userCredential => {
       // Check if status is true in firestore
       const user = userCredential.user;
-      const userData = firestore().collection('userData').doc(user.uid).get();
+      const userData = await firestore().collection('userData').doc(user.uid).get();
       const check1 = userData.data().status;
       const check2 = user.emailVerified;
-      const check3 = user.phoneVerified;
 
-      if (check1 && check2 && check3) navigation.navigate('HomeScreen');
+      if (check1 && check2) navigation.navigate('HomeScreen');
       else if (!check1) navigation.navigate('Wait');
       else if (!check2) navigation.navigate('Email');
-      else if (!check3) navigation.navigate('Confirmation')
     })
     .catch(error => {
       // Handle authentication error
@@ -67,7 +65,7 @@ const Login = () => {
       }
       else {
         // Other error cases
-        Alert.alert('Error', errorMessage);
+        Alert.alert('Error ', errorMessage);
       }
     
     });
