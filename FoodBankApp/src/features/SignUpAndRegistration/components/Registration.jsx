@@ -37,6 +37,7 @@ const Registration = () => {
       const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
       const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
       // We start validation
 
       // Check if everything is filled
@@ -55,8 +56,7 @@ const Registration = () => {
         return false;
       }
       // Check if phone number is valid
-
-      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+      
       if (!phoneRegex.test(phoneNumber)) {
         Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
         return false;
