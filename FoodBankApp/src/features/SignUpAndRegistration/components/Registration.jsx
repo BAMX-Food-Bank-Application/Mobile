@@ -22,12 +22,44 @@ const Registration = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handleSignUp = async () => {
-    try {
-      await AsyncStorage.setItem(
-        'SignUpRequest',
-        'Done',
-      );
-    } catch (error) {
+    if(!dev){
+      const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
+      const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+      // We start validation
+
+      // Check if everything is filled
+      if (name === '' || email === '' || password === '' || passwordC === '') {
+        Alert.alert('Campos vacíos', 'Por favor llena todos los campos');
+        return false;
+      }
+      // Check if name is valid
+      if (!nameRegex.test(name)) {
+        Alert.alert('Nombre inválido', 'El nombre ingresado no es válido');
+        return false;
+      }
+      // Check if email is valid
+      if (!emailRegex.test(email)) {
+        Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+        return false;
+      }
+      // Check if phone number is valid
+      
+      if (!phoneRegex.test(phoneNumber)) {
+        Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
+        return false;
+      }
+
+      // Check if password is valid
+      if (!passwordRegex.test(password)) {
+        Alert.alert("Contraseña inválida", "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número");
+        return false;
+      }
+      if (password !== passwordC) {
+        Alert.alert('Contraseñas no coinciden', 'Las contraseñas no coinciden');
+        return false;
+      }
     }
     navigation.navigate('Wait')
   };

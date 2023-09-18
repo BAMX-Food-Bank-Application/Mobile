@@ -12,13 +12,20 @@ import Confirmation from '../features/SignUpAndRegistration/components/Confirmat
 import Wait from '../features/SignUpAndRegistration/components/Wait';
 import Password from '../features/SignUpAndRegistration/components/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
+<<<<<<< Updated upstream
 import Request from '../features/Dashboard/views/Request';
+=======
+import Email from '../features/SignUpAndRegistration/components/Email';
+import { auth } from '../config/FirebaseConnection';
+import CreateRequest from '../features/Dashboard/components/CreateRequest';
+>>>>>>> Stashed changes
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   const {user} = userAuth();
 
+<<<<<<< Updated upstream
   if (user) {
     return (
       <NavigationContainer>
@@ -30,10 +37,47 @@ export default function AppNavigation() {
       </NavigationContainer>
     );
   } else {
+=======
+  if(user != null){
+    if(_retrieveData()){
+      console.log('Waiting for verification');
+      return (      
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="CreateRequest"
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Wait" component={Wait} />
+            <Stack.Screen name="Email" component={Email} />
+            <Stack.Screen name="Confirmation" component={Confirmation} />
+            <Stack.Screen name="CreateRequest" component={CreateRequest} />
+
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }
+    else{
+      console.log('User logged: '+ user.uid)
+      return (      
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="HomeScreen"
+            screenOptions={{headerShown: false}}>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="CreateRequest" component={CreateRequest} />
+
+            
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    } 
+  }
+  else if(user == null){
+    console.log('No access token');
+>>>>>>> Stashed changes
     return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="CreateRequest"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Login" component={HomeScreen} />
