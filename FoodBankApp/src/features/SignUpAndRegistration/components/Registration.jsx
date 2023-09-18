@@ -6,9 +6,14 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import { createUserWithEmailAndPassword, sendEmailVerification, createCustomToken, signInWithEmailAndPassword } from 'firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
+import {auth} from '../../../config/FirebaseConnection';
+
 
 const Registration = () => {
 
@@ -21,12 +26,14 @@ const Registration = () => {
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
+  
+  const dev = false;
+
   const handleSignUp = async () => {
     if(!dev){
       const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
       const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
       // We start validation
 
       // Check if everything is filled
@@ -45,7 +52,8 @@ const Registration = () => {
         return false;
       }
       // Check if phone number is valid
-      
+
+      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
       if (!phoneRegex.test(phoneNumber)) {
         Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
         return false;
@@ -61,8 +69,47 @@ const Registration = () => {
         return false;
       }
     }
-    navigation.navigate('Wait')
-  };
+    else{
+      console.log('Dev mode');
+      setName('Dev');
+      setEmail('geekdeer@gmail.com');
+      setPhoneNumber('1234567890');
+      setPassword('Dev123456');
+      setNameCorp('DevCorp');
+      setAddress('DevAddress');
+    }   
+
+    // If everything is valid, we proceed to create the user
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Creating user data in firestore
+        console.log('User created: '+ userCredential.user.uid);
+        
+        firestore().collection('userData').doc(userCredential.user.uid).set({
+          name: name,
+          nameCorp: nameCorp,
+          address: address,
+          phoneNumber: Number(phoneNumber), 
+          status: Boolean (false),         
+        })
+
+        .then(() => {
+          // Sending email verification to the user
+          console.log('User data added');
+          sendEmailVerification(userCredential.user)
+          .catch((error) => {
+            console.log('Error sending email verification: ', error);
+          });
+        }
+        )
+        .catch((error) => {
+          console.log('Error adding user data to firestore: ', error);
+        });        
+      })
+      .catch((error) => {
+        console.log('Error creating user: ', error);
+      });
+    };
 
   return (
     <View style={styles.screen}>
@@ -90,7 +137,8 @@ const Registration = () => {
           value={email}
           onChangeText={setEmail}
           style={styles.input}
-          autoCapitalize={'none'}></TextInput>
+          autoCapitalize={'none'}
+          keyboardType={'email-address'}></TextInput>
         <TextInput
           placeholder="Nombre de Empresa *"
           style={styles.input}
@@ -103,8 +151,11 @@ const Registration = () => {
           autoCapitalize={'none'}></TextInput>
         <TextInput
           placeholder="Número de teléfono *"
+          style={styles.input}
+          maxLength={10}
           onChangeText={setPhoneNumber}
-          style={styles.input}></TextInput>
+          value={phoneNumber}
+          keyboardType={'phone-pad'}></TextInput>
         <TextInput
           placeholder="Contraseña *"
           value={password}

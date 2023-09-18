@@ -4,58 +4,53 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 import {useNavigation} from '@react-navigation/native';
-import  firestore  from '@react-native-firebase/firestore';
 import { auth } from '../../../config/FirebaseConnection';
 
 
-const Wait = () => {
+
+
+
+const Email = () => {
   const navigation = useNavigation();
-  
 
-    const checkVerification = async () => {
+  const checkMail = async () => {
+    // get current user if email is verified
+    if(auth.currentUser.emailVerified){
+      try {
+       navigation.navigate('HomeScreen');
+       console.log('YAY');
+      } catch (error) {
+        console.log('Error: ', error);
+      }
+    } else {
+      // if email is not verified, wait 5 seconds and check again
+      setTimeout(() => {
+        auth.currentUser.reload();
+        checkMail();
+      }, 5000);
+    }
+  };
 
-        try{
-          const UID = auth.currentUser.uid;
-          const verification = (await firestore().collection('userData').doc(UID).get()).data().status;
-          if (verification) {
-            // Item exists, remove it
-            navigation.navigate('Email');
-          } else {
-            setTimeout(() => {
-              console.log('Waiting for verification');
-              checkVerification();
-            }, 10000);
-          }
-        }
-        catch (error){
-          console.log('Error (0x2): ', error);
-        }    
-      
-    };
-  
-
-  checkVerification();
-
+  checkMail();
   return (
     <View style={styles.screen}>
       
       <View style = {styles.container}>
         <Image
             source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fprocessing.png?alt=media&token=7cb7b032-ccef-463b-96c8-ce7d0a2a6446',
+                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2FsentEmail.png?alt=media&token=16517312-d681-4682-8ac0-41676115b8d0',
             }}
             style={styles.logo}
         />
         <View style={styles.texts}>
-            <Text style={styles.message}>Espere</Text>
-            <Text style={styles.text}>El Banco de Alimentos está revisando tu solicitud de registro.</Text>
+            <Text style={styles.message}>Ya casi!</Text>
+            <Text style={styles.text}>Se ha enviado un correo de confirmación, por favor revise su bandeja de entrada.</Text>
         </View>
       </View>
-
     </View>
   );
 };
@@ -103,4 +98,4 @@ const styles = StyleSheet.create({
       }
 });
 
-export default Wait;
+export default Email;

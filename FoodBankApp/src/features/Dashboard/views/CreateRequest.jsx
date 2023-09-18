@@ -81,6 +81,26 @@ const CreateRequest = () => {
     setInputs(updatedInputs);
   };
 
+  const handleExit = () => {
+    Alert.alert(
+      '¿Estás seguro?',
+      'Si sales ahora, tu solicitud no será guardada',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancel pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Salir',
+          onPress: () => navigation.navigate('HomeScreen'),
+          style: 'destructive',
+        },
+      ],
+      {cancelable: false},
+    ); 
+  };
+
   
   // Final method for request creation
   const createRequest = async () => {
@@ -132,7 +152,7 @@ const CreateRequest = () => {
   return (
 
     <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
+      <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.arrowbtn}>
         <Image
               source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
               style={styles.arrow}
@@ -208,7 +228,7 @@ const CreateRequest = () => {
           <TouchableOpacity onPress={() => createRequest()}>
             <Text style={[styles.button, {backgroundColor: '#38B503'}]}>Guardar</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleExit()}>
             <Text style={[styles.button, {backgroundColor: '#E8042C'}]}>Cancelar</Text>
           </TouchableOpacity>
           
