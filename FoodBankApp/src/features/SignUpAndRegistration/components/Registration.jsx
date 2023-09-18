@@ -1,4 +1,7 @@
+// Base
 import React, {useState} from 'react';
+
+// UI
 import {
   Text,
   View,
@@ -7,16 +10,27 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  ScrollView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+
+// Components
+import DefaultAlert from '../../Global/components/DefaultAlert';
+import Button from '../../Global/components/Button';
+import ReturnButton from '../../Global/components/ReturnButton';
+import Logo from '../../Global/components/Logo';
+
+
+// Firebase
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
 import {auth} from '../../../config/FirebaseConnection';
 
-import {SafeAreaView} from 'react-native-safe-area-context';
+// Styles
+import DefaultStyles from '../../Global/styles/Defaults';
+import Colors from '../../Global/styles/Colors';
 
+
+// Others
+import {useNavigation} from '@react-navigation/native';
 
 const Registration = () => {
 
@@ -35,9 +49,8 @@ const Registration = () => {
   const handleSignUp = async () => {
     if(!dev){
       const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
-      const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+      const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z])$/;
+      const passwordRegex = /^(?=.[a-z])(?=.[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
       // We start validation
 
       // Check if everything is filled
@@ -56,6 +69,8 @@ const Registration = () => {
         return false;
       }
       // Check if phone number is valid
+
+      const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
       if (!phoneRegex.test(phoneNumber)) {
         Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
         return false;
@@ -114,81 +129,72 @@ const Registration = () => {
     };
 
   return (
-    <SafeAreaView style={styles.screen}>
-      <ScrollView>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
-          <Image
-                source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
-                style={styles.arrow}
-                />
+    <View style={styles.screen}>
+      <ReturnButton/>
+      <View
+        style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
+        <Logo/>
+        <TextInput
+          placeholder="Nombre Completo *"
+          placeholderTextColor={Colors.textDisabled}
+          style={styles.input}
+          onChangeText={setName}
+          autoCapitalize={'words'}></TextInput>
+        <TextInput
+          placeholder="Correo *"
+          placeholderTextColor={Colors.textDisabled}
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          autoCapitalize={'none'}
+          keyboardType={'email-address'}></TextInput>
+        <TextInput
+          placeholder="Nombre de Empresa *"
+          placeholderTextColor={Colors.textDisabled}
+          style={styles.input}
+          onChangeText={setNameCorp}
+          autoCapitalize={'none'}></TextInput>
+        <TextInput
+          placeholder="Ubicación de la Empresa *"
+          placeholderTextColor={Colors.textDisabled}
+          style={styles.input}
+          onChangeText={setAddress}
+          autoCapitalize={'none'}></TextInput>
+        <TextInput
+          placeholder="Número de teléfono *"
+          placeholderTextColor={Colors.textDisabled}
+          style={styles.input}
+          maxLength={10}
+          onChangeText={setPhoneNumber}
+          value={phoneNumber}
+          keyboardType={'phone-pad'}></TextInput>
+        <TextInput
+          placeholder="Contraseña *"
+          placeholderTextColor={Colors.textDisabled}
+          value={password}
+          secureTextEntry
+          onChangeText={setPassword}
+          style={styles.input}></TextInput>
+        <TextInput
+          placeholder="Confirmar contraseña *"
+          placeholderTextColor={Colors.textDisabled}
+          value={passwordC}
+          secureTextEntry
+          onChangeText={setPasswordC}
+          style={styles.input}></TextInput>
+        <TouchableOpacity
+          style={[styles.button, {marginRight: 16}]}
+          onPress={handleSignUp}>
+          <Text style={[DefaultStyles.poppinsMedium, {color: Colors.textPrimary}]} >Registrarse</Text>
         </TouchableOpacity>
-        <View
-          style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
-          <View style={styles.logocon}>
-            <Image
-              source={{
-                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=bb2f494f-d3dc-41bc-87f7-b677e0e966d7',
-              }}
-              style={styles.logo}
-            />
-          </View>
-          <TextInput
-            placeholder="Nombre Completo *"
-            style={styles.input}
-            onChangeText={setName}
-            autoCapitalize={'words'}></TextInput>
-          <TextInput
-            placeholder="Correo *"
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-            autoCapitalize={'none'}
-            keyboardType={'email-address'}></TextInput>
-          <TextInput
-            placeholder="Nombre de Empresa *"
-            style={styles.input}
-            onChangeText={setNameCorp}
-            autoCapitalize={'none'}></TextInput>
-          <TextInput
-            placeholder="Ubicación de la Empresa *"
-            style={styles.input}
-            onChangeText={setAddress}
-            autoCapitalize={'none'}></TextInput>
-          <TextInput
-            placeholder="Número de teléfono *"
-            style={styles.input}
-            maxLength={10}
-            onChangeText={setPhoneNumber}
-            value={phoneNumber}
-            keyboardType={'phone-pad'}></TextInput>
-          <TextInput
-            placeholder="Contraseña *"
-            value={password}
-            secureTextEntry
-            onChangeText={setPassword}
-            style={styles.input}></TextInput>
-          <TextInput
-            placeholder="Confirmar contraseña *"
-            value={passwordC}
-            secureTextEntry
-            onChangeText={setPasswordC}
-            style={styles.input}></TextInput>
-          <TouchableOpacity
-            style={[styles.button, {marginRight: 16}]}
-            onPress={handleSignUp}>
-            <Text style={styles.poppinsmedium} >Registrarse</Text>
+        <View style={[DefaultStyles.flexRow]}>
+          <Text style={[DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}> Ya tienes una cuenta? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={[DefaultStyles.linkedText]}>Ingresar</Text>
           </TouchableOpacity>
-          <View style={[styles.flexRow]}>
-            <Text style={[styles.flex]}>Ya tienes una cuenta? </Text>
-            <TouchableOpacity
-              style={[styles.flex]}
-              onPress={() => navigation.navigate('Login')}>
-              <Text style={[styles.linkedText]}>Ingresar</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </View>
   );
 };
 
@@ -198,26 +204,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#EFEFEF',
   },
-  logocon:{
-    width: 200,
-    height: 300,
-  },
   logo: {
-    width: '100%',
-    height: '100%',
+    width: 280,
+    height: 280,
     marginBottom: 16,
   },
-  arrow: {
-    width: 24,
-    height: 24,
-  },
-  arrowbtn: {
-    width: 24,
-    height: 24,
-    alignSelf: 'flex-start',
-    marginTop: 30,
-    marginHorizontal: 24,
-  },
+
   input: {
     width: '100%',
     borderBottomWidth: 1,
@@ -231,17 +223,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
-  flexRow: {
-    display: 'flex',
-    margin: 10,
-    flexDirection: 'row',
-  },
+  
   rowItem: {
     flex: 1,
-  },
-  linkedText: {
-    color: '#E8042C',
-    fontFamily: 'Poppins-Medium', 
   },
   poppinsregular: {
     fontFamily: 'Poppins-Regular', 
