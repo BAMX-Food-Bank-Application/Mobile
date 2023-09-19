@@ -7,12 +7,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import { createUserWithEmailAndPassword, sendEmailVerification, createCustomToken, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 import {auth} from '../../../config/FirebaseConnection';
+
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 
 const Registration = () => {
@@ -112,77 +115,81 @@ const Registration = () => {
     };
 
   return (
-    <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
-        <Image
-              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
-              style={styles.arrow}
-              />
-      </TouchableOpacity>
-      <View
-        style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
-        <Image
-          source={{
-            uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=cb9d7322-205e-448f-9288-24e81fe46bf5',
-          }}
-          style={styles.logo}
-        />
-        <TextInput
-          placeholder="Nombre Completo *"
-          style={styles.input}
-          onChangeText={setName}
-          autoCapitalize={'words'}></TextInput>
-        <TextInput
-          placeholder="Correo *"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-          autoCapitalize={'none'}
-          keyboardType={'email-address'}></TextInput>
-        <TextInput
-          placeholder="Nombre de Empresa *"
-          style={styles.input}
-          onChangeText={setNameCorp}
-          autoCapitalize={'none'}></TextInput>
-        <TextInput
-          placeholder="Ubicación de la Empresa *"
-          style={styles.input}
-          onChangeText={setAddress}
-          autoCapitalize={'none'}></TextInput>
-        <TextInput
-          placeholder="Número de teléfono *"
-          style={styles.input}
-          maxLength={10}
-          onChangeText={setPhoneNumber}
-          value={phoneNumber}
-          keyboardType={'phone-pad'}></TextInput>
-        <TextInput
-          placeholder="Contraseña *"
-          value={password}
-          secureTextEntry
-          onChangeText={setPassword}
-          style={styles.input}></TextInput>
-        <TextInput
-          placeholder="Confirmar contraseña *"
-          value={passwordC}
-          secureTextEntry
-          onChangeText={setPasswordC}
-          style={styles.input}></TextInput>
-        <TouchableOpacity
-          style={[styles.button, {marginRight: 16}]}
-          onPress={handleSignUp}>
-          <Text style={styles.poppinsmedium} >Registrarse</Text>
+    <SafeAreaView style={styles.screen}>
+      <ScrollView>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
+          <Image
+                source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
+                style={styles.arrow}
+                />
         </TouchableOpacity>
-        <View style={[styles.flexRow]}>
-          <Text style={[styles.flex]}>Ya tienes una cuenta? </Text>
+        <View
+          style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
+          <View style={styles.logocon}>
+            <Image
+              source={{
+                uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=cb9d7322-205e-448f-9288-24e81fe46bf5',
+              }}
+              style={styles.logo}
+            />
+          </View>
+          <TextInput
+            placeholder="Nombre Completo *"
+            style={styles.input}
+            onChangeText={setName}
+            autoCapitalize={'words'}></TextInput>
+          <TextInput
+            placeholder="Correo *"
+            value={email}
+            onChangeText={setEmail}
+            style={styles.input}
+            autoCapitalize={'none'}
+            keyboardType={'email-address'}></TextInput>
+          <TextInput
+            placeholder="Nombre de Empresa *"
+            style={styles.input}
+            onChangeText={setNameCorp}
+            autoCapitalize={'none'}></TextInput>
+          <TextInput
+            placeholder="Ubicación de la Empresa *"
+            style={styles.input}
+            onChangeText={setAddress}
+            autoCapitalize={'none'}></TextInput>
+          <TextInput
+            placeholder="Número de teléfono *"
+            style={styles.input}
+            maxLength={10}
+            onChangeText={setPhoneNumber}
+            value={phoneNumber}
+            keyboardType={'phone-pad'}></TextInput>
+          <TextInput
+            placeholder="Contraseña *"
+            value={password}
+            secureTextEntry
+            onChangeText={setPassword}
+            style={styles.input}></TextInput>
+          <TextInput
+            placeholder="Confirmar contraseña *"
+            value={passwordC}
+            secureTextEntry
+            onChangeText={setPasswordC}
+            style={styles.input}></TextInput>
           <TouchableOpacity
-            style={[styles.flex]}
-            onPress={() => navigation.navigate('Login')}>
-            <Text style={[styles.linkedText]}>Ingresar</Text>
+            style={[styles.button, {marginRight: 16}]}
+            onPress={handleSignUp}>
+            <Text style={styles.poppinsmedium} >Registrarse</Text>
           </TouchableOpacity>
+          <View style={[styles.flexRow]}>
+            <Text style={[styles.flex]}>Ya tienes una cuenta? </Text>
+            <TouchableOpacity
+              style={[styles.flex]}
+              onPress={() => navigation.navigate('Login')}>
+              <Text style={[styles.linkedText]}>Ingresar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -192,9 +199,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#EFEFEF',
   },
+  logocon:{
+    width: 200,
+    height: 300,
+  },
   logo: {
-    width: 280,
-    height: 280,
+    width: '100%',
+    height: '100%',
     marginBottom: 16,
   },
   arrow: {
@@ -204,6 +215,8 @@ const styles = StyleSheet.create({
   arrowbtn: {
     width: 24,
     height: 24,
+    alignSelf: 'flex-start',
+    marginTop: 30,
     marginHorizontal: 24,
   },
   input: {
