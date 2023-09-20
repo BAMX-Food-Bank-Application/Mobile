@@ -3,13 +3,13 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 // UI
-import {Text, TouchableOpacity, Alert} from 'react-native';
+import {Text, TouchableOpacity, Alert, ScrollView} from 'react-native';
 
 // Firebase
 import app from '../../../config/FirebaseConnection';
 import {getAuth} from 'firebase/auth';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import NewRequest from '../components/NewRequest';
+import ShipmentsComponent from '../components/ShipmentsComponent';
 
 const HomeScreen = () => {
   const auth = getAuth(app);
@@ -28,13 +28,10 @@ const HomeScreen = () => {
   };
 
   return (
-    <SafeAreaView>
-      <Text>Welcome to the Home Screen</Text>
-      <TouchableOpacity onPress={() => signOut()}>
-        <Text>LogOut</Text>
-      </TouchableOpacity>
-      <NewRequest></NewRequest>
-    </SafeAreaView>
+      <ScrollView style={{margin: 16}}>
+        <ShipmentsComponent/>
+        <NewRequest/>
+      </ScrollView>
   );
 };
 
