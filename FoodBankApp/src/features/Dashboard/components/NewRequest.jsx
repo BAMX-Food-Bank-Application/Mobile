@@ -23,22 +23,18 @@ const NewRequest = () => {
 
 const styles = StyleSheet.create({
     full:{
+        display: 'flex',
         backgroundColor: '#F89C04',
-        width: '80%',
-        height: '30%',
-        alignSelf: 'center',
+        minHeight: 100,
         borderRadius: 15,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        paddingHorizontal: 10,
     },
     plus: {
-        height: '100%',
-    },
-    plusbtn: {
-        width: '20%',
-        height: '80%'
+        width: 64,
+        height: 64,
+        alignSelf: 'center',
     },
     text: {
         fontFamily: 'Poppins-ExtraBold',
