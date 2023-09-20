@@ -14,7 +14,6 @@ import Password from '../features/SignUpAndRegistration/views/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Email from '../features/SignUpAndRegistration/views/Email';
 import CreateRequest from '../features/Dashboard/views/CreateRequest';
-import RequestDetails from '../features/Dashboard/views/RequestDetails'
 import { auth } from '../config/FirebaseConnection';
 
 const Stack = createNativeStackNavigator();
