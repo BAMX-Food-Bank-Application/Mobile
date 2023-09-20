@@ -38,7 +38,6 @@ const CreateRequest = () => {
 
   // Force date input to be date format dd/mm/yyyy, if not, it will be deleted
   const handleDate = (text, index) => {
-    if (!regexDate.test(text)) return;
     if (text.length == 2 || text.length == 5) handleInputChange(text + '/', index, 'expirationDate');
     else if (text.length == 3 || text.length == 6) handleInputChange(text.substring(0, text.length - 1), index, 'expirationDate');
     else if (text.length == 1 && text > 3) handleInputChange('', index, 'expirationDate');
@@ -160,16 +159,9 @@ const CreateRequest = () => {
     });
 
     try{
-    const UID = auth.currentUser.uid;
-      const userData = (await firestore().collection('userData').doc(UID).get()).data();
-  
+    const UID = auth.currentUser.uid;  
       const requestData = {
         supplierID: UID,
-        supplierName: userData.name,
-        supplierEmail: auth.currentUser.email,
-        nameCorp: userData.nameCorp,
-        address: userData.address,
-        phone: userData.phoneNumber,
         type: typeArray,
         productName: nameArray,
         weight: weightArray,
@@ -262,12 +254,13 @@ const CreateRequest = () => {
         </View>
         </ScrollView>
         <View style={[styles.flexContainer, {flexDirection: 'row'}]}>
+        <TouchableOpacity onPress={() => handleExit()}>
+            <Text style={[styles.button, {backgroundColor: '#E8042C'}]}>Cancelar</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => handleRequest()}>
             <Text style={[styles.button, {backgroundColor: '#38B503'}]}>Guardar</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleExit()}>
-            <Text style={[styles.button, {backgroundColor: '#E8042C'}]}>Cancelar</Text>
-          </TouchableOpacity>
+          
           
       </View>
       </View>

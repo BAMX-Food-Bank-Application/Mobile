@@ -11,10 +11,9 @@ import {getAuth} from 'firebase/auth';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NewRequest from '../components/NewRequest';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const auth = getAuth(app);
 
-  const navigation = useNavigation();
 
   const signOut = async () => {
     try {
@@ -34,6 +33,9 @@ const HomeScreen = () => {
         <Text>LogOut</Text>
       </TouchableOpacity>
       <NewRequest></NewRequest>
+      <TouchableOpacity onPress={ () =>  navigation.navigate('RequestDetails', { docID: 'Spzcyokwe0ImmKGnpf0g'})}>
+        <Text>Request details</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
