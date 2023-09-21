@@ -1,4 +1,7 @@
-import React, {useEffect, useState} from 'react';
+// git commit -m "Products data visualized inside cards, full details view done, added key index to request creation view. [Check for bugs]"
+
+
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -140,38 +143,40 @@ const CreateRequest = () => {
   
   // Final method for request creation
   const handleRequest = async () => {
-    let nameArray = [];
-    let typeArray = [];
-    let weightArray = [];
-    let unitArray = [];
-    let expirationDateArray = [];
+    let names = [];
+    let types = [];
+    let weights = [];
+    let units = [];
+    let expirationDates = [];
 
-    if (!validateInputs()) {
-      return;
-    }
+    if (!validateInputs()) return;
 
     inputs.forEach((input) => {
-      nameArray.push(input.productName);
-      typeArray.push(input.type);
-      weightArray.push(input.weight);
-      unitArray.push(input.unit);
-      expirationDateArray.push(input.expirationDate);
+      names.push(input.productName);
+      types.push(input.type);
+      weights.push(input.weight);
+      units.push(input.unit);
+      expirationDates.push(input.expirationDate);
     });
 
     try{
-    const UID = auth.currentUser.uid;  
+      const UID = auth.currentUser.uid;  
+      const count = firestore().collection('Requests').where("supplierID", "==", UID).get().then((snapshot) => { return snapshot.size; }); 
       const requestData = {
         supplierID: UID,
-        type: typeArray,
-        productName: nameArray,
-        weight: weightArray,
-        unit: unitArray,
-        expirationDate: expirationDateArray, 
+        type: types,
+        productName: names,
+        weight: weights,
+        unit: units,
+        expirationDates: expirationDates, 
+        creationDate: new Date().toLocaleDateString(),
         status: 'Pendiente',
+        requestNumber: count,
       }; 
       console.log('Request: ', requestData);
       await firestore().collection('Requests').add(requestData);
       Alert.alert('Solicitud creada', 'Tu solicitud ha sido creada con éxito');
+      navigation.goBack();
     } 
     catch (error){
       Alert.alert('Error', 'No se pudo crear la solicitud');

@@ -1,7 +1,6 @@
 // Core
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-
 // UI
 import {Text, TouchableOpacity, Alert} from 'react-native';
 
@@ -33,7 +32,7 @@ const HomeScreen = ({ navigation }) => {
         <Text>LogOut</Text>
       </TouchableOpacity>
       <NewRequest></NewRequest>
-      <TouchableOpacity onPress={ () =>  navigation.navigate('RequestDetails', { docID: 'Spzcyokwe0ImmKGnpf0g'})}>
+      <TouchableOpacity onPress={ () =>  navigation.navigate('RequestDetails', { docID: 'ZcS3GokgeN7F0oxbLKsj'})}>
         <Text>Request details</Text>
       </TouchableOpacity>
     </SafeAreaView>
