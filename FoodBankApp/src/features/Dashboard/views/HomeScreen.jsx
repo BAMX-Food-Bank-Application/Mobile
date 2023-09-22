@@ -31,7 +31,7 @@ const HomeScreen = () => {
     <View style={{paddingHorizontal: 16}}>
     <ShipmentsComponent/>
         <NewRequest/>
-        <TouchableOpacity onPress={signOut}>
+        <TouchableOpacity onPress={signOut} style={{opacity:0}}>
           <Text>Cerrar sesion</Text>
         </TouchableOpacity>
     </View>  

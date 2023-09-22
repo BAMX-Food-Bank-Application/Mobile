@@ -1,15 +1,16 @@
-// Core
+// Base
 import {React, useEffect, useState} from 'react';
-import {FlatList, Image, View} from 'react-native';
-import {StyleSheet} from 'react-native';
-import {Text} from 'react-native';
-import {TouchableOpacity} from 'react-native';
 
-import firestore from '@react-native-firebase/firestore';
+// UI
+import {FlatList, Image, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-import {auth} from '../../../config/FirebaseConnection';
+// Styles
+import Colors from '../../Global/styles/Colors';
 import DefaultStyles from '../../Global/styles/Defaults';
 
+// Firebase
+import firestore from '@react-native-firebase/firestore';
+import {auth} from '../../../config/FirebaseConnection';
 
 const colorStatus = {
     'En camino': '#4200ff',
@@ -65,14 +66,21 @@ const ShipmentsComponent = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mis Cargamentos</Text>
-      <FlatList
-      showsVerticalScrollIndicator={false}
-        data={shipments}
-        renderItem={({item}) => (
-          <Shipment shipmentId={item.id} index={item.requestNumber} status={item.status} />
-        )}
-      />
+      <Text style={[DefaultStyles.poppinsTitle, {color: Colors.textSecondary}]}>Mis Cargamentos</Text>
+      
+      {
+        shipments.length > 0 ? (
+        <FlatList
+        showsVerticalScrollIndicator={false}
+          data={shipments}
+          renderItem={({item}) => (
+            <Shipment shipmentId={item.id} index={item.requestNumber} status={item.status} />
+          )}
+        />
+        ) : 
+        (<Text style={[DefaultStyles.poppinsSubtitle, {color: Colors.textSecondary}]}>No hay cargamentos</Text>)
+      }
+      
     </View>
   );
 };
@@ -87,12 +95,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     height: 500,
     elevation: 5,
-  },
-  title: {
-    color: '#fff',
-    fontSize: 24,
-    fontFamily: 'Poppins-ExtraBold',
-    paddingBottom: 16,
   },
   shipment: {
     display: 'flex',

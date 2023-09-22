@@ -20,25 +20,31 @@ import Button from './Button';
 // import DefaultAlert from '../../Global/components/DefaultAlert';
 
 // 2. Declare the states
-// const [showAlert, setShowAlert] = useState(false);
-// const [alertMessage, setAlertMessage] = useState('');
-// const [alertTitle, setAlertTitle] = useState('');
+/*
+ const [showAlert, setShowAlert] = useState(false);
+ const [alertMessage, setAlertMessage] = useState('');
+ const [alertTitle, setAlertTitle] = useState('');
+*/
 
 // 3. Call the component somewhere inside the return
-// <DefaultAlert
-//   alertTitle={alertTitle}
-//   alertContent={alertMessage}
-//   btnContent={'Aceptar'}
-//   modalVisible={showAlert}
-//   onHide={() => setShowAlert(false)}
-// />
+/*
+<DefaultAlert
+   alertTitle={alertTitle}
+   alertContent={alertMessage}
+   btnContent={'Aceptar'}
+   modalVisible={showAlert}
+   onHide={() => setShowAlert(false)}
+/>
+*/
 
 // 4. Set a trigger function
-//const alertTrigger = (title, message) => {
-//  setAlertTitle(title);
-//  setAlertMessage(message)
-//  setShowAlert(!showAlert);
-//};
+/*
+const alertTrigger = (title, message) => {
+  setAlertTitle(title);
+  setAlertMessage(message)
+  setShowAlert(!showAlert);
+};
+*/
 
 // 5. Call the trigger function either with or without title
 // alertTrigger('Error', 'El correo ingresado no es válido');

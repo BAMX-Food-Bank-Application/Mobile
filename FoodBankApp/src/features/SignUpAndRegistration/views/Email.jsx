@@ -2,21 +2,29 @@ import React, {useEffect} from 'react';
   import {
     View,
     Text,
-    StyleSheet,
-    Image,
-
+    StyleSheet
   } from 'react-native';
 
+  // Components
+  import Logo from '../../Global/components/Logo';
 
-  import {useNavigation} from '@react-navigation/native';
+  // Styles
+  import DefaultStyles from '../../Global/styles/Defaults';
+
+  // Firebase
   import { auth } from '../../../config/FirebaseConnection';
+  import { sendEmailVerification } from 'firebase/auth';
 
-
-
-
+  // Others
+  import {useNavigation} from '@react-navigation/native';
 
   const Email = () => {
+
     const navigation = useNavigation();
+
+    useEffect(() => {
+      if(!auth.currentUser.emailVerified) sendEmailVerification(auth.currentUser)
+    }, []);
 
     useEffect(() => {
       const interval = setInterval(() => {
@@ -36,18 +44,12 @@ import React, {useEffect} from 'react';
     }, []);
     
     return (
-      <View style={styles.screen}>
-        
+      <View style={DefaultStyles.screen}>
         <View style = {styles.container}>
-          <Image
-              source={{
-                  uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2FsentEmail.png?alt=media&token=16517312-d681-4682-8ac0-41676115b8d0',
-              }}
-              style={styles.logo}
-          />
+          <Logo imageLink='https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2FsentEmail.png?alt=media&token=16517312-d681-4682-8ac0-41676115b8d0'/>
           <View style={styles.texts}>
-              <Text style={styles.message}>Ya casi!</Text>
-              <Text style={styles.text}>Se ha enviado un correo de confirmación, por favor revise su bandeja de entrada.</Text>
+              <Text style={DefaultStyles.poppinsTitle}>¡Ya casi!</Text>
+              <Text style={DefaultStyles.poppinsSubtitle}>Se ha enviado un correo de confirmación, por favor revise su bandeja de entrada.</Text>
           </View>
         </View>
       </View>
@@ -55,41 +57,8 @@ import React, {useEffect} from 'react';
   };
 
 const styles = StyleSheet.create({
-    screen: {
-      flex: 1,
-      alignItems: 'center',
-      backgroundColor: '#EFEFEF',
-    },
-    logo: {
-        width: 200,
-        height: 200,
-        marginBottom: 16,
-        marginTop: 80
-      },
-      arrow: {
-        width: 24,
-        height: 24,
-      },
-      arrowbtn: {
-        width: 24,
-        height: 24,
-        marginHorizontal: 24,
-      },
       container: {
         alignItems: 'center',
-      },
-      message: {
-        fontFamily: 'Poppins-ExtraBold',
-        fontSize: 36,
-        color: 'black',
-      },
-      text: {
-        marginTop: 50,
-        textAlign: 'center',
-        fontFamily: 'Poppins-Regular',
-        fontSize: 16,
-        color: 'black',
-        marginHorizontal: 8,
       },
       texts: {
         marginTop: 60,

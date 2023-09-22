@@ -18,12 +18,12 @@ const ConfirmDialog = ({alertTitle, alertContent, btnContent, modalVisible, onAc
     if (!modalVisible) return null;
 
   return (
-    <Modal animationType='fade' transparent={true} visible={true}>
+    <Modal animationType='fade' transparent={true} visible={modalVisible}>
       <View style={styles.container}>
         <View style={styles.modalContent}>
           
-          {alertTitle != null &&(<Text style={[DefaultStyles.poppinsTitle, {flex: 1}]}>{alertTitle}</Text>)}
-            <Text style={[DefaultStyles.poppinsRegular, {flex: 1}]}>{alertContent}</Text>
+          {alertTitle != null &&(<Text style={[DefaultStyles.poppinsTitle]}>{alertTitle}</Text>)}
+            <Text style={[DefaultStyles.poppinsRegular]}>{alertContent}</Text>
             <View style={{flexDirection: 'row', columnGap: 16}}>
                 <Button
                     bgColor={Colors.approval}

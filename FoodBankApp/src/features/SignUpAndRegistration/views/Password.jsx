@@ -1,19 +1,30 @@
-import React, {useRef, useState} from 'react';
+// Base
+import {React, useState} from 'react';
+
+// UI
 import {
   View,
   Text,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   TextInput,
-  Alert,
+  SafeAreaView
 } from 'react-native';
 
+// Components
+import DefaultAlert from '../../Global/components/DefaultAlert';
+import ReturnButton from '../../Global/components/ReturnButton';
+import Button from '../../Global/components/Button';
 
-import {useNavigation} from '@react-navigation/native';
-import firebase from '@react-native-firebase/app';
+// Styles
+import DefaultStyles from '../../Global/styles/Defaults';
+import Colors from '../../Global/styles/Colors';
+
+// Firebase 
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../../config/FirebaseConnection';
+
+// Others
+import {useNavigation} from '@react-navigation/native';
 
 
 const Password = () => {
@@ -21,27 +32,35 @@ const Password = () => {
 
   const [email, setEmail] = useState('');
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+
+  const alertTrigger = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message)
+    setShowAlert(!showAlert);
+  };
+
 
   const handleNewToken = () => {
-
     const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
     if (!emailRegex.test(email)) {
-      Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+      alertTrigger('Correo inválido', 'No hay un usuario registrado con ese correo')
       return false;
     }else{
 
     }
       sendPasswordResetEmail(auth, email).then(() => {
-        Alert.alert('Correo enviado', 'Se ha enviado un correo para restablecer tu contraseña');
+        alertTrigger('Correo enviado', 'Se ha enviado un correo para restablecer tu contraseña')
         navigation.navigate('Login');
       }).catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode === 'auth/user-not-found') {
-          // User not found
-          Alert.alert('Usuario no encontrado', 'El usuario no existe');
+          alertTrigger('Usuario no encontrado', 'El usuario no existe');
         } else {
-          Alert.alert('Error', errorMessage);
+          alertTrigger('Error', errorMessage)
         }
       });
     }
@@ -49,89 +68,44 @@ const Password = () => {
 
 
   return (
-    <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
-        <Image
-              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
-              style={styles.arrow}
-              />
-      </TouchableOpacity>
-      <View style = {styles.container}>
-        <Text style={styles.message}>Restaurar contraseña</Text>
-        <Text style={styles.text}>Ingresa el correo con el que te registraste en la app</Text>
+    <SafeAreaView style={[DefaultStyles.screen]}>
+      <ReturnButton/>
+      <View style={styles.container}>
+          <Text style={DefaultStyles.poppinsTitle}>Restaurar contraseña</Text>
+          <Text style={DefaultStyles.poppinsSubtitle}>Ingresa el correo con el que te registraste en la app</Text>
+        
+          <TextInput
+          placeholder="Correo"
+          placeholderTextColor={Colors.textDisabled}
+          style={DefaultStyles.input}
+          onChangeText={setEmail}
+          autoCapitalize={'words'}></TextInput>
+
+        <Button content='Continuar' functionality={() => handleNewToken()} bgColor={Colors.textSecondary} fontColor={Colors.textPrimary}/>
       </View>
-        <View style={styles.inputs}>
-            <TextInput
-            placeholder="Correo"
-            style={styles.input}
-            onChangeText={setEmail}
-            autoCapitalize={'words'}></TextInput>
-        </View>
-        <TouchableOpacity
-          style={[styles.button, {marginRight: 16}]}
-          onPress={() => handleNewToken()}
-          >
-          <Text style={styles.poppinsmedium} >Continuar</Text>
-        </TouchableOpacity>
-    </View>
+
+
+      <DefaultAlert
+          alertTitle={alertTitle}
+          alertContent={alertMessage}
+          btnContent={'Aceptar'}
+          modalVisible={showAlert}
+          onHide={() => setShowAlert(false)}
+        />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-    screen: {
-      flex: 1,
-      alignItems: 'center',
-      backgroundColor: '#EFEFEF',
-    },
-      arrow: {
-        width: 24,
-        height: 24,
-      },
-      arrowbtn: {
-        width: 24,
-        height: 24,
-        marginHorizontal: 24,
-        alignSelf: 'flex-start',
-        marginTop: 40,
-      },
       container: {
-        alignItems: 'center',
-        marginTop: 32,
-      },
-      message: {
-        fontFamily: 'Poppins-ExtraBold',
-        fontSize: 24,
-        color: 'black',
-      },
-      text: {
-        fontFamily: 'Poppins-Regular',
-        fontSize: 16,
-        color: 'black',
-      },
-      input: {
-        width: '100%',
-        borderBottomWidth: 1,
-        padding: 10,
-        fontFamily: 'Poppins-Regular',  
-      },
-      inputs: {
-        display: 'flex',
-        marginTop: 32,
-        width: '80%',
-      },
-      button: {
-        marginTop: 32,
-        borderRadius: 25,
-        backgroundColor: '#FFFFFF',
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        alignSelf: 'center',
-      },
-      poppinsmedium: {
-        fontFamily: 'Poppins-Medium', 
-        fontSize: 16,
-        color: 'black',
-      },
+        flex: 1, 
+        alignItems: 'center', 
+        display: 'flex', 
+        marginHorizontal: 32, 
+        rowGap: 16,
+        justifyContent:'center'
+      }
+
 });
 
 export default Password;

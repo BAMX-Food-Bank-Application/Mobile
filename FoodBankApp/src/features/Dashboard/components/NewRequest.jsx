@@ -38,12 +38,7 @@ const styles = StyleSheet.create({
         height: 64,
         alignSelf: 'center',
     },
-    text: {
-        fontFamily: 'Poppins-ExtraBold',
-        fontSize: 24,
-        color: 'white',
-        lineHeight: 25,
-    },
+    
 
 })
 

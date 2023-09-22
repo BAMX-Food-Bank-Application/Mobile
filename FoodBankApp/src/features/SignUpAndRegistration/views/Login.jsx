@@ -1,3 +1,4 @@
+// Base
 import React, {useState} from 'react';
 
 // UI
@@ -7,9 +8,10 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-//Components
+// Components
 import DefaultAlert from '../../Global/components/DefaultAlert';
 import Button from '../../Global/components/Button';
 import Logo from '../../Global/components/Logo';
@@ -54,7 +56,6 @@ const Login = () => {
     setShowAlert(!showAlert);
   };
 
-
   const handleLogin = async () => {
     setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
@@ -96,52 +97,53 @@ const Login = () => {
   }
 
   return (
-    <LinearGradient
-      colors={[Colors.gradientPrimary, Colors.gradientSecondary]}
-      style={styles.linearGradient}>
-      <View style={styles.screen}>
-        <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
-          <Logo/>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={Colors.textDisabled}
-            style={[isFocused ? styles.inputFocused : styles.input, DefaultStyles.poppinsRegular]}
-            onFocus={() => {
-              setIsFocused(true);
-            }}
-            onBlur={() => {
-              setIsFocused(false);
-            }}
-            value={email} onChangeText={setEmail}
-            >
-          </TextInput>
-          <TextInput
-            placeholder="Contraseña"
-            placeholderTextColor={Colors.textDisabled}
-            style={[isFocused2 ? styles.inputFocused : styles.input, DefaultStyles.poppinsRegular]}
-            onFocus={() => {
-              setIsFocused2(true);
-            }}
-            onBlur={() => {
-              setIsFocused2(false);
-            }}
-            secureTextEntry
-            value={password} onChangeText={setPassword}
-            ></TextInput>
-        </View>
-        <View style={[styles.buttons, {gap: 16}]}>
+      <LinearGradient
+        colors={[Colors.gradientPrimary, Colors.gradientSecondary]}
+        style={styles.linearGradient}>
+        <SafeAreaView style={[DefaultStyles.screen, {backgroundColor: null}]}>
+          <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
+            <Logo/>
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor={Colors.textDisabled}
+              style={[isFocused ? styles.inputFocused : styles.input, DefaultStyles.poppinsRegular]}
+              onFocus={() => {
+                setIsFocused(true);
+              }}
+              onBlur={() => {
+                setIsFocused(false);
+              }}
+              value={email} onChangeText={setEmail}
+              >
+            </TextInput>
+            <TextInput
+              placeholder="Contraseña"
+              placeholderTextColor={Colors.textDisabled}
+              style={[isFocused2 ? styles.inputFocused : styles.input, DefaultStyles.poppinsRegular]}
+              onFocus={() => {
+                setIsFocused2(true);
+              }}
+              onBlur={() => {
+                setIsFocused2(false);
+              }}
+              secureTextEntry
+              value={password} onChangeText={setPassword}
+              ></TextInput>
+          </View>
+          <View style={styles.buttons}>
 
-          <Button content='Registrarse' functionality = { () => navRegistration() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
-          <Button content='Login' functionality = { () => handleLogin() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
+            <Button content='Registrarse' functionality = { () => navRegistration() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
+            <Button content='Login' functionality = { () => handleLogin() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
 
-        </View>
-        <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Password')}>
-          <Text style={[styles.linkedText]}>¿Olvidaste tu contraseña?</Text>
-        </TouchableOpacity>
-        <DefaultAlert alertTitle = {alertTitle} alertContent = {alertMessage} btnContent='Ok' modalVisible={showAlert} onHide={ () => alertTrigger() } />
-        
-      </View>
-    </LinearGradient>
+          </View>
+          <View style={[styles.link,{alignSelf: 'center', display:'flex'}]}>
+            <TouchableOpacity onPress={() => navigation.navigate('Password')}>
+              <Text style={[styles.linkedText]}>¿Olvidaste tu contraseña?</Text>
+            </TouchableOpacity>
+          </View>
+          <DefaultAlert alertTitle = {alertTitle} alertContent = {alertMessage} btnContent='Ok' modalVisible={showAlert} onHide={ () => alertTrigger() } />
+        </SafeAreaView>
+      </LinearGradient>
   );
 };
 
@@ -187,20 +189,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     marginHorizontal: 32,
-  },
-  logo: {
-    width: 300,
-    height: 300,
-    marginBottom: 16,
-  },
-  linkedText: {
-    color: 'white',
-    fontFamily: 'Poppins-Regular', 
-    alignSelf: 'center',
+    gap: 8,
   },
   link: {
-    marginTop: 32,
-    marginHorizontal: 90,
+    display: 'flex',
+    marginTop: 24,
   }
 });
 export default Login;
