@@ -13,7 +13,6 @@ import {
 import Button from '../../Global/components/Button';
 import DefaultAlert from '../../Global/components/DefaultAlert';
 import ConfirmDialog from '../../Global/components/ConfirmDialog';
-import Input from '../../Global/components/Input';
 
 // Styles
 import Colors from '../../Global/styles/Colors';
@@ -260,7 +259,6 @@ const CreateRequest = () => {
               style={[styles.flexItem, styles.input]}
             />
             <View style={{flexDirection: 'row'}}>
-              <Input onChange={handleInputChange(text, index,'weight')} placeholderText='Cantidad' ></Input>
               <TextInput
                 placeholder="Cantidad"
                 placeholderTextColor={Colors.textDisabled}

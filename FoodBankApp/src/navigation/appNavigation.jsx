@@ -52,6 +52,7 @@ export default function AppNavigation() {
             <Stack.Screen name="Wait" component={Wait} />
             <Stack.Screen name="Email" component={Email} />
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="CreateRequest" component={CreateRequest} />
           </Stack.Navigator>
         </NavigationContainer>
       );
@@ -63,8 +64,6 @@ export default function AppNavigation() {
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="CreateRequest" component={CreateRequest} />
-          <Stack.Screen name = "RequestDetails" component={RequestDetails}/>
-          
         </Stack.Navigator>
       </NavigationContainer>
     }
@@ -77,7 +76,7 @@ export default function AppNavigation() {
             screenOptions={{headerShown: false}}>
             <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="CreateRequest" component={CreateRequest} />
-            <Stack.Screen name = "RequestDetails" component={RequestDetails}/>
+            
           </Stack.Navigator>
         </NavigationContainer>
       );
