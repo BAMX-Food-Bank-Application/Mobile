@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, Touchable, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import DefaultStyles from '../../Global/styles/Defaults';
 
 
 const NewRequest = () => {
@@ -9,7 +10,7 @@ const NewRequest = () => {
     return(
         <View style={styles.full}>
             <View>
-                <Text style={styles.text}>Nuevo {"\n"}Cargamento</Text>
+                <Text style={[DefaultStyles.poppinsTitle, {color: 'white'}]}>Nuevo {"\n"}Cargamento</Text>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('CreateRequest')} style={styles.plusbtn}>
                 <Image
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
+        elevation: 5,
     },
     plus: {
         width: 64,

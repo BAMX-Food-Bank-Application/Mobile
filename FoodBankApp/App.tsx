@@ -2,7 +2,6 @@ import React from 'react';
 import AppNavigation from './src/navigation/appNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const __DEV__ = true;
 
 if (!__DEV__) {
@@ -12,14 +11,11 @@ if (!__DEV__) {
   AsyncStorage.clear();
 }
 
-
 const App = () => {
 
-  
-
-  return(
+return(
     <AppNavigation></AppNavigation>
-  );
+  ); 
 };
 
 export default App;

@@ -1,8 +1,15 @@
 // Core
-import React from 'react';
+import {React, useEffect, useState} from 'react';
 import {FlatList, Image, View} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {Text} from 'react-native';
+import {TouchableOpacity} from 'react-native';
+
+import firestore from '@react-native-firebase/firestore';
+
+import {auth} from '../../../config/FirebaseConnection';
+import DefaultStyles from '../../Global/styles/Defaults';
+
 
 const colorStatus = {
     'En camino': '#4200ff',
@@ -11,11 +18,23 @@ const colorStatus = {
     'Pendiente': '#f07e15',
 }
 
-const Shipment = ({shipmentId, status}) => {
-    
+const getDocumentsData = () => {
+  const UID = auth.currentUser.uid;
+  const shipments = firestore().collection('Requests');
+  const query = shipments.where('supplierID', '==', UID).get().then((querySnapshot) => {
+    const data = querySnapshot.docs.map((doc) => {
+      return { id: doc.id, ...doc.data() }; // Include the document ID in the data object
+    });
+    return data;
+  });
+  return query;
+}
+  
+const Shipment = ({shipmentId, status, index}) => {
   return (
+    <TouchableOpacity onPress={() => console.log(shipmentId)}>
     <View style={styles.shipmentContainer}>
-        <Text style={styles.shipTitle}>Cargamento #{shipmentId}</Text>
+        <Text style={DefaultStyles.poppinsTitle}>Cargamento #{index}</Text>
         <View style={styles.shipment}>
          <View style={[styles.image, {backgroundColor: colorStatus[status]}]}>
         <Image
@@ -27,67 +46,31 @@ const Shipment = ({shipmentId, status}) => {
         />
       </View>
       <View style={styles.rightSection}>
-        <Text style={styles.status}>{status}</Text>
+        <Text style={DefaultStyles.poppinsSubtitle}>{status}</Text>
       </View>
     </View>
     </View>
+    </TouchableOpacity>
   );
 };
 
 const ShipmentsComponent = () => {
+  const [shipments, setShipments] = useState([]);
+
+  useEffect(() => {
+    getDocumentsData().then((data) => {
+      setShipments(data);
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mis Cargamentos</Text>
       <FlatList
       showsVerticalScrollIndicator={false}
-        data={[
-          {
-            shipmentId: '0001',
-            status: 'En camino',
-          },
-          {
-            shipmentId: '0002',
-            status: 'Entregado',
-          },
-          {
-            shipmentId: '0003',
-            status: 'Pendiente',
-          },
-          {
-            shipmentId: '0002',
-            status: 'En camino',
-          },
-          {
-            shipmentId: '0003',
-            status: 'En camino',
-          },
-          {
-            shipmentId: '0002',
-            status: 'Cancelado',
-          },
-          {
-            shipmentId: '0003',
-            status: 'En camino',
-          },
-          {
-            shipmentId: '0002',
-            status: 'En camino',
-          },
-          {
-            shipmentId: '0003',
-            status: 'En camino',
-          },
-          {
-            shipmentId: '0023',
-            status: 'En camino',
-          },
-          {
-            shipmentId: '0003',
-            status: 'Cancelado',
-          },
-        ]}
+        data={shipments}
         renderItem={({item}) => (
-          <Shipment shipmentId={item.shipmentId} status={item.status} />
+          <Shipment shipmentId={item.id} index={item.requestNumber} status={item.status} />
         )}
       />
     </View>
@@ -103,6 +86,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 16,
     height: 500,
+    elevation: 5,
   },
   title: {
     color: '#fff',
@@ -111,20 +95,24 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   shipment: {
-    backgroundColor: '#fff',
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 16,
+    gap: 16,
   },
   shipmentContainer: {
+    padding: 16,
     backgroundColor: '#fff',
     marginVertical: 8,
     borderRadius: 16,
+    
   },
   rightSection: {
-    marginLeft: 16,
+    alignContent: 'center',
+    justifyContent: 'center',
+
   },
   image: {
     width: 48,
@@ -133,15 +121,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 56,
   },
-  shipTitle: {
-    fontSize: 20,
-    fontFamily: 'Poppins-SemiBold',
-    paddingTop: 16,
-    paddingHorizontal: 16
-  },
-  status: {
-    fontSize: 18,
-    fontWeight: 'light',
-    fontFamily: 'Poppins-Regular',
-  }
 });

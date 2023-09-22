@@ -32,6 +32,9 @@ import Colors from '../../Global/styles/Colors';
 // Others
 import {useNavigation} from '@react-navigation/native';
 
+// Others
+import {useNavigation} from '@react-navigation/native';
+
 const Registration = () => {
 
   const navigation = useNavigation();

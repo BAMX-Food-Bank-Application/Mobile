@@ -3,7 +3,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 // UI
-import {Text, TouchableOpacity, Alert, ScrollView} from 'react-native';
+import {Text, TouchableOpacity, Alert, View} from 'react-native';
 
 // Firebase
 import app from '../../../config/FirebaseConnection';
@@ -28,11 +28,14 @@ const HomeScreen = () => {
   };
 
   return (
-      <ScrollView style={{margin: 16}}>
-        <ShipmentsComponent/>
+    <View style={{paddingHorizontal: 16}}>
+    <ShipmentsComponent/>
         <NewRequest/>
-      </ScrollView>
-  );
+        <TouchableOpacity onPress={signOut}>
+          <Text>Cerrar sesion</Text>
+        </TouchableOpacity>
+    </View>  
+    );
 };
 
 export default HomeScreen;
