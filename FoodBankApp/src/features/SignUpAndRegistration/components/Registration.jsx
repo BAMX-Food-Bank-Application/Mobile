@@ -1,19 +1,35 @@
+// Base
 import React, {useState} from 'react';
+
+// UI
 import {
   Text,
   View,
-  Image,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import { createUserWithEmailAndPassword, sendEmailVerification} from 'firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
+// Components
+import DefaultAlert from '../../Global/components/DefaultAlert';
+import Button from '../../Global/components/Button';
+import ReturnButton from '../../Global/components/ReturnButton';
+import Logo from '../../Global/components/Logo';
+
+
+// Firebase
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {auth} from '../../../config/FirebaseConnection';
 
+// Styles
+import DefaultStyles from '../../Global/styles/Defaults';
+import Colors from '../../Global/styles/Colors';
+
+
+// Others
+import {useNavigation} from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Registration = () => {
 
@@ -26,52 +42,56 @@ const Registration = () => {
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  
-  const dev = false;
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
 
-  const validateInputs = () => {
+  const alertTrigger = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message)
+    setShowAlert(!showAlert);
+  };
+
+  const validateInputs = async () => {
     const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
-    const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const passwordRegex = /^(?=.[a-z])(?=.[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+
     // We start validation
 
     // Check if everything is filled
     if (name === '' || email === '' || password === '' || passwordC === '') {
-      Alert.alert('Campos vacíos', 'Por favor llena todos los campos');
-      return false;
-    }
-    // Check if name is valid
-    if (!nameRegex.test(name)) {
-      Alert.alert('Nombre inválido', 'El nombre ingresado no es válido');
+      alertTrigger('Campos vacíos', 'Por favor llena todos los campos')
       return false;
     }
     // Check if email is valid
     if (!emailRegex.test(email)) {
-      Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+      alertTrigger('Correo inválido', 'El correo ingresado no es válido');
       return false;
     }
     // Check if phone number is valid
 
-    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     if (!phoneRegex.test(phoneNumber)) {
-      Alert.alert('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
+      alertTrigger('Número de teléfono inválido', 'El número de teléfono ingresado no es válido');
       return false;
     }
 
     // Check if password is valid
     if (!passwordRegex.test(password)) {
-      Alert.alert("Contraseña inválida", "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número");
+      alertTrigger('Contraseña inválida', 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número');
       return false;
     }
     if (password !== passwordC) {
-      Alert.alert('Contraseñas no coinciden', 'Las contraseñas no coinciden');
+      alertTrigger('Contraseña inválida', 'Las contraseñas no coinciden')
       return false;
-    }
+    } 
     return true;
   }
-  
-    const handleSignUp = async () => {
-      if(validateInputs){
+
+  const handleSignUp = async () => {
+
+    if(validateInputs()){
+
       // If everything is valid, we proceed to create the user
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -85,14 +105,10 @@ const Registration = () => {
             phoneNumber: Number(phoneNumber), 
             status: Boolean (false),         
           })
-  
+
           .then(() => {
             // Sending email verification to the user
             console.log('User data added');
-            sendEmailVerification(userCredential.user)
-            .catch((error) => {
-              console.log('Error sending email verification: ', error);
-            });
           }
           )
           .catch((error) => {
@@ -104,80 +120,91 @@ const Registration = () => {
         });
       }
     };
-  
-
-  
 
   return (
-    <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
-        <Image
-              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
-              style={styles.arrow}
-              />
-      </TouchableOpacity>
+    <SafeAreaView style={DefaultStyles.screen}>
+      <ReturnButton/>
       <View
-        style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
-        <Image
-            source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=bb2f494f-d3dc-41bc-87f7-b677e0e966d7'}}
-            style={styles.logo}
-          />
+        style={{alignItems: 'center', marginHorizontal: 32}}>
+        <Logo/>
         <TextInput
           placeholder="Nombre Completo *"
-          style={styles.input}
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
           onChangeText={setName}
           autoCapitalize={'words'}></TextInput>
         <TextInput
           placeholder="Correo *"
+          placeholderTextColor={Colors.textDisabled}
           value={email}
           onChangeText={setEmail}
-          style={styles.input}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          
           autoCapitalize={'none'}
           keyboardType={'email-address'}></TextInput>
         <TextInput
           placeholder="Nombre de Empresa *"
-          style={styles.input}
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          
           onChangeText={setNameCorp}
           autoCapitalize={'none'}></TextInput>
         <TextInput
           placeholder="Ubicación de la Empresa *"
-          style={styles.input}
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          
           onChangeText={setAddress}
           autoCapitalize={'none'}></TextInput>
         <TextInput
           placeholder="Número de teléfono *"
-          style={styles.input}
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          
           maxLength={10}
           onChangeText={setPhoneNumber}
           value={phoneNumber}
           keyboardType={'phone-pad'}></TextInput>
         <TextInput
           placeholder="Contraseña *"
+          placeholderTextColor={Colors.textDisabled}
           value={password}
           secureTextEntry
           onChangeText={setPassword}
-          style={styles.input}></TextInput>
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          ></TextInput>
         <TextInput
           placeholder="Confirmar contraseña *"
+          placeholderTextColor={Colors.textDisabled}
           value={passwordC}
           secureTextEntry
           onChangeText={setPasswordC}
-          style={styles.input}></TextInput>
-        <TouchableOpacity
-          style={[styles.button, {marginRight: 16}]}
-          onPress={handleSignUp}>
-          <Text style={styles.poppinsmedium} >Registrarse</Text>
-        </TouchableOpacity>
-        <View style={[styles.flexRow]}>
-          <Text style={[styles.flex]}>Ya tienes una cuenta? </Text>
-          <TouchableOpacity
-            style={[styles.flex]}
-            onPress={() => navigation.navigate('Login')}>
-            <Text style={[styles.linkedText]}>Ingresar</Text>
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          ></TextInput>
+
+          <View style={{marginTop: 16}}>
+            <Button content='Registrarse' bgColor={Colors.textSecondary} fontColor={Colors.textPrimary} functionality={() => handleSignUp()}/>
+
+          </View>
+          
+        <View style={[DefaultStyles.flexRow]}>
+          
+          <Text style={[DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}> Ya tienes una cuenta? </Text>
+          
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={[DefaultStyles.linkedText]}>Ingresar</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+
+      <DefaultAlert
+        alertTitle={alertTitle}
+        alertContent={alertMessage}
+        btnContent={'Aceptar'}
+        modalVisible={showAlert}
+        onHide={() => setShowAlert(false)}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -192,47 +219,15 @@ const styles = StyleSheet.create({
     height: 280,
     marginBottom: 16,
   },
-  arrow: {
-    width: 24,
-    height: 24,
-  },
-  arrowbtn: {
-    width: 24,
-    height: 24,
-    marginHorizontal: 24,
-  },
   input: {
     width: '100%',
     borderBottomWidth: 1,
     padding: 10,
     fontFamily: 'Poppins-Regular',
   },
-  button: {
-    marginTop: 16,
-    borderRadius: 25,
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-  },
-  flexRow: {
-    display: 'flex',
-    margin: 10,
-    flexDirection: 'row',
-  },
+  
   rowItem: {
     flex: 1,
-  },
-  linkedText: {
-    color: '#E8042C',
-    fontFamily: 'Poppins-Medium', 
-  },
-  poppinsregular: {
-    fontFamily: 'Poppins-Regular', 
-  },
-  poppinsmedium: {
-    fontFamily: 'Poppins-Medium', 
-    fontSize: 16,
-    color: 'black',
   },
 });
 

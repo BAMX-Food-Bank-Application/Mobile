@@ -2,13 +2,13 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 // UI
-import {Text, TouchableOpacity, Alert} from 'react-native';
+import {Text, TouchableOpacity, Alert, ScrollView} from 'react-native';
 
 // Firebase
 import app from '../../../config/FirebaseConnection';
 import {getAuth} from 'firebase/auth';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import NewRequest from '../components/NewRequest';
+import ShipmentsComponent from '../components/ShipmentsComponent';
 
 const HomeScreen = ({ navigation }) => {
   const auth = getAuth(app);

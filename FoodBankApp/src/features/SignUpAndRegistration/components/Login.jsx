@@ -4,13 +4,18 @@ import React, {useState} from 'react';
 import {
   Text,
   View,
-  Image,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+//Components
+import DefaultAlert from '../../Global/components/DefaultAlert';
+import Button from '../../Global/components/Button';
+import Logo from '../../Global/components/Logo';
+
+// Styles
+import Colors from '../../Global/styles/Colors';
 
 // Navigator
 import { useNavigation } from '@react-navigation/native';
@@ -19,6 +24,9 @@ import { useNavigation } from '@react-navigation/native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '../../../config/FirebaseConnection';
 import firestore from '@react-native-firebase/firestore';
+import DefaultStyles from '../../Global/styles/Defaults';
+
+
 
 const auth = getAuth(app);
 
@@ -29,8 +37,23 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword]= useState ('');
   const [loading, setLoading] = useState(false);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
   
   const navigation = useNavigation();
+
+  const navRegistration = () => {
+    navigation.navigate('Registration');
+  };
+
+  const alertTrigger = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message)
+    setShowAlert(!showAlert);
+  };
+
 
   const handleLogin = async () => {
     setLoading(true);
@@ -52,20 +75,20 @@ const Login = () => {
       const errorMessage = error.message;
       if (errorCode === 'auth/invalid-email') {
         // Invalid email
-        Alert.alert('Correo inválido', 'El correo ingresado no es válido');
+        alertTrigger('Correo inválido', 'El correo ingresado no es válido')
       } else if (errorCode === 'auth/wrong-password') {
         // Incorrect password
-        Alert.alert('Contraseña incorrecta', 'La contraseña ingresada es incorrecta');
+        alertTrigger('Contraseña incorrecta', 'La contraseña ingresada es incorrecta');
       } else if (errorCode === 'auth/user-not-found') {
         // User not found
-        Alert.alert('Usuario no encontrado', 'El usuario ingresado no existe');
+        alertTrigger('Usuario no encontrado', 'El usuario ingresado no existe');
       } else if(errorCode === 'auth/missing-password'){
         // Password missing
-        Alert.alert('Contraseña no ingresada', 'Por favor ingresa una contraseña');
+        alertTrigger('Contraseña no ingresada', 'Por favor ingresa una contraseña');
       }
       else {
         // Other error cases
-        Alert.alert('Error ', errorMessage);
+        alertTrigger('Error', errorMessage)
       }
     
     });
@@ -74,17 +97,15 @@ const Login = () => {
 
   return (
     <LinearGradient
-      colors={['#f3b246', '#e01e40']}
+      colors={[Colors.gradientPrimary, Colors.gradientSecondary]}
       style={styles.linearGradient}>
       <View style={styles.screen}>
         <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
-          <Image
-            source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2Fsign_up%2Fbamx_logo.png?alt=media&token=bb2f494f-d3dc-41bc-87f7-b677e0e966d7'}}
-            style={styles.logo}
-          />
+          <Logo/>
           <TextInput
             placeholder="Email"
-            style={[isFocused ? styles.inputFocused : styles.input, styles.poppinsregular]}
+            placeholderTextColor={Colors.textDisabled}
+            style={[isFocused ? styles.inputFocused : styles.input, DefaultStyles.poppinsRegular]}
             onFocus={() => {
               setIsFocused(true);
             }}
@@ -93,10 +114,11 @@ const Login = () => {
             }}
             value={email} onChangeText={setEmail}
             >
-            </TextInput>
+          </TextInput>
           <TextInput
             placeholder="Contraseña"
-            style={[isFocused2 ? styles.inputFocused : styles.input, styles.poppinsregular]}
+            placeholderTextColor={Colors.textDisabled}
+            style={[isFocused2 ? styles.inputFocused : styles.input, DefaultStyles.poppinsRegular]}
             onFocus={() => {
               setIsFocused2(true);
             }}
@@ -107,17 +129,17 @@ const Login = () => {
             value={password} onChangeText={setPassword}
             ></TextInput>
         </View>
-        <View style={styles.buttons}>
-          <TouchableOpacity style={[styles.button, {marginRight: 16}]} onPress={() => navigation.navigate('Registration')}>
-            <Text style={styles.poppinsmedium}>Registrarse</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => handleLogin()}>
-            <Text style={styles.poppinsmedium}>Ingresar</Text>
-          </TouchableOpacity>
+        <View style={[styles.buttons, {gap: 16}]}>
+
+          <Button content='Registrarse' functionality = { () => navRegistration() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
+          <Button content='Login' functionality = { () => handleLogin() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
+
         </View>
         <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Password')}>
           <Text style={[styles.linkedText]}>¿Olvidaste tu contraseña?</Text>
         </TouchableOpacity>
+        <DefaultAlert alertTitle = {alertTitle} alertContent = {alertMessage} btnContent='Ok' modalVisible={showAlert} onHide={ () => alertTrigger() } />
+        
       </View>
     </LinearGradient>
   );
@@ -157,15 +179,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 24,
   },
-  button: {
-    flex: 1,
-    backgroundColor: '#EFEFEF',
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    alignItems: 'center',
-    elevation: 10,
-  },
   buttons: {
     alignSelf: 'auto',
     display: 'flex',
@@ -179,12 +192,6 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     marginBottom: 16,
-  },
-  poppinsregular: {
-    fontFamily: 'Poppins-Regular', 
-  },
-  poppinsmedium: {
-    fontFamily: 'Poppins-Medium', 
   },
   linkedText: {
     color: 'white',
