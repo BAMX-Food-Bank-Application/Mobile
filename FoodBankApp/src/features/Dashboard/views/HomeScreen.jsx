@@ -1,7 +1,6 @@
 // Core
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-
 // UI
 import {Text, TouchableOpacity, Alert, ScrollView} from 'react-native';
 
@@ -11,10 +10,9 @@ import {getAuth} from 'firebase/auth';
 import NewRequest from '../components/NewRequest';
 import ShipmentsComponent from '../components/ShipmentsComponent';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const auth = getAuth(app);
 
-  const navigation = useNavigation();
 
   const signOut = async () => {
     try {
@@ -28,10 +26,16 @@ const HomeScreen = () => {
   };
 
   return (
-      <ScrollView style={{margin: 16}}>
-        <ShipmentsComponent/>
-        <NewRequest/>
-      </ScrollView>
+    <SafeAreaView>
+      <Text>Welcome to the Home Screen</Text>
+      <TouchableOpacity onPress={() => signOut()}>
+        <Text>LogOut</Text>
+      </TouchableOpacity>
+      <NewRequest></NewRequest>
+      <TouchableOpacity onPress={ () =>  navigation.navigate('RequestDetails', { docID: 'ZcS3GokgeN7F0oxbLKsj'})}>
+        <Text>Request details</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 
