@@ -29,7 +29,7 @@ import DefaultStyles from '../../Global/styles/Defaults';
 
 const CreateRequest = () => {
   const [inputs, setInputs] = useState([{ productName: '', weight: '', type: '', unit: '', expirationDate: '' }]);
-  const [unitTypes, setUnitTypes] = useState([[{label: 'Selecciona un tipo de producto', unitValue: ''}]]);
+  const [unitTypes, setUnitTypes] = useState([[]]);
 
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
@@ -74,7 +74,7 @@ const CreateRequest = () => {
   const handleDate = (text, index) => {
     if (text.length == 2 || text.length == 5) handleInputChange(text + '/', index, 'expirationDate');
     else if (text.length == 3 || text.length == 6) handleInputChange(text.substring(0, text.length - 1), index, 'expirationDate');
-    else if (text.length == 1 && text > 3) handleInputChange('', index, 'expirationDate');
+    else if (text.length == 1) handleInputChange(text, index, 'expirationDate');
     else handleInputChange(text, index, 'expirationDate');
   };
 
@@ -139,7 +139,7 @@ const CreateRequest = () => {
 
   const handleAddInput = () => {
     const newInput = { productName: '', weight: '', type: '', unit: '', expirationDate: '' };
-    const newUnit = [{label: 'Selecciona un tipo de producto', unitValue: ''}];
+    const newUnit = [];
     setUnitTypes([...unitTypes, newUnit]);
     setInputs([...inputs, newInput]);
   };
@@ -207,6 +207,7 @@ const CreateRequest = () => {
       }; 
       console.log('Request: ', requestData);
       await firestore().collection('Requests').add(requestData);
+      navigation.goBack();
       Alert.alert('Solicitud creada', 'Tu solicitud ha sido creada con éxito');
       navigation.goBack();
     } 
@@ -228,8 +229,11 @@ const CreateRequest = () => {
         {inputs.map((input, index) => (
           <View key={index}>
             {index !== 0 && (
-              <TouchableOpacity onPress={() => handleRemoveInput(index)}>
-                <Text>X</Text>
+              <TouchableOpacity onPress={() => handleRemoveInput(index)} style={{alignSelf:'flex-end'}}>
+                <View style={[DefaultStyles.flexRow, {justifyContent: 'flex-end'}]}>
+                  <Image style={{height:16, width:16}} source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2FtrashCan.png?alt=media&token=bf64a75a-ff1e-4b59-a57b-c24ff3a27b6d'}}></Image>
+                  <Text style={DefaultStyles.linkedText}>Eliminar producto</Text>
+                </View>
               </TouchableOpacity>
             )}
             <Text style={DefaultStyles.poppinsMedium}>Tipo de producto</Text>
@@ -266,7 +270,7 @@ const CreateRequest = () => {
               />
               <Dropdown
                 itemTextStyle={DefaultStyles.poppinsRegular}
-                selectedTextStyle={DefaultStyles.poppinsRegular}
+                selectedTextStyle={[DefaultStyles.poppinsRegular, {fontSize: 13}]}
                 style={styles.dropdown}
                 placeholder="Unidad"
                 
@@ -366,7 +370,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     padding: 10,
     fontFamily: 'Poppins-Regular',
-    color: Colors.black,
+    color: Colors.textPrimary,
     height: 45,
     margin: 10,
   },
@@ -386,14 +390,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     color: 'white', 
     fontWeight: 'bold',
-  },
-  poppinsregular: {
-    fontFamily: 'Poppins-Regular', 
-  },
-  poppinsmedium: {
-    fontFamily: 'Poppins-Medium', 
-    fontSize: 16,
-    color: 'black',
   },
 });
 
