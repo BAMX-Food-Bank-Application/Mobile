@@ -31,7 +31,7 @@ import React, {useEffect} from 'react';
         auth.currentUser.reload().then(() => {
           if (auth.currentUser.emailVerified) {
             clearInterval(interval);
-            navigation.navigate('HomeScreen');
+            navigation.navigate('Confirmation');
           }
         }).catch(error => {
           console.log('Error: ', error);

@@ -4,7 +4,6 @@ import userAuth from '../hooks/userAuth';
 // Libs
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import firestore from '@react-native-firebase/firestore';
 
 // Screens
 import Login from '../features/SignUpAndRegistration/views/Login';
@@ -14,7 +13,7 @@ import Password from '../features/SignUpAndRegistration/views/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Email from '../features/SignUpAndRegistration/views/Email';
 import CreateRequest from '../features/Dashboard/views/CreateRequest';
-import { auth } from '../config/FirebaseConnection';
+import Confirmation from '../features/SignUpAndRegistration/views/Confirmation';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +29,7 @@ export default function AppNavigation() {
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Wait" component={Wait} />
         <Stack.Screen name="Email" component={Email} />
+        <Stack.Screen name="Confirmation" component={Confirmation} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="CreateRequest" component={CreateRequest} />
       </Stack.Navigator>

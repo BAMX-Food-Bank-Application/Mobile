@@ -27,9 +27,6 @@ import Colors from '../../Global/styles/Colors';
 
 // Others
 import {useNavigation} from '@react-navigation/native';
-
-// Others
-import {useNavigation} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Registration = () => {

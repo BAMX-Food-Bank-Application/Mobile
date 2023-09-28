@@ -8,19 +8,80 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
-import {getAuth} from 'firebase/auth';
-import app from '../../../config/FirebaseConnection';
+import {auth} from '../../../config/FirebaseConnection';
+import firestore from '@react-native-firebase/firestore';
+import { useEffect } from 'react';
+
+
+var isaac = require( 'isaac' );
+var verificationCode;
+
 
 const Confirmation = ( {route} ) => {
-  const {email, name, password, phoneNumber} = route.params
-  const auth = getAuth(app);
+  const [user_phoneNumber, setPhoneNumber] = useState("");
   const navigation = useNavigation();
   const firstInput = useRef();
   const secondInput = useRef();
   const thirdInput = useRef();
   const fourthInput = useRef();
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: ''});
+  const UID = auth.currentUser.uid;
+
+  // const handleOTP = () => {
+  //   if(otp == verificationCode){
+  //     console.log("NICE")
+  //     navigation.navigate("Homescreen")
+  //   }
+  //   else{
+  //     console.log("ERROR OTP")
+  //     console.log()
+  //   }
+  // }
+
+  const sendCode = () => {
+      try {
+        firestore()
+          .collection('userData')
+          .doc(UID)
+          .get()
+          .then((snapshot) => {
+            const data = snapshot.data().phoneNumber
+            setPhoneNumber(data)
+            
+            const random_number = isaac.random( ) * 100000000;
+            
+            verificationCode = (random_number.toString());
+            verificationCode = verificationCode.substring(0,4);
+
+            const json = JSON.stringify({
+              "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": "+52"+user_phoneNumber,
+                "type": "text",
+                "text": {
+                  "preview_url": false,
+                  "body": "HOLA TU CODIGO ES ESTE: " + verificationCode
+                  }
+            });
+          
+            axios({
+              method: "post",
+              url: "https://graph.facebook.com/v17.0/147364981785470/messages",
+              data: json,
+              headers: { "Content-Type": "application/json", "Authorization": "Bearer EAACOAQDhfd4BOZBKJtHR5i3Rx54hK6MND2KNQK40UKpCF6UEc2p2tmJHN6nHRvTjVEDCZAVkBWSDy3cU8pjzctBNiqbGDzvxhuXZCGfJTezsDQqpXUntvVmA8ayhjaVVm7jsjMxKJZCnM4iYaab3GYyZBCKDFTCItVSmZArtBQnkdoPIQZAWcW5Lwrl1p9rhGvWXqot0cayB7eHKZCLKk9YvJZBRf2QZA5z0A5XCsZD" },
+            })
+          }); 
+      } catch (error) {
+        console.log("Error 0x5", error);
+      }
+  };
+
+  useEffect(() => {
+    setPhoneNumber("")
+    sendCode();
+  }, []);
 
   return (
     <View style={styles.screen}>
@@ -39,7 +100,7 @@ const Confirmation = ( {route} ) => {
       <Text style={styles.poppinssemibold}>Verificación OTP</Text>
       <Text style={styles.codeText}>
         Ingresa el código que se ha enviado a {''}
-        <Text style={styles.phoneNumberText}>{phoneNumber}</Text>
+        <Text style={styles.phoneNumberText}>+52{user_phoneNumber}</Text>
       </Text>
       <View style={styles.otpContainer}>
         <View style={styles.otpBox}>
@@ -93,7 +154,7 @@ const Confirmation = ( {route} ) => {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => console.log(otp)}>
+        onPress={(console)}>
         <Text style={styles.poppinsmedium}>Verificar</Text>
       </TouchableOpacity>
       <View style={[styles.flexRow]}>
