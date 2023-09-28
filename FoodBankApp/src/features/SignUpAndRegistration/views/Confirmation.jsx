@@ -50,10 +50,21 @@ const Confirmation = ( {route} ) => {
     setShowAlert(!showAlert);
   };
 
+  const clearCode = (
+    setInterval(() => {
+      verificationCode = ""
+    }, 60000)
+  )
+
+  clearCode
+
   const handleOTP = (otp, verificationCode) => {
     const input_otp = otp[1] + otp[2] + otp[3] + otp[4] 
     if(input_otp == verificationCode){
       navigation.navigate("HomeScreen")
+    }
+    else if(verificationCode == ""){
+      alertTrigger('Codigo expirado', 'Por favor intenta de nuevo');
     }
     else{
       alertTrigger('Codigo incorrecto', 'Por favor intenta de nuevo');
