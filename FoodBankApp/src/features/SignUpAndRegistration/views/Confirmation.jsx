@@ -1,4 +1,7 @@
-import React, {useRef, useState} from 'react';
+// BASE
+import React, {useRef, useState, useEffect} from 'react';
+
+// UI
 import {
   View,
   Text,
@@ -8,12 +11,20 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import axios from 'axios';
-import {useNavigation} from '@react-navigation/native';
+// COMPONENTS
+import DefaultAlert from '../../Global/components/DefaultAlert';
+import Button from '../../Global/components/Button';
+
+// STYLES
+import Colors from '../../Global/styles/Colors';
+
+// FIREBASE
 import {auth} from '../../../config/FirebaseConnection';
 import firestore from '@react-native-firebase/firestore';
-import { useEffect } from 'react';
 
+// OTHERS
+import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
 
 var isaac = require( 'isaac' );
 var verificationCode;
@@ -29,16 +40,25 @@ const Confirmation = ( {route} ) => {
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: ''});
   const UID = auth.currentUser.uid;
 
-  // const handleOTP = () => {
-  //   if(otp == verificationCode){
-  //     console.log("NICE")
-  //     navigation.navigate("Homescreen")
-  //   }
-  //   else{
-  //     console.log("ERROR OTP")
-  //     console.log()
-  //   }
-  // }
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+
+  const alertTrigger = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setShowAlert(!showAlert);
+  };
+
+  const handleOTP = (otp, verificationCode) => {
+    const input_otp = otp[1] + otp[2] + otp[3] + otp[4] 
+    if(input_otp == verificationCode){
+      navigation.navigate("HomeScreen")
+    }
+    else{
+      alertTrigger('Codigo incorrecto', 'Por favor intenta de nuevo');
+    }
+  }
 
   const sendCode = () => {
       try {
@@ -74,7 +94,7 @@ const Confirmation = ( {route} ) => {
             })
           }); 
       } catch (error) {
-        console.log("Error 0x5", error);
+        alertTrigger('Error en envío', error);
       }
   };
 
@@ -99,7 +119,7 @@ const Confirmation = ( {route} ) => {
       />
       <Text style={styles.poppinssemibold}>Verificación OTP</Text>
       <Text style={styles.codeText}>
-        Ingresa el código que se ha enviado a {''}
+        Ingresa el código que se ha enviado por Whatsapp a {''} {''}
         <Text style={styles.phoneNumberText}>+52{user_phoneNumber}</Text>
       </Text>
       <View style={styles.otpContainer}>
@@ -152,19 +172,27 @@ const Confirmation = ( {route} ) => {
           />
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={(console)}>
-        <Text style={styles.poppinsmedium}>Verificar</Text>
-      </TouchableOpacity>
+        <Button
+                content="Verificar"
+                bgColor={Colors.textSecondary}
+                fontColor={Colors.textPrimary}
+                functionality={() => handleOTP(otp, verificationCode)}
+        />
       <View style={[styles.flexRow]}>
           <Text style={[styles.flex]}>¿No recibiste un mensaje? </Text>
           <TouchableOpacity
             style={[styles.flex]}
-            onPress={() => navigation.navigate('Login')}>
+            onPress={() => sendCode()}>
             <Text style={[styles.linkedText]}>Reenviar</Text>
           </TouchableOpacity>
         </View>
+        <DefaultAlert
+          alertTitle={alertTitle}
+          alertContent={alertMessage}
+          btnContent={'Aceptar'}
+          modalVisible={showAlert}
+          onHide={() => setShowAlert(false)}
+        />
     </View>
   );
 };

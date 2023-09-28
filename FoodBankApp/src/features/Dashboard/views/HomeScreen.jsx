@@ -2,7 +2,7 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 // UI
-import {Text, TouchableOpacity, Alert, View} from 'react-native';
+import {Text, TouchableOpacity, Alert, SafeAreaView} from 'react-native';
 
 // Firebase
 import app from '../../../config/FirebaseConnection';
