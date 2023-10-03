@@ -46,10 +46,6 @@ const Login = () => {
   
   const navigation = useNavigation();
 
-  const navRegistration = () => {
-    navigation.navigate('Registration');
-  };
-
   const alertTrigger = (title, message) => {
     setAlertTitle(title);
     setAlertMessage(message)
@@ -132,13 +128,12 @@ const Login = () => {
           </View>
           <View style={styles.buttons}>
 
-            <Button content='Registrarse' functionality = { () => navRegistration() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
             <Button content='Login' functionality = { () => handleLogin() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
 
           </View>
           <View style={[styles.link,{alignSelf: 'center', display:'flex'}]}>
             <TouchableOpacity onPress={() => navigation.navigate('Password')}>
-              <Text style={[styles.linkedText]}>¿Olvidaste tu contraseña?</Text>
+              <Text style={[styles.linkedText, {color:'white'}]}>¿Olvidaste tu contraseña?</Text>
             </TouchableOpacity>
           </View>
           <DefaultAlert alertTitle = {alertTitle} alertContent = {alertMessage} btnContent='Ok' modalVisible={showAlert} onHide={ () => alertTrigger() } />

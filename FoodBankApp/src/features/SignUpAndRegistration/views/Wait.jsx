@@ -36,7 +36,7 @@ const Wait = () => {
             setTimeout(() => {
               console.log('Waiting for verification');
               checkVerification();
-            }, 10000);
+            }, 1000);
           }
         }
         catch (error){

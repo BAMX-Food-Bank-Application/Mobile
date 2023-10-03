@@ -1,5 +1,5 @@
 // Base
-import {React, useState} from 'react';
+import {React} from 'react';
 
 // UI
 import { StyleSheet, Text, View, Modal} from 'react-native';

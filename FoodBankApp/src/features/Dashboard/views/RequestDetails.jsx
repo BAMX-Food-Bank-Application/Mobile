@@ -4,7 +4,10 @@ import {useNavigation} from '@react-navigation/native';
 import {auth} from '../../../config/FirebaseConnection';
 
 // UI
-import {ScrollView, Text, TouchableOpacity, StyleSheet, View, Image, Alert} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
+
+// Components
+import DefaultAlert from '../../Global/components/DefaultAlert';
 
 // Firebase
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -15,7 +18,20 @@ const RequestDetails = ({route}) => {
   const [userDocumentData, setUserDocumentData] = useState({});
   const [productList, setProductList] = useState([]);
 
+  const [alertVisible, setAlertVisible] = useState(false);  
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertContent, setAlertContent] = useState('');
+  const [btnContent, setBtnContent] = useState(['','']);
+
   const navigation = useNavigation();
+
+
+  const triggerAlert = (title, message, button) => {
+    setAlertTitle(title);
+    setAlertContent(message);
+    setBtnContent(button);
+    setAlertVisible(!alertVisible);
+  };
 
   const getDocumentsData = () => {
     const { docID } = route.params;
@@ -71,7 +87,7 @@ const RequestDetails = ({route}) => {
           status: 'Cancelado',
         })
         .then(() => {
-          Alert.alert('Cargamento cancelado');
+          triggerAlert('Cargamento cancelado', 'El cargamento ha sido cancelado', 'Ok');
           navigation.navigate('HomeScreen');
         });
     } catch (error) {
@@ -153,6 +169,14 @@ const RequestDetails = ({route}) => {
 
         </ScrollView>
       </View>  
+
+      <DefaultAlert 
+        modalVisible={alertVisible}
+        alertTitle={alertTitle}
+        alertContent={alertContent}
+        onHide={() => triggerAlert('', '', [''])}
+        btnContent = {btnContent}
+      />
     </SafeAreaView>
 
   );
