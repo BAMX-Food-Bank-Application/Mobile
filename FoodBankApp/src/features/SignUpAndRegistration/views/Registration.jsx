@@ -13,7 +13,6 @@ import {
 // Components
 import DefaultAlert from '../../Global/components/DefaultAlert';
 import Button from '../../Global/components/Button';
-import ReturnButton from '../../Global/components/ReturnButton';
 import Logo from '../../Global/components/Logo';
 
 // Firebase
@@ -24,9 +23,6 @@ import {auth} from '../../../config/FirebaseConnection';
 // Styles
 import DefaultStyles from '../../Global/styles/Defaults';
 import Colors from '../../Global/styles/Colors';
-
-// Others
-import {useNavigation} from '@react-navigation/native';
 
 // Others
 import {useNavigation} from '@react-navigation/native';
@@ -102,7 +98,6 @@ const Registration = () => {
   };
 
   const handleSignUp = async () => {
-    if (!dev) {
       const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/;
       const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z])$/;
       const passwordRegex = /^(?=.[a-z])(?=.[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -138,98 +133,95 @@ const Registration = () => {
             console.log('Error creating user: ', error);
           });
       }
-    }
+  };
+  return (
+    <SafeAreaView style={DefaultStyles.screen}>
+      <View
+        style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
+        <Logo />
+        <TextInput
+          placeholder="Nombre Completo *"
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          onChangeText={setName}
+          autoCapitalize={'words'}></TextInput>
+        <TextInput
+          placeholder="Correo *"
+          placeholderTextColor={Colors.textDisabled}
+          value={email}
+          onChangeText={setEmail}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          autoCapitalize={'none'}
+          keyboardType={'email-address'}></TextInput>
+        <TextInput
+          placeholder="Nombre de Empresa *"
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          onChangeText={setNameCorp}
+          autoCapitalize={'none'}></TextInput>
+        <TextInput
+          placeholder="Ubicación de la Empresa *"
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          onChangeText={setAddress}
+          autoCapitalize={'none'}></TextInput>
+        <TextInput
+          placeholder="Número de teléfono *"
+          placeholderTextColor={Colors.textDisabled}
+          style={[styles.input, DefaultStyles.poppinsRegular]}
+          maxLength={10}
+          onChangeText={setPhoneNumber}
+          value={phoneNumber}
+          keyboardType={'phone-pad'}></TextInput>
+        <TextInput
+          placeholder="Contraseña *"
+          placeholderTextColor={Colors.textDisabled}
+          value={password}
+          secureTextEntry
+          onChangeText={setPassword}
+          style={[styles.input, DefaultStyles.poppinsRegular]}></TextInput>
+        <TextInput
+          placeholder="Confirmar contraseña *"
+          placeholderTextColor={Colors.textDisabled}
+          value={passwordC}
+          secureTextEntry
+          onChangeText={setPasswordC}
+          style={[styles.input, DefaultStyles.poppinsRegular]}></TextInput>
 
-    return (
-      <SafeAreaView style={DefaultStyles.screen}>
-        <ReturnButton />
-        <View
-          style={{alignItems: 'center', display: 'flex', marginHorizontal: 32}}>
-          <Logo />
-          <TextInput
-            placeholder="Nombre Completo *"
-            placeholderTextColor={Colors.textDisabled}
-            style={[styles.input, DefaultStyles.poppinsRegular]}
-            onChangeText={setName}
-            autoCapitalize={'words'}></TextInput>
-          <TextInput
-            placeholder="Correo *"
-            placeholderTextColor={Colors.textDisabled}
-            value={email}
-            onChangeText={setEmail}
-            style={[styles.input, DefaultStyles.poppinsRegular]}
-            autoCapitalize={'none'}
-            keyboardType={'email-address'}></TextInput>
-          <TextInput
-            placeholder="Nombre de Empresa *"
-            placeholderTextColor={Colors.textDisabled}
-            style={[styles.input, DefaultStyles.poppinsRegular]}
-            onChangeText={setNameCorp}
-            autoCapitalize={'none'}></TextInput>
-          <TextInput
-            placeholder="Ubicación de la Empresa *"
-            placeholderTextColor={Colors.textDisabled}
-            style={[styles.input, DefaultStyles.poppinsRegular]}
-            onChangeText={setAddress}
-            autoCapitalize={'none'}></TextInput>
-          <TextInput
-            placeholder="Número de teléfono *"
-            placeholderTextColor={Colors.textDisabled}
-            style={[styles.input, DefaultStyles.poppinsRegular]}
-            maxLength={10}
-            onChangeText={setPhoneNumber}
-            value={phoneNumber}
-            keyboardType={'phone-pad'}></TextInput>
-          <TextInput
-            placeholder="Contraseña *"
-            placeholderTextColor={Colors.textDisabled}
-            value={password}
-            secureTextEntry
-            onChangeText={setPassword}
-            style={[styles.input, DefaultStyles.poppinsRegular]}></TextInput>
-          <TextInput
-            placeholder="Confirmar contraseña *"
-            placeholderTextColor={Colors.textDisabled}
-            value={passwordC}
-            secureTextEntry
-            onChangeText={setPasswordC}
-            style={[styles.input, DefaultStyles.poppinsRegular]}></TextInput>
-
-          <View style={{marginTop: 16}}>
-            <Button
-              content="Registrarse"
-              bgColor={Colors.textSecondary}
-              fontColor={Colors.textPrimary}
-              functionality={() => handleSignUp()}
-            />
-          </View>
-
-          <View style={[DefaultStyles.flexRow]}>
-            <Text
-              style={[
-                DefaultStyles.poppinsRegular,
-                {color: Colors.textPrimary},
-              ]}>
-              {' '}
-              Ya tienes una cuenta?{' '}
-            </Text>
-
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={[DefaultStyles.linkedText]}>Ingresar</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={{marginTop: 16}}>
+          <Button
+            content="Registrarse"
+            bgColor={Colors.textSecondary}
+            fontColor={Colors.textPrimary}
+            functionality={() => handleSignUp()}
+          />
         </View>
 
-        <DefaultAlert
-          alertTitle={alertTitle}
-          alertContent={alertMessage}
-          btnContent={'Aceptar'}
-          modalVisible={showAlert}
-          onHide={() => setShowAlert(false)}
-        />
-      </SafeAreaView>
-    );
-  };
+        <View style={[DefaultStyles.flexRow]}>
+          <Text
+            style={[
+              DefaultStyles.poppinsRegular,
+              {color: Colors.textPrimary},
+            ]}>
+            {' '}
+            Ya tienes una cuenta?{' '}
+          </Text>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={[DefaultStyles.linkedText]}>Ingresar</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <DefaultAlert
+        alertTitle={alertTitle}
+        alertContent={alertMessage}
+        btnContent={'Aceptar'}
+        modalVisible={showAlert}
+        onHide={() => setShowAlert(false)}
+      />
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({

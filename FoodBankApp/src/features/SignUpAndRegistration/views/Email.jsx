@@ -36,7 +36,7 @@ import React, {useEffect} from 'react';
         }).catch(error => {
           console.log('Error: ', error);
         });
-      }, 5000);
+      }, 1000);
   
       return () => {
         clearInterval(interval);

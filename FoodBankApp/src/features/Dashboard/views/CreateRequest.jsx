@@ -10,12 +10,13 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  Alert,
+  Modal
 } from 'react-native';
 // Components
 import Button from '../../Global/components/Button';
 import DefaultAlert from '../../Global/components/DefaultAlert';
 import ConfirmDialog from '../../Global/components/ConfirmDialog';
+import DatePicker from 'react-native-modern-datepicker';
 
 // Styles
 import Colors from '../../Global/styles/Colors';
@@ -31,6 +32,8 @@ const CreateRequest = () => {
   const [inputs, setInputs] = useState([{ productName: '', weight: '', type: '', unit: '', expirationDate: '' }]);
   const [unitTypes, setUnitTypes] = useState([[]]);
 
+  const [dateVisible, setDateVisible] = useState(false);
+
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
 
@@ -38,12 +41,10 @@ const CreateRequest = () => {
   const [alertContent, setAlertContent] = useState('');
   const [btnContent, setBtnContent] = useState(['','']);
 
-
-
-
   const triggerConfirmation = () => {
     setConfirmationVisible(!confirmationVisible);
   };
+
   const triggerAlert = (title, message, button) => {
     setAlertTitle(title);
     setAlertContent(message);
@@ -51,10 +52,12 @@ const CreateRequest = () => {
     setAlertVisible(!alertVisible);
   };
   
+  const triggerDateVisible = () => {
+    setDateVisible(!dateVisible);
+    console.log(dateVisible);
+  };
 
   const navigation = useNavigation();
-
-  const regexDate = /^[0-9]$/;
 
   // Labels data for dropdown
   const productTypes = [
@@ -69,14 +72,6 @@ const CreateRequest = () => {
     { label: "Higiene personal", typeValue: "HP" },
     { label: "Otros",            typeValue: "OT" },
   ];
-
-  // Force date input to be date format dd/mm/yyyy, if not, it will be deleted
-  const handleDate = (text, index) => {
-    if (text.length == 2 || text.length == 5) handleInputChange(text + '/', index, 'expirationDate');
-    else if (text.length == 3 || text.length == 6) handleInputChange(text.substring(0, text.length - 1), index, 'expirationDate');
-    else if (text.length == 1) handleInputChange(text, index, 'expirationDate');
-    else handleInputChange(text, index, 'expirationDate');
-  };
 
   // Validation
     const validateInputs = () => {
@@ -107,6 +102,14 @@ const CreateRequest = () => {
   };
 
   // Handle everything
+
+  const handleDate = (text, index) => {
+    const updatedInputs = [...inputs];
+    updatedInputs[index].expirationDate = text;
+    setInputs(updatedInputs);
+    triggerDateVisible();
+  };
+
   const handleUnitTypes = (index, _typeValue) => {
     const updatedUnits = [...unitTypes]; 
 
@@ -131,6 +134,7 @@ const CreateRequest = () => {
   
     setUnitTypes(updatedUnits); // Update the state with the modified inputs array
   };
+
   const handleInputChange = (text, index, field) => { 
     const updatedInputs = [...inputs];
     updatedInputs[index][field] = text;
@@ -149,29 +153,6 @@ const CreateRequest = () => {
     updatedInputs.splice(index, 1);
     setInputs(updatedInputs);
   };
-
-  const handleExit = () => {
-
-    Alert.alert(
-      '¿Estás seguro?',
-      'Si sales ahora, tu solicitud no será guardada',
-      [
-        {
-          text: 'Cancelar cargamento',
-          onPress: () => navigation.navigate('HomeScreen'),
-          style: 'destructive',
-        },
-        {
-          text: 'Volver',
-          onPress: () => console.log('Cancel pressed'),
-          style: 'cancel',
-        },
-        
-      ],
-      {cancelable: false},
-    ); 
-  };
-
   
   // Final method for request creation
   const handleRequest = async () => {
@@ -193,7 +174,7 @@ const CreateRequest = () => {
 
     try{
       const UID = auth.currentUser.uid;  
-      const count = firestore().collection('Requests').where("supplierID", "==", UID).get().then((snapshot) => { return snapshot.size; }); 
+      const docExists = await firestore().collection('Requests').doc(UID).get() ? true : false;
       const requestData = {
         supplierID: UID,
         type: types,
@@ -204,15 +185,13 @@ const CreateRequest = () => {
         creationDate: new Date().toLocaleDateString(),
         status: 'Pendiente',
         requestNumber: count,
-      }; 
-      console.log('Request: ', requestData);
-      await firestore().collection('Requests').add(requestData);
-      navigation.goBack();
-      Alert.alert('Solicitud creada', 'Tu solicitud ha sido creada con éxito');
-      navigation.goBack();
+      };   
+        await firestore().collection('Requests').add(requestData).collection;
+        navigation.goBack();
+        triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito', 'Aceptar')
     } 
     catch (error){
-      Alert.alert('Error', 'No se pudo crear la solicitud');
+      triggerAlert('Error', 'No se pudo crear la solicitud', 'Aceptar')
       console.log('Error (0x4): ', error);
     }
     
@@ -221,11 +200,13 @@ const CreateRequest = () => {
   // Showing things
  
   return (
-
+    
     <View style={styles.screen}>
-      
       <View style={[styles.flexContainer, styles.cardScreen]}>
+        
         <ScrollView contentContainerStyle={{flexGrow:0}}>
+        
+     
         {inputs.map((input, index) => (
           <View key={index}>
             {index !== 0 && (
@@ -252,6 +233,7 @@ const CreateRequest = () => {
                   handleInputChange(item.typeValue, index, 'type');                  
                 }}
               />
+              
             <Text style={DefaultStyles.poppinsMedium}>Producto</Text>
             <TextInput
               placeholder="Nombre del producto"
@@ -264,6 +246,7 @@ const CreateRequest = () => {
               <TextInput
                 placeholder="Cantidad"
                 placeholderTextColor={Colors.textDisabled}
+                keyboardType="numeric"
                 value={inputs[index].weight}
                 onChangeText={(text) => handleInputChange(text, index, 'weight') }
                 style={[styles.flexItem, styles.input]}
@@ -273,9 +256,7 @@ const CreateRequest = () => {
                 selectedTextStyle={[DefaultStyles.poppinsRegular, {fontSize: 13}]}
                 style={styles.dropdown}
                 placeholder="Unidad"
-                
                 placeholderStyle={{color: Colors.textDisabled}}
-
                 data={unitTypes[index]}
                 labelField="label"
                 valueField="unitValue"
@@ -286,17 +267,28 @@ const CreateRequest = () => {
               />
             </View>
             <Text style={DefaultStyles.poppinsMedium}>Fecha de caducidad</Text>
-            <TextInput
-              placeholderTextColor={Colors.textDisabled}
-
+            <TouchableOpacity onPress={() => triggerDateVisible()}>
+              <TextInput
+                placeholderTextColor={Colors.textDisabled}
                 placeholder="DD/MM/AAAA"
                 value={inputs[index].expirationDate}
-                type="date"
-                maxLength={10}
-                keyboardType='numeric'
-                onChangeText={(text) => handleDate(text, index)}
                 style={[styles.flexItem, styles.input]}
-              />
+                editable={false}
+                selectTextOnFocus={false}
+              />    
+            </TouchableOpacity>
+            <Modal animationType='fade' transparent={true} visible={dateVisible}>
+              <View style={styles.container}>
+                <View style={styles.modalContent}>
+                    <DatePicker
+                        mode="calendar" 
+                        onSelectedChange={date =>{ 
+                          handleDate(date, index);
+                        }}  
+                    />
+                </View>
+              </View>   
+            </Modal>
           </View>
         ))}
         <View style={[styles.flexContainer, {alignItems: 'flex-end', color: Colors.black}]}>
@@ -308,8 +300,11 @@ const CreateRequest = () => {
         <View style={[styles.flexContainer, {flexDirection: 'row', columnGap: 16}]}>
           <Button content='Guardar' functionality={() => handleRequest()} bgColor={Colors.approval} fontColor={Colors.white}/>
           <Button content='Cancelar' functionality={() => triggerConfirmation()} bgColor={Colors.primary} fontColor={Colors.white}/>       
+        </View>
+      
       </View>
-      </View>
+
+                        
       <ConfirmDialog 
         modalVisible={confirmationVisible} 
         alertTitle='¿Estás segur@ de cancelar tu cargamento?' 
@@ -324,7 +319,8 @@ const CreateRequest = () => {
         alertContent={alertContent}
         onHide={() => triggerAlert('', '', [''])}
         btnContent = {btnContent}
-      />
+      /> 
+      
     </View>
   );
 };
@@ -374,22 +370,31 @@ const styles = StyleSheet.create({
     height: 45,
     margin: 10,
   },
-  arrow: {
-    width: 24,
-    height: 24,
-  },
-  arrowbtn: {
-    width: 24,
-    height: 24,
-    marginHorizontal: 24,
-  },
   button: {
-    marginTop: 16,
+    marginVertical: 16,
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 30,
     color: 'white', 
     fontWeight: 'bold',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingHorizontal: 24,
+  
+},
+  modalContent: {
+      width: '100%',
+      height: '50%',
+      display: 'flex',
+      borderRadius: 25,
+      alignItems: 'center',
+      backgroundColor: Colors.white,
+      elevation: 10,
+      padding: 24,
   },
 });
 

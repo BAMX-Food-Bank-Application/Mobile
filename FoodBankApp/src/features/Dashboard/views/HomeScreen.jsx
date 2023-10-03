@@ -2,7 +2,14 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 // UI
-import {Text, TouchableOpacity, Alert, View} from 'react-native';
+import {Text, TouchableOpacity, Alert, SafeAreaView} from 'react-native';
+
+// Styles
+import DefaultStyles from '../../Global/styles/Defaults';
+import Colors from '../../Global/styles/Colors';
+
+// Components
+import Button from '../../Global/components/Button';
 
 // Firebase
 import app from '../../../config/FirebaseConnection';
@@ -26,14 +33,11 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
-      <Text>Welcome to the Home Screen</Text>
+    <SafeAreaView style={[DefaultStyles.Screen, {paddingHorizontal: 16}]}>
+      <ShipmentsComponent/>
+      <NewRequest/>
       <TouchableOpacity onPress={() => signOut()}>
         <Text>LogOut</Text>
-      </TouchableOpacity>
-      <NewRequest></NewRequest>
-      <TouchableOpacity onPress={ () =>  navigation.navigate('RequestDetails', { docID: 'ZcS3GokgeN7F0oxbLKsj'})}>
-        <Text>Request details</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
