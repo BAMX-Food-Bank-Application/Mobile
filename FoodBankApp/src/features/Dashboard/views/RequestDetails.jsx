@@ -49,8 +49,12 @@ const RequestDetails = ({route}) => {
           setUserDocumentData(userData);
           userData.email = userEmail;
         });
+
+  // const shipments = firestore().collection('userData').doc(UID).collection('requestsHistory');
       firestore()
-        .collection('Requests')
+        .collection('userData')
+        .doc(UID)
+        .collection('requestsHistory')
         .doc(docID)
         .get()
         .then((snapshot) => {
@@ -58,13 +62,13 @@ const RequestDetails = ({route}) => {
           setRequestDocumentData(requestData);
           
          requestData.productName.forEach((product, index) => {
-
+          
           const newProductData = {
             Name: product,
             Type: requestData.type[index],
             Quantity: requestData.weight[index],
             MeasuringUnit: requestData.unit[index],
-            ExpirationDate: requestData.expirationDate[index]
+            ExpirationDate: requestData.expirationDates[index]
           };    
           
           setProductList((prevList) => [...prevList, newProductData]);
@@ -79,9 +83,12 @@ const RequestDetails = ({route}) => {
 
   const cancelRequest = () => {
     const { docID } = route.params;
+    const UID = auth.currentUser.uid;
     try {
       firestore()
-        .collection('Requests')
+        .collection('userData')
+        .doc(UID)
+        .collection('requestsHistory')
         .doc(docID)
         .update({
           status: 'Cancelado',
@@ -114,7 +121,7 @@ const RequestDetails = ({route}) => {
                 style={styles.arrow}
               />
             </TouchableOpacity>
-            <Text style={[styles.poppinsTitle, {flex: 4}]}>Cargamento #{requestDocumentData.requestNumber}</Text>
+            <Text style={[styles.poppinsTitle, {flex: 4}]}>Cargamento #{requestDocumentData.requestID}</Text>
           </View>
         
         <Text style={styles.poppinsSubtitle}>Nombre: </Text>  
@@ -130,7 +137,7 @@ const RequestDetails = ({route}) => {
         <Text style={styles.poppinsregular}>{userDocumentData.nameCorp}</Text>
 
         <Text style={styles.poppinsSubtitle}>Productos: </Text>
-
+        
         {
           productList.map((product, index) => {
             return(

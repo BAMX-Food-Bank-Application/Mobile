@@ -3,7 +3,7 @@
   import {useNavigation} from '@react-navigation/native';
 
   // UI
-  import {FlatList, Image, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+  import {FlatList, Image, View, StyleSheet, Text, TouchableOpacity, RefreshControl} from 'react-native';
 
   // Styles
   import Colors from '../../Global/styles/Colors';
@@ -22,17 +22,31 @@
 
 
 
-  const getDocumentsData = () => {
-    const UID = auth.currentUser.uid;
-    const shipments = firestore().collection('Requests');
-    const query = shipments.where('supplierID', '==', UID).get().then((querySnapshot) => {
-      const data = querySnapshot.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() }; // Include the document ID in the data object
-      });
-      return data;
-    });
-    return query;
-  }
+const getDocumentsData = async () => {
+  const UID = auth.currentUser.uid;
+  const shipments = firestore().collection('userData').doc(UID).collection('requestsHistory').orderBy('requestID', 'asc');
+
+  const querySnapshot = await shipments.get();
+  const data = querySnapshot.docs.map((doc) => {
+    // Ignore the document with ID 'summary'
+    if (doc.id === 'summary') {
+      return null;
+    }
+    return { id: doc.id, ...doc.data() }; // Include the document ID in the data object
+  }).filter(doc => doc !== null); // Filter out the ignored document
+
+  return data;
+}
+
+onRefresh = () => {
+  setRefresh(true);
+  setShipments([]);
+
+  getDocumentsData().then((data) => {
+    setShipments(data);
+    setRefresh(false);
+  }).delay(2000);
+}
     
   const Shipment = ({shipmentId, status, index}) => {
     const navigation = useNavigation();
@@ -61,6 +75,8 @@
 
   const ShipmentsComponent = ({navigation}) => {
     const [shipments, setShipments] = useState([]);
+    const [refresh, setRefresh] = useState(false);
+
 
     useEffect(() => {
       getDocumentsData().then((data) => {
@@ -78,8 +94,15 @@
           showsVerticalScrollIndicator={false}
             data={shipments}
             renderItem={({item}) => (
-              <Shipment shipmentId={item.id} index={item.requestNumber} status={item.status} nav={navigation} />
+              <Shipment shipmentId={item.id} index={item.requestID} status={item.status} nav={navigation} />
             )}
+            refreshControl={
+              <RefreshControl
+                refreshing={refresh}
+                onRefresh={() => getDocumentsData().then((data) => {
+                  setShipments(data);
+                })}/>
+            }
           />
           ) : 
           (<Text style={[DefaultStyles.poppinsSubtitle, {color: Colors.textSecondary}]}>No hay cargamentos</Text>)
