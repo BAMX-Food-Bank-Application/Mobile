@@ -28,7 +28,8 @@ export default function AppNavigation() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="HomeScreen"
-          screenOptions={{headerShown: false}}>
+          screenOptions={{headerShown: false}}
+          >
           <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -45,19 +46,16 @@ export default function AppNavigation() {
           <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
-          <Stack.Screen name="CreateRequest" component={CreateRequest} />
-          <Stack.Screen name = "RequestDetails" component = {RequestDetails}/>
         </Stack.Navigator>
       </NavigationContainer>
     :      
     <NavigationContainer>
     <Stack.Navigator
-      initialRouteName="ProfileDetails"
+      initialRouteName="Login"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Registration" component={Registration} />
       <Stack.Screen name="Password" component={Password} />
-      <Stack.Screen name = "ProfileDetails" component = {ProfileDetails}/>
     </Stack.Navigator>
   </NavigationContainer>
   );

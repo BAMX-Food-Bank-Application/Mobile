@@ -2,7 +2,7 @@
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 // UI
-import {Text, TouchableOpacity, Alert, SafeAreaView} from 'react-native';
+import {Text, TouchableOpacity, Alert, SafeAreaView, Touchable} from 'react-native';
 
 // Styles
 import DefaultStyles from '../../Global/styles/Defaults';
@@ -37,7 +37,10 @@ const HomeScreen = ({ navigation }) => {
       <ShipmentsComponent/>
       <NewRequest/>
       <TouchableOpacity onPress={() => signOut()}>
-        <Text>LogOut</Text>
+        <Text style={[DefaultStyles.poppinsTitle, {margin:24}]}>LogOut</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ProfileDetails')}>
+        <Text style={[DefaultStyles.poppinsTitle, {margin:24}]}>Profile</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

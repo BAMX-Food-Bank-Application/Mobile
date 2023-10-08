@@ -7,7 +7,7 @@ const DefaultStyles = StyleSheet.create({
         color: Colors.textPrimary,
         fontFamily: 'Poppins-ExtraBold',
         fontSize: 24,
-        lineHeight: 26
+        lineHeight: 32
     },
     poppinsSubtitle: {
         color: Colors.textDisabled,
@@ -40,11 +40,11 @@ const DefaultStyles = StyleSheet.create({
       alignItems: 'center',
     },
     screen: {
-      flex: 1,
       alignContent: 'center',
       backgroundColor: '#EFEFEF',
       paddingHorizontal: 8,
-      paddingVertical: 24,
+      paddingTop: 24,
+      paddingBottom: 8,
     },
     input: {
       width: '100%',

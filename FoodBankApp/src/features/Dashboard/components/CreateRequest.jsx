@@ -20,8 +20,6 @@ const CreateRequest = () => {
 
   const navigation = useNavigation();
 
-  const regexDate = /^(((0[1-9]|[12][0-9]|3[01])[- /.](0[13578]|1[02])|(0[1-9]|[12][0-9]|30)[- /.](0[469]|11)|(0[1-9]|1\d|2[0-8])[- /.]02)[- /.]\d{4}|29[- /.]02[- /.](\d{2}(0[48]|[2468][048]|[13579][26])|([02468][048]|[1359][26])00))$/;
-
   // Labels data for dropdown
   const productTypes = [
     { label: "Frutas",           typeValue: "FR" },
@@ -101,6 +99,7 @@ const CreateRequest = () => {
     try{
     const UID = auth.currentUser.uid;
       const userData = (await firestore().collection('userData').doc(UID).get()).data();
+      const count = (await firestore().collection('userData').doc(UID).collection('requestsHistory').count()).size;
   
       const requestData = {
         supplierID: UID,
@@ -115,9 +114,9 @@ const CreateRequest = () => {
         unit: unitArray,
         expirationDate: expirationDateArray, 
         status: 'Pendiente',
+        requestNumber: count + 1,
       }; 
-      console.log('Request: ', requestData);
-      await firestore().collection('Requests').add(requestData);
+      await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
       Alert.alert('Solicitud creada', 'Tu solicitud ha sido creada con éxito');
     } 
     catch (error){
@@ -158,8 +157,6 @@ const CreateRequest = () => {
                 onChange={item => {
                   handleUnitTypes(index, item.typeValue);
                   handleInputChange(item.typeValue, index, 'type');
-                  
-                  //console.log('Type value: ', inputs[index].type, ' Unit value: ', inputs[index].unit);
                 }}
               />
             <Text style={styles.poppinsmedium}>Producto</Text>

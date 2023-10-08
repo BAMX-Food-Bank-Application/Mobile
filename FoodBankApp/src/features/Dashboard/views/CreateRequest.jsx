@@ -54,7 +54,6 @@ const CreateRequest = () => {
   
   const triggerDateVisible = () => {
     setDateVisible(!dateVisible);
-    console.log(dateVisible);
   };
 
   const navigation = useNavigation();
@@ -162,7 +161,21 @@ const CreateRequest = () => {
     let units = [];
     let expirationDates = [];
 
+
     if (!validateInputs()) return;
+
+    const requestSummary = {
+      fruits: 0,
+      vegetables: 0,
+      grains: 0,
+      canned: 0,
+      meat: 0,
+      dairy: 0,
+      clothes: 0,
+      medicine: 0,
+      hygiene: 0,
+      others: 0,
+    };
 
     inputs.forEach((input) => {
       names.push(input.productName);
@@ -170,11 +183,52 @@ const CreateRequest = () => {
       weights.push(input.weight);
       units.push(input.unit);
       expirationDates.push(input.expirationDate);
+
+      if(input.unit === 'KG') input.weight /= 1000;
+      if(input.unit === 'GL') input.weight /= 3.78541;
+
+      switch (input.type) {
+        case 'FR':
+          requestSummary.fruits += input.weight;
+          break;
+        case 'VR':
+          requestSummary.vegetables += input.weight;
+          break;
+        case 'GR':
+          requestSummary.grains += input.weight;
+          break;
+        case 'EN':
+          requestSummary.canned += input.weight;
+          break;
+        case 'CA':
+          requestSummary.meat += input.weight;
+          break;
+        case 'LA':
+          requestSummary.dairy += input.weight;
+          break;
+        case 'RO':
+          requestSummary.clothes += input.weight;
+          break;
+        case 'ME':
+          requestSummary.medicine += input.weight;
+          break;
+        case 'HP':
+          requestSummary.hygiene += input.weight;
+          break;
+        case 'OT':
+          requestSummary.others += input.weight;
+          break;
+      }
+
     });
+
+    console.log(requestSummary);
 
     try{
       const UID = auth.currentUser.uid;  
-      const docExists = await firestore().collection('Requests').doc(UID).get() ? true : false;
+
+      const docsRegistered = (await firestore().collection('userData').doc(UID).collection('requestsHistory').get()).size;
+
       const requestData = {
         supplierID: UID,
         type: types,
@@ -184,9 +238,43 @@ const CreateRequest = () => {
         expirationDates: expirationDates, 
         creationDate: new Date().toLocaleDateString(),
         status: 'Pendiente',
-        requestNumber: count,
-      };   
-        await firestore().collection('Requests').add(requestData).collection;
+        requestID: docsRegistered,
+        };   
+
+        if (docsRegistered > 0){
+          await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
+          
+          await firestore().collection('Leaderboard').doc(UID).update(
+            {
+              fruits: firestore.FieldValue.increment(requestSummary.fruits),
+              vegetables: firestore.FieldValue.increment(requestSummary.vegetables),
+              grains: firestore.FieldValue.increment(requestSummary.grains),
+              canned: firestore.FieldValue.increment(requestSummary.canned),
+              meat: firestore.FieldValue.increment(requestSummary.meat),
+              dairy: firestore.FieldValue.increment(requestSummary.dairy),
+              clothes: firestore.FieldValue.increment(requestSummary.clothes),
+              medicine: firestore.FieldValue.increment(requestSummary.medicine),
+              hygiene: firestore.FieldValue.increment(requestSummary.hygiene),
+              others: firestore.FieldValue.increment(requestSummary.others),
+            }
+          );
+
+        }
+        else{
+          const summaryRef = {
+            fruits: 0,
+            vegetables: 0,
+            grains: 0,
+            canned: 0,
+            meat: 0,
+            dairy: 0,
+            clothes: 0,
+            medicine: 0,
+            hygiene: 0,
+            others: 0,
+          };
+          await firestore().collection('userData').doc(UID).collection('requestsHistory').doc('summary').set(summaryRef);
+        }
         navigation.goBack();
         triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito', 'Aceptar')
     } 
