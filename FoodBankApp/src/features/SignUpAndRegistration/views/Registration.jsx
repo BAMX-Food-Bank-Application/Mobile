@@ -15,6 +15,9 @@ import DefaultAlert from '../../Global/components/DefaultAlert';
 import Button from '../../Global/components/Button';
 import Logo from '../../Global/components/Logo';
 
+// Utils
+import {validateEmail, validatePassword} from '../../Global/utils/regexValidation';
+
 // Firebase
 import {createUserWithEmailAndPassword} from 'firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -49,13 +52,8 @@ const Registration = () => {
   };
 
   const validateInputs = async () => {
-    const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/;
-    const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z]*)*$/;
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    const phoneRegex =
-      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
-
-    // We start validation
+    const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
 
     // Check if everything is filled
     if (name === '' || email === '' || password === '' || passwordC === '') {
@@ -98,9 +96,7 @@ const Registration = () => {
   };
 
   const handleSignUp = async () => {
-      const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/;
-      const nameRegex = /^[a-zA-Z]+(([',.-][a-zA-Z])?[ a-zA-Z])$/;
-      const passwordRegex = /^(?=.[a-z])(?=.[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
       // We start validation
 
       if (validateInputs()) {

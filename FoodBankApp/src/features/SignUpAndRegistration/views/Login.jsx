@@ -16,6 +16,9 @@ import DefaultAlert from '../../Global/components/DefaultAlert';
 import Button from '../../Global/components/Button';
 import Logo from '../../Global/components/Logo';
 
+// Utils
+import { validateEmail, validatePassword } from '../../Global/utils/regexValidation';
+
 // Styles
 import Colors from '../../Global/styles/Colors';
 
@@ -28,17 +31,15 @@ import app from '../../../config/FirebaseConnection';
 import firestore from '@react-native-firebase/firestore';
 import DefaultStyles from '../../Global/styles/Defaults';
 
-
-
 const auth = getAuth(app);
 
 const Login = () => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword]= useState ('');
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword]= useState (''); 
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -53,7 +54,14 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    setLoading(true);
+    if (!validateEmail(email)){
+      alertTrigger('Correo inválido', 'El correo ingresado no es válido')
+      return;
+    }
+    if (!validatePassword(password)){
+      alertTrigger('Contraseña inválida', 'La contraseña debe contener al menos 8 caracteres, una mayúscula, una minúscula y un número');
+      return;
+    }
     signInWithEmailAndPassword(auth, email, password)
     .then(async userCredential => {
       // Check if status is true in firestore
@@ -87,9 +95,7 @@ const Login = () => {
         // Other error cases
         alertTrigger('Error', errorMessage)
       }
-    
     });
-    setLoading(false);
   }
 
   return (
