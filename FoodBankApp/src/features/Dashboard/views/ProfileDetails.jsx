@@ -17,6 +17,7 @@ import LeaderBoardTable from '../components/LeaderBoardTable';
 import app from '../../../config/FirebaseConnection';
 import firestore from '@react-native-firebase/firestore';
 import {getAuth} from 'firebase/auth';
+
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = screenWidth - 32;
 

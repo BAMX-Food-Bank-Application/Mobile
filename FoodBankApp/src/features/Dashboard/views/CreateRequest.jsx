@@ -1,6 +1,3 @@
-// git commit -m "Products data visualized inside cards, full details view done, added key index to request creation view. [Check for bugs]"
-
-
 import React, {useState} from 'react';
 import {
   Text,
