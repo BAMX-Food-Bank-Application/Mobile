@@ -8,6 +8,11 @@ import {ScrollView, Text, TouchableOpacity, StyleSheet, View, Image} from 'react
 
 // Components
 import DefaultAlert from '../../Global/components/DefaultAlert';
+import Button from '../../Global/components/Button';
+import LoadingComponent from '../../Global/components/LoadingComponent';
+
+// Styles 
+import Colors from '../../Global/styles/Colors';
 
 // Firebase
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -22,6 +27,7 @@ const RequestDetails = ({route}) => {
   const [alertTitle, setAlertTitle] = useState('');
   const [alertContent, setAlertContent] = useState('');
   const [btnContent, setBtnContent] = useState(['','']);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigation = useNavigation();
 
@@ -34,10 +40,10 @@ const RequestDetails = ({route}) => {
   };
 
   const getDocumentsData = () => {
+    setIsLoading(true);
     const { docID } = route.params;
     const UID = auth.currentUser.uid;
     const userEmail = auth.currentUser.email;
-
 
     try {
       firestore()
@@ -50,7 +56,6 @@ const RequestDetails = ({route}) => {
           userData.email = userEmail;
         });
 
-  // const shipments = firestore().collection('userData').doc(UID).collection('requestsHistory');
       firestore()
         .collection('userData')
         .doc(UID)
@@ -79,6 +84,7 @@ const RequestDetails = ({route}) => {
     } catch (error) {
       console.log("Error 0x5", error);
     }
+    setIsLoading(false);
   };
 
   const cancelRequest = () => {
@@ -92,6 +98,7 @@ const RequestDetails = ({route}) => {
         .doc(docID)
         .update({
           status: 'Cancelado',
+          cancelationDate: new Date('DD/MM/YYYY'),
         })
         .then(() => {
           triggerAlert('Cargamento cancelado', 'El cargamento ha sido cancelado', 'Ok');
@@ -109,8 +116,9 @@ const RequestDetails = ({route}) => {
     getDocumentsData();
   }, []);
 
-  return (
+  if (!isLoading) return (
     <SafeAreaView>
+      <LoadingComponent loading={isLoading}/>
       <View style={styles.screen}>
         <ScrollView>
 
@@ -169,10 +177,12 @@ const RequestDetails = ({route}) => {
         }
         <Text style={styles.poppinsSubtitle}>Estado del cargamento: {requestDocumentData.status}</Text>
         <Text style={styles.poppinsSubtitle}>Fecha de entrega: {requestDocumentData.creationDate}</Text>
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={[styles.poppinsSubtitle, {color: 'white'}]} onPress={ () => cancelRequest()}>Cancelar cargamento</Text>
-        </TouchableOpacity>
+        {
+          requestDocumentData.status === 'Cancelado' 
+          ? <Text style={styles.poppinsSubtitle}>Fecha de cancelación: {requestDocumentData.cancelationDate}</Text> 
+          : <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => cancelRequest()}/>
+        }
+        
 
         </ScrollView>
       </View>  

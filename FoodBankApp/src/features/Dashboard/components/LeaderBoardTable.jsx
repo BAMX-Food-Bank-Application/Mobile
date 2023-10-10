@@ -65,7 +65,7 @@ const LeaderBoardTable = ({Category}) => {
                             <View key={user.id} style={styles.row}>
                                 <View style={{display:'flex', flexDirection:'row', alignItems: 'center', columnGap: 12}}>
                                     <Text style={[DefaultStyles.poppinsTitle,{color:'black'}]}>{index+1}</Text>
-                                    <UserIcon mini={true} />
+                                    <UserIcon mini={true} ID={user.id}/>
                                 </View>
 
                                 <Text style={[DefaultStyles.poppinsRegular, styles.column, {color:'black'}]}>{leaderBoardData.find(doc => doc.id === user.id) ? leaderBoardData.find(doc => doc.id === user.id).nameCorp : 'placeholder' }</Text>
