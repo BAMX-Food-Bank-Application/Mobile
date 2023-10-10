@@ -115,6 +115,7 @@ const CreateRequest = () => {
         expirationDate: expirationDateArray, 
         status: 'Pendiente',
         requestNumber: count + 1,
+        creationDate: new Date('DD/MM/YYYY'),
       }; 
       await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
       Alert.alert('Solicitud creada', 'Tu solicitud ha sido creada con éxito');

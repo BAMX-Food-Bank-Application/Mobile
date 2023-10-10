@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+
 import LinearGradient from 'react-native-linear-gradient';
 // Components
 import DefaultAlert from '../../Global/components/DefaultAlert';
@@ -37,7 +38,7 @@ const Login = () => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword]= useState (''); 
 
@@ -54,6 +55,7 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     if (!validateEmail(email)){
       alertTrigger('Correo inválido', 'El correo ingresado no es válido')
       return;
@@ -90,12 +92,15 @@ const Login = () => {
       } else if(errorCode === 'auth/missing-password'){
         // Password missing
         alertTrigger('Contraseña no ingresada', 'Por favor ingresa una contraseña');
+      } else if(errorCode === 'auth/network-request-failed'){
+        alertTrigger('Sin conexión', 'Por favor conectate a internet para continuar');
       }
       else {
         // Other error cases
         alertTrigger('Error', errorMessage)
       }
     });
+    setLoading(false);
   }
 
   return (

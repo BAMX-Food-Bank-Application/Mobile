@@ -1,4 +1,4 @@
-import { validateEmail, validatePassword, validateNumbers, validateDate } from '../src/features/SignUpAndRegistration/utils/regexValidation';
+import { validateEmail, validatePassword, validateNumbers, validateDate } from '../src/features/Global/utils/regexValidation';
 
 describe('validateEmail', () => {
     it('Should return true for valid email addresses', () => {
