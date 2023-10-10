@@ -90,6 +90,8 @@ const RequestDetails = ({route}) => {
   const cancelRequest = () => {
     const { docID } = route.params;
     const UID = auth.currentUser.uid;
+    const date = new Date();
+    const formatedDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
     try {
       firestore()
         .collection('userData')
@@ -98,7 +100,7 @@ const RequestDetails = ({route}) => {
         .doc(docID)
         .update({
           status: 'Cancelado',
-          cancelationDate: new Date('DD/MM/YYYY'),
+          cancellationDate: formatedDate,
         })
         .then(() => {
           triggerAlert('Cargamento cancelado', 'El cargamento ha sido cancelado', 'Ok');
@@ -108,8 +110,6 @@ const RequestDetails = ({route}) => {
       console.log('Error 0x6', error);
     }
   };
-
-
 
   useEffect(() => {
     setProductList([]);
@@ -121,7 +121,6 @@ const RequestDetails = ({route}) => {
       <LoadingComponent loading={isLoading}/>
       <View style={styles.screen}>
         <ScrollView>
-
           <View style={styles.flexContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={[styles.arrowbtn, styles.flexItem]}>
               <Image
@@ -179,7 +178,7 @@ const RequestDetails = ({route}) => {
         <Text style={styles.poppinsSubtitle}>Fecha de entrega: {requestDocumentData.creationDate}</Text>
         {
           requestDocumentData.status === 'Cancelado' 
-          ? <Text style={styles.poppinsSubtitle}>Fecha de cancelación: {requestDocumentData.cancelationDate}</Text> 
+          ? <Text style={styles.poppinsSubtitle}>Fecha de cancelación: {requestDocumentData.cancellationDate}</Text> 
           : <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => cancelRequest()}/>
         }
         
