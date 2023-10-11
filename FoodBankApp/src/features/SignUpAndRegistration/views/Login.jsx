@@ -110,6 +110,7 @@ const Login = () => {
                 setIsFocused(false);
               }}
               value={email} onChangeText={setEmail}
+              accessibilityLabel='Email input'
               >
             </TextInput>
             <TextInput
@@ -124,9 +125,10 @@ const Login = () => {
               }}
               secureTextEntry
               value={password} onChangeText={setPassword}
+              accessibilityLabel='Password input'
               ></TextInput>
           </View>
-          <View style={styles.buttons}>
+          <View style={styles.buttons} accessibilityLabel='Login Button'>
 
             <Button content='Login' functionality = { () => handleLogin() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
 

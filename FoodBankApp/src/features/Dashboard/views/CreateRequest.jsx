@@ -272,7 +272,6 @@ const CreateRequest = () => {
           };
           await firestore().collection('userData').doc(UID).collection('requestsHistory').doc('summary').set(summaryRef);
         }
-        navigation.goBack();
         triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito', 'Aceptar')
     } 
     catch (error){
@@ -402,7 +401,7 @@ const CreateRequest = () => {
         modalVisible={alertVisible}
         alertTitle={alertTitle}
         alertContent={alertContent}
-        onHide={() => triggerAlert('', '', [''])}
+        onHide={() => alertTitle === "Solicitud creada" ? navigation.goBack() : triggerAlert()}
         btnContent = {btnContent}
       /> 
       

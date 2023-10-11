@@ -37,7 +37,7 @@ const HomeScreen = ({ navigation }) => {
       <ShipmentsComponent/>
       <NewRequest/>
       <TouchableOpacity onPress={() => signOut()}>
-        <Text style={[DefaultStyles.poppinsTitle, {margin:24}]}>LogOut</Text>
+        <Text style={[DefaultStyles.poppinsTitle, {margin:24}]} accessibilityLabel='Log Out Button'>LogOut</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('ProfileDetails')}>
         <Text style={[DefaultStyles.poppinsTitle, {margin:24}]}>Profile</Text>

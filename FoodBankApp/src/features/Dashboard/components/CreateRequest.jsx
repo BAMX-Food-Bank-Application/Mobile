@@ -13,10 +13,20 @@ import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import {auth} from '../../../config/FirebaseConnection';
 import { Dropdown } from 'react-native-element-dropdown';
+import DefaultAlert from '../../Global/components/DefaultAlert';
 
 const CreateRequest = () => {
   const [inputs, setInputs] = useState([{ productName: '', weight: '', type: '', unit: '', expirationDate: '' }]);
   const [unitTypes, setUnitTypes] = useState([[{label: 'Selecciona un tipo de producto', unitValue: ''}]]);
+  const [alertTitle, setAlertTitle] = useState[''];
+  const [alertContent, setAlertContent] = useState[''];
+  const [showAlert, setShowAlert] = useState(false);
+
+  const alertTrigger = (_alertTitle, _alertContent)  => {
+    setShowAlert(!showAlert);
+    setAlertTitle(alertTitle);
+    setAlertContent(alertContent);
+  };
 
   const navigation = useNavigation();
 
@@ -39,7 +49,7 @@ const CreateRequest = () => {
   const handleUnitTypes = (index, _typeValue) => {
     const updatedUnits = [...unitTypes]; 
 
-    if (_typeValue === "FR" || _typeValue === "VR" || _typeValue === "GR" || _typeValue === "CA") {
+    if (_typeValue === "FR" || _typeValue === "VR" || _typeValue === "GR" || _typeValue === "CA" || _typeValue === "LA") {
       updatedUnits[index] = [
         { label: "Kilos", unitValue: "KG" },
         { label: "Toneladas", unitValue: "TON" },
@@ -48,13 +58,6 @@ const CreateRequest = () => {
       updatedUnits[index] = [
         { label: "Piezas", unitValue: "PZ" },
         { label: "Cajas", unitValue: "CA" },
-      ];
-    } else if (_typeValue === "LA") {
-      updatedUnits[index] = [
-        { label: "Litros", unitValue: "LT" },
-        { label: "Galones", unitValue: "GL" },
-        { label: "Kilos", unitValue: "KG" },
-        { label: "Piezas", unitValue: "PZ" },
       ];
     }
   
@@ -117,10 +120,11 @@ const CreateRequest = () => {
         requestNumber: count + 1,
       }; 
       await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
-      Alert.alert('Solicitud creada', 'Tu solicitud ha sido creada con éxito');
-    } 
+        alertTrigger("Solicitud Creada", "Su solicitud se ha generado satsifactoriamente.");
+        console.log("A");
+      } 
     catch (error){
-      Alert.alert('Error', 'No se pudo crear la solicitud');
+      alertTrigger("Error", "No se ha podido guardar su solicitud.")
       console.log('Error (0x4): ', error);
     }
     
@@ -131,6 +135,9 @@ const CreateRequest = () => {
   return (
 
     <View style={styles.screen}>
+      <DefaultAlert alertTitle={alertTitle} alertContent={alertContent} modalVisible={showAlert} onHide={() => 
+        alertTitle === "Solicitud creada" ? navigation.goBack() : alertTrigger()
+      } btnContent={"Continuar"}/>
       <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.arrowbtn}>
         <Image
               source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
@@ -165,6 +172,7 @@ const CreateRequest = () => {
               value={inputs[index].productName} // Use the value from the inputs state array
               onChangeText={(text) => handleInputChange(text, index, 'productName')}
               style={[styles.flexItem, styles.input]}
+              accessibilityLabel='Producto'
             />
             <View style={{flexDirection: 'row'}}>
               <TextInput
