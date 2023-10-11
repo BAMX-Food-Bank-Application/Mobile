@@ -111,6 +111,7 @@ const Login = () => {
           <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
             <Logo/>
             <TextInput
+              autoCapitalize='none'
               placeholder="Email"
               placeholderTextColor={Colors.textDisabled}
               style={[isFocused ? styles.inputFocused : styles.input, DefaultStyles.poppinsRegular]}
