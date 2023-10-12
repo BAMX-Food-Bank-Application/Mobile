@@ -8,13 +8,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 // Screens
 import Login from '../features/SignUpAndRegistration/views/Login';
 import Registration from '../features/SignUpAndRegistration/views/Registration';
-import Wait from '../features/SignUpAndRegistration/views/Wait';
 import Password from '../features/SignUpAndRegistration/views/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Email from '../features/SignUpAndRegistration/views/Email';
 import CreateRequest from '../features/Dashboard/views/CreateRequest';
 import RequestDetails from '../features/Dashboard/views/RequestDetails';
 import ProfileDetails from '../features/Dashboard/views/ProfileDetails';
+import wantDonation from '../features/Dashboard/views/WantDonation';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +30,6 @@ export default function AppNavigation() {
           initialRouteName="HomeScreen"
           screenOptions={{headerShown: false}}
           >
-          <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="CreateRequest" component={CreateRequest} />
@@ -41,9 +40,8 @@ export default function AppNavigation() {
       :
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Wait"
+          initialRouteName="Email"
           screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
         </Stack.Navigator>
@@ -53,7 +51,7 @@ export default function AppNavigation() {
     <Stack.Navigator
       initialRouteName="Login"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Login" component={wantDonation} />
       <Stack.Screen name="Registration" component={Registration} />
       <Stack.Screen name="Password" component={Password} />
     </Stack.Navigator>
