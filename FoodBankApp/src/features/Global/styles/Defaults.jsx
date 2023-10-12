@@ -48,7 +48,9 @@ const DefaultStyles = StyleSheet.create({
     },
     input: {
       width: '100%',
+      flex: 1,
       borderBottomWidth: 1,
+      color: Colors.textPrimary,
       padding: 10,
       fontFamily: 'Poppins-Regular',
       marginBottom: 36,  

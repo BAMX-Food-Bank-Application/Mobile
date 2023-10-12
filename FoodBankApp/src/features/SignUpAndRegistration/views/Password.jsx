@@ -44,7 +44,8 @@ const Password = () => {
 
 
   const handleNewToken = () => {
-    const emailRegex = /^\S+@\S+\.(com|mx|org|net)$/
+    const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+                      
     if (!emailRegex.test(email)) {
       alertTrigger('Correo inválido', 'No hay un usuario registrado con ese correo')
       return false;
@@ -68,20 +69,24 @@ const Password = () => {
 
 
   return (
-    <SafeAreaView style={[DefaultStyles.screen]}>
+    <SafeAreaView style={DefaultStyles.screen}>
       <ReturnButton/>
-      <View style={styles.container}>
-          <Text style={DefaultStyles.poppinsTitle}>Restaurar contraseña</Text>
-          <Text style={DefaultStyles.poppinsSubtitle}>Ingresa el correo con el que te registraste en la app</Text>
+      <View style={{display: 'flex', padding: 24, alignItems: 'center'}}>
+          <Text style={[DefaultStyles.poppinsTitle, {textAlign: 'center'}]}>Restaurar contraseña</Text>
+          <Text style={[DefaultStyles.poppinsSubtitle, {textAlign: 'center'}]}>Ingresa el correo con el que te registraste en la app</Text>
         
+        <View style={DefaultStyles.flexRow}>
           <TextInput
-          placeholder="Correo"
-          placeholderTextColor={Colors.textDisabled}
-          style={DefaultStyles.input}
-          onChangeText={setEmail}
-          autoCapitalize={'words'}></TextInput>
-
-        <Button content='Continuar' functionality={() => handleNewToken()} bgColor={Colors.textSecondary} fontColor={Colors.textPrimary}/>
+            placeholder="Correo"
+            placeholderTextColor={Colors.textDisabled}
+            style={DefaultStyles.input}
+            onChangeText={setEmail}
+            autoCapitalize={'words'}>
+          </TextInput>
+        </View>
+        <View>
+          <Button content='Continuar' functionality={() => handleNewToken()} bgColor={Colors.textSecondary} fontColor={Colors.textPrimary}/>
+        </View>
       </View>
 
 
@@ -104,6 +109,17 @@ const styles = StyleSheet.create({
         marginHorizontal: 32, 
         rowGap: 16,
         justifyContent:'center'
+      },
+      input: {
+        width: '100%',
+        margin: 12,
+        padding: 10,
+        backgroundColor: '#EFEFEF',
+        borderRadius: 25,
+        borderWidth: 2,
+        borderColor: '#EFEFEF',
+        paddingHorizontal: 24,
+        elevation: 15,
       }
 
 });
