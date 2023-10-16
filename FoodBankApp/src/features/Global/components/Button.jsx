@@ -10,10 +10,11 @@ import DefaultStyles from '../styles/Defaults';
 const Button = ({content, functionality, bgColor, fontColor}) => {
     return(
         <TouchableOpacity onPress={() => functionality()} style={[styles.button, {backgroundColor: bgColor}]}>
-            <View >  
+            <View>  
               <Text style={[DefaultStyles.poppinsRegular, {color: fontColor}]}>{content}</Text>
             </View>
         </TouchableOpacity>
+        
     )
 }
 
@@ -21,6 +22,7 @@ const Button = ({content, functionality, bgColor, fontColor}) => {
 const styles = StyleSheet.create({
     button: {
       flex: 1,
+      minHeight: 50,
       maxHeight: 50,
       borderRadius: 25,
       paddingVertical: 10,

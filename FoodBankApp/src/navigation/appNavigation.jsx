@@ -8,7 +8,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 // Screens
 import Login from '../features/SignUpAndRegistration/views/Login';
 import Registration from '../features/SignUpAndRegistration/views/Registration';
-import Wait from '../features/SignUpAndRegistration/views/Wait';
+import SingleDonation from '../features/SignUpAndRegistration/views/SingleDonation';
 import Password from '../features/SignUpAndRegistration/views/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
 import Email from '../features/SignUpAndRegistration/views/Email';
@@ -28,9 +28,7 @@ export default function AppNavigation() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="HomeScreen"
-          screenOptions={{headerShown: false}}
-          >
-          <Stack.Screen name="Wait" component={Wait} />
+          screenOptions={{headerShown: false}}>
           <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="CreateRequest" component={CreateRequest} />
@@ -43,7 +41,6 @@ export default function AppNavigation() {
         <Stack.Navigator
           initialRouteName="Wait"
           screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Wait" component={Wait} />
           <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
         </Stack.Navigator>
@@ -56,6 +53,7 @@ export default function AppNavigation() {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Registration" component={Registration} />
       <Stack.Screen name="Password" component={Password} />
+      <Stack.Screen name="SingleDonation" component={SingleDonation}/>
     </Stack.Navigator>
   </NavigationContainer>
   );

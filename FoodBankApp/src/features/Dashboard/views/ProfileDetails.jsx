@@ -2,7 +2,7 @@
 import {React, useEffect, useState} from 'react';
 
 // UI
-import {Text, SafeAreaView, View, StyleSheet, ScrollView, Dimensions, PermissionsAndroid, Platform} from 'react-native';
+import {Text, SafeAreaView, View, StyleSheet, ScrollView, Dimensions} from 'react-native';
 
 // Styles
 import DefaultStyles from '../../Global/styles/Defaults';
@@ -65,13 +65,13 @@ const ProfileDetails = () => {
 
     if(!isLoading) {
         return (
-            <SafeAreaView style={{display: 'flex', flexDirection: 'column'}}>
+            <SafeAreaView style={{display: 'flex', flexDirection: 'column', backgroundColor: 'red'}}>
                 <LoadingComponent loading={isLoading}/>
-                <View style={[DefaultStyles.screen, {backgroundColor: Colors.white, height: '100%'}]}>
+                <View style={[DefaultStyles.screen, {backgroundColor: Colors.textSecondary, height: '100%', paddingHorizontal: 8}]}>
                     <View style={{paddingVertical: 16}}>
                         <ReturnButton/>
                     </View>
-                    <View style={styles.heroeContainer}>
+                    <View>
                         <View style={{position: 'absolute', top:-75, alignItems: 'center'}}>
                             <UserIcon ID={auth.currentUser.uid} editable={true}/>
                         </View >
@@ -82,7 +82,7 @@ const ProfileDetails = () => {
                         <View>
                             <ScrollView horizontal={true}
                                 pagingEnabled={true} 
-                                snapToInterval={cardWidth + 16} 
+                                snapToInterval={cardWidth + 32} 
                                 onScroll={handleScroll} 
                                 alwaysBounceHorizontal={false} 
                                 disableIntervalMomentum={true} 
@@ -113,7 +113,7 @@ const ProfileDetails = () => {
                                 {
                                     tipoDonacion.map((donacion, index) => {
                                         return(
-                                            <View key={index} style={[styles.carrouselIndicator, {backgroundColor: currentPage === index ? Colors.white : 'transparent'}]}/>
+                                            <View key={index} style={[styles.carrouselIndicator, {backgroundColor: currentPage === index ? Colors.textSecondary : 'transparent'}]}/>
                                         )
                                     })
                                 }
@@ -131,27 +131,17 @@ const ProfileDetails = () => {
 };
 
 const styles = StyleSheet.create({
-    heroeContainer: {
-        borderRadius: 16,
-        backgroundColor: Colors.secondary,
-        display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: cardWidth/4,
-        marginTop: 42,
-    },
     card: {
         display: 'flex',
         flexDirection: 'column',
         width: cardWidth,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.textSecondary,
         marginHorizontal: 8,
         marginVertical: 16,
         borderRadius: 12,
         padding: 16,
         elevation: 3,
+        overflow: 'hidden',
     },
     container: {
         flex: 1,
@@ -190,7 +180,7 @@ const styles = StyleSheet.create({
             borderRadius: 8,
             marginHorizontal: 4,
             borderWidth: 1,
-            borderColor: Colors.white,
+            borderColor: Colors.textSecondary,
         }
 });
 

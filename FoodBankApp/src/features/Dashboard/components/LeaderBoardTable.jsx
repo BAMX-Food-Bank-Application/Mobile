@@ -26,7 +26,6 @@ const LeaderBoardTable = ({Category}) => {
         const userData = userDataSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const _summaryData = summaryDataSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-
         setSummaryData(_summaryData);
         setLeaderBoardData(userData);
     }

@@ -108,7 +108,7 @@ const Login = () => {
         colors={[Colors.gradientPrimary, Colors.gradientSecondary]}
         style={styles.linearGradient}>
         <SafeAreaView style={[DefaultStyles.screen, {backgroundColor: null}]}>
-          <View style={{alignItems: 'center', display: 'flex', marginHorizontal: 32,}}>
+          <View style={{alignItems: 'center', display: 'flex'}}>
             <Logo/>
             <TextInput
               autoCapitalize='none'
@@ -143,9 +143,12 @@ const Login = () => {
             <Button content='Login' functionality = { () => handleLogin() } bgColor={'white'} fontColor={Colors.textPrimary} ></Button>
 
           </View>
-          <View style={[styles.link,{alignSelf: 'center', display:'flex'}]}>
+          <View style={[DefaultStyles.flexColumn, {marginVertical: 32, rowGap: 16}]}>
             <TouchableOpacity onPress={() => navigation.navigate('Password')}>
               <Text style={[styles.linkedText, {color:'white'}]}>¿Olvidaste tu contraseña?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('SingleDonation')}>
+              <Text style={[styles.linkedText, {color:'white'}]}>¿Quieres donar? Contáctanos</Text>
             </TouchableOpacity>
           </View>
           <DefaultAlert alertTitle = {alertTitle} alertContent = {alertMessage} btnContent='Ok' modalVisible={showAlert} onHide={ () => alertTrigger() } />
@@ -160,15 +163,9 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    background:
-      'linear-gradient(0deg, rgba(243,178,70,.8) 0%, rgba(224,30,64,.8) 100%)',
-  },
   input: {
     width: '100%',
-    margin: 12,
+    marginVertical: 12,
     padding: 10,
     backgroundColor: '#EFEFEF',
     borderRadius: 25,
@@ -179,7 +176,7 @@ const styles = StyleSheet.create({
   },
   inputFocused: {
     width: '100%',
-    margin: 12,
+    marginVertical: 12,
     padding: 10,
     backgroundColor: '#EFEFEF',
     borderWidth: 2,
@@ -197,10 +194,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 32,
     gap: 8,
-  },
-  link: {
-    display: 'flex',
-    marginTop: 24,
   }
 });
 export default Login;
