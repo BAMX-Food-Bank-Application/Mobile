@@ -372,8 +372,8 @@ const CreateRequest = () => {
         </View>
         </ScrollView>
         <View style={[styles.flexContainer, {flexDirection: 'row', columnGap: 16}]}>
-          <Button content='Guardar' functionality={() => handleRequest()} bgColor={Colors.approval} fontColor={Colors.white}/>
-          <Button content='Cancelar' functionality={() => triggerConfirmation()} bgColor={Colors.primary} fontColor={Colors.white}/>       
+          <Button content='Guardar' functionality={() => handleRequest()} bgColor={Colors.approval} fontColor={Colors.textSecondary}/>
+          <Button content='Cancelar' functionality={() => triggerConfirmation()} bgColor={Colors.primary} fontColor={Colors.textSecondary}/>       
         </View>
       
       </View>

@@ -28,13 +28,13 @@ const ConfirmDialog = ({alertTitle, alertContent, btnContent, modalVisible, onAc
                 <Button
                     bgColor={Colors.approval}
                     content={btnContent[0]}
-                    fontColor={Colors.white}
+                    fontColor={Colors.textSecondary}
                     functionality={() => onAccept()}
                 />
                 <Button
                     bgColor={Colors.primary}
                     content={btnContent[1]}
-                    fontColor={Colors.white}
+                    fontColor={Colors.textSecondary}
                     functionality={() => onDeny()}
                 />
                 </View>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
       display: 'flex',
       borderRadius: 25,
       alignItems: 'center',
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.textSecondary,
       elevation: 10,
       padding: 24,
       rowGap: 16,        

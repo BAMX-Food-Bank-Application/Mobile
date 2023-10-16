@@ -37,9 +37,9 @@ const Tag = ({text, selected, activeColor, _onPress}) => {
   };
 
   return (
-    <View style={[styles.tag, {backgroundColor: isSelected ? activeColor : Colors.textDisabled}]}>
+    <View style={[styles.tag, {backgroundColor: isSelected ? activeColor : Colors.textSecondary}]}>
       <TouchableOpacity onPress={() => handlePress()} activeOpacity={1}>
-        <Text style={[DefaultStyles.poppinsMedium, {color: Colors.textSecondary, fontSize: 10}]}>
+        <Text style={[DefaultStyles.poppinsMedium, {color: isSelected ? Colors.textSecondary : Colors.textPrimary, fontSize: 10}]}>
           {text}
         </Text>
       </TouchableOpacity>
@@ -84,12 +84,13 @@ const ShipmentsComponent = ({navigation}) => {
 
   const [refresh, setRefresh] = useState(false);
 
-  const getDocumentsData = async () => {
-    const UID = auth.currentUser.uid;
-    const shipments = firestore().collection('userData').doc(UID).collection('requestsHistory').orderBy('requestID', 'asc');
-    const filter = [];
+  let unsubscribe = null;
 
-    const querySnapshot = await shipments.get();
+const getDocumentsData = () => {
+  const UID = auth.currentUser.uid;
+  const shipments = firestore().collection('userData').doc(UID).collection('requestsHistory').orderBy('requestID', 'asc');
+  
+  unsubscribe = shipments.onSnapshot((querySnapshot) => {
     let data = querySnapshot.docs.map((doc) => {
       if (doc.id === 'summary') {
         return null;
@@ -97,22 +98,32 @@ const ShipmentsComponent = ({navigation}) => {
       return { id: doc.id, ...doc.data() };
     }).filter(doc => doc !== null);
 
-    if(!delivered && !cancelled && !inTransit && !pending) return data;
-
+    const filter = [];
+    
     if(pending) filter.push("Pendiente");
     if(delivered) filter.push("Entregado");
     if(cancelled) filter.push("Cancelado");
     if(inTransit) filter.push("En camino");    
 
-    data = data.filter(doc => filter.includes(doc.status));
-
-    return data;
-  };
+    if(filter.length === 0) {
+      // If none of the tags are selected, return all documents
+      setShipments(data);
+    } else {
+      // If any of the tags are selected, filter the documents based on the status
+      data = data.filter(doc => filter.includes(doc.status));
+      setShipments(data);
+    }
+  });
+};
 
   useEffect(() => {
-    getDocumentsData().then((data) => {
-      setShipments(data);
-    });
+    getDocumentsData();
+    
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [delivered, cancelled, inTransit, pending]);
 
   return (
@@ -193,12 +204,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 8,
     marginVertical: 8,
-    backgroundColor: '#fff',
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 4,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: Colors.textDisabled,
   }
 });

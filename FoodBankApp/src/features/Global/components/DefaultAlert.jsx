@@ -61,12 +61,13 @@ const DefaultAlert = ({alertTitle, alertContent, btnContent, modalVisible, onHid
         <View style={styles.modalContent}>
             {alertTitle != null && (<Text style={[DefaultStyles.poppinsTitle, {textAlign: 'center'}]}>{alertTitle}</Text>)}
             <Text style={[alertTitle != null ? DefaultStyles.poppinsRegular : DefaultStyles.poppinsSubtitle, {textAlign: 'center'}]}>{alertContent}</Text>
-            <Button
-                bgColor={Colors.blueAccent}
-                content={btnContent}
-                fontColor={Colors.white}
-                functionality={() => onHide()}
-            />
+              
+              <Button
+                  bgColor={Colors.blueAccent}
+                  content={btnContent}
+                  fontColor={Colors.textSecondary}
+                  functionality={() => onHide()}
+              />
         </View>
       </View>   
     </Modal>
@@ -80,16 +81,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         paddingHorizontal: 24,
-      
     },
     modalContent: {
         display: 'flex',
         borderRadius: 25,
         alignItems: 'center',
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.textSecondary,
         elevation: 10,
         padding: 24,
-        rowGap: 16,        
+        rowGap: 16, 
+        maxHeight: '30%',    
     },
   });
 

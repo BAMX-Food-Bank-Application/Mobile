@@ -6,10 +6,9 @@ const Colors = {
     secondary: '#F89C04',
     blueAccent: '#4200FF',
     approval: '#38B503',
-    white: '#FFFFFF',
     // Text
     textPrimary: '#0F0606',
-    textSecondary: '#FFFFFF',
+    textSecondary: '#F9F9F9',
     textAccent: '#FFC700',
     textDisabled: '#BDBDBD',
     textError: '#FF0000',
