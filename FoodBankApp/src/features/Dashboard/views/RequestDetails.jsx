@@ -20,15 +20,16 @@ import DefaultStyles from '../../Global/styles/Defaults';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore';
 import ReturnButton from '../../Global/components/ReturnButton';
+
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = screenWidth - 24;
 
 const RequestDetails = ({route}) => {
-  const [requestDocumentData, setRequestDocumentData] = useState({});
-  const [userDocumentData, setUserDocumentData] = useState({});
   const [productList, setProductList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
+  const { userData, docData } = route.params;
+  const data = docData[0];
 
   const [alertVisible, setAlertVisible] = useState(false);  
   const [alertTitle, setAlertTitle] = useState('');
@@ -67,49 +68,21 @@ const RequestDetails = ({route}) => {
 
   const getDocumentsData = () => {
     setIsLoading(true);
-    const { docID } = route.params;
-    const UID = auth.currentUser.uid;
-    const userEmail = auth.currentUser.email;
 
-    try {
-      firestore()
-        .collection('userData')
-        .doc(UID)
-        .get()
-        .then((snapshot) => {
-          const userData = snapshot.data();
-          setUserDocumentData(userData);
-          userData.email = userEmail;
-        });
-
-      firestore()
-        .collection('userData')
-        .doc(UID)
-        .collection('requestsHistory')
-        .doc(docID)
-        .get()
-        .then((snapshot) => {
-          const requestData = snapshot.data();
-          setRequestDocumentData(requestData);
-          
-         requestData.productName.forEach((product, index) => {
+         data.productName.forEach((product, index) => {
           
           const newProductData = {
-            Name: product,
-            Type: requestData.type[index],
-            Quantity: requestData.weight[index],
-            MeasuringUnit: requestData.unit[index],
-            ExpirationDate: requestData.expirationDates[index]
+            Name: product.length > 16 ? product.substring(0, 16) + '...' : product,
+            Type: data.type[index],
+            Quantity: data.weight[index],
+            MeasuringUnit: data.unit[index],
+            ExpirationDate: data.expirationDates[index]
           };    
           
           setProductList((prevList) => [...prevList, newProductData]);
 
-         });
         });      
 
-    } catch (error) {
-      console.log("Error 0x5", error);
-    }
     setIsLoading(false);
   };
 
@@ -148,7 +121,7 @@ const RequestDetails = ({route}) => {
       <View style={styles.screen}>
           <View style={DefaultStyles.header}>
             <ReturnButton/>
-            <Text style={[DefaultStyles.poppinsTitle, {flex: 4}]}>Cargamento #{String(requestDocumentData.requestID).padStart(5, '0')}</Text>
+            <Text style={[DefaultStyles.poppinsTitle, {flex: 4}]}>Cargamento #{String(data.requestID).padStart(5, '0')}</Text>
           </View>
         <View>
 
@@ -156,8 +129,8 @@ const RequestDetails = ({route}) => {
         <View style={[styles.mainCardView, {padding:32}]}>
             <UserIcon ID={auth.currentUser.uid} mini={true}/>
             <View style={[DefaultStyles.flexColumn, {alignItems: 'flex-start'}]}>
-              <Text style={DefaultStyles.poppinsRegular}>{userDocumentData.name}</Text>
-              <Text style={DefaultStyles.poppinsRegular}>{userDocumentData.nameCorp}</Text> 
+              <Text style={DefaultStyles.poppinsRegular}>{userData.name}</Text>
+              <Text style={DefaultStyles.poppinsRegular}>{userData.nameCorp}</Text> 
             </View>
         </View>
         <Text style={[DefaultStyles.poppinsTitle, {marginTop: 16, marginBottom: 8}]}>Productos: </Text>
@@ -227,15 +200,15 @@ const RequestDetails = ({route}) => {
               <View style={{backgroundColor: Colors.blueAccent, padding:16, borderRadius: 48}}>
                 <Image style={{height:24, width:24, backgroundColor: Colors.blueAccent,}} source={{uri:"https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Fcamion.png?alt=media&token=44bf84ed-3c81-47b1-ade9-83470a48d829&_gl=1*1unjq6*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyODUwNS4xNDkuMS4xNjk3MTI5NzczLjU2LjAuMA.."}}/>
               </View>
-              <Text style={DefaultStyles.poppinsMedium}>{requestDocumentData.status}</Text>
+              <Text style={DefaultStyles.poppinsMedium}>{data.status}</Text>
             </View>
 
             <View style={styles.halfCardView}>
               <Text style={[DefaultStyles.poppinsMedium, {textAlign: 'center'}]}>
-                { requestDocumentData.status === "Cancelado" ? requestDocumentData.cancellationDate : requestDocumentData.creationDate } 
+                { data.status === "Cancelado" ? data.cancellationDate : data.creationDate } 
                 </Text>
               <Text style={[DefaultStyles.poppinsMedium, {textAlign: 'center'}]}>
-                { requestDocumentData.status === "Cancelado" ? "Cancelación" : "Entrega"}</Text>
+                { data.status === "Cancelado" ? "Cancelación" : "Entrega"}</Text>
             </View>
 
           </View>
@@ -243,7 +216,7 @@ const RequestDetails = ({route}) => {
         
         
         {
-          requestDocumentData.status != 'Cancelado' 
+          data.status === 'Cancelado' || data.status === 'Entregado' 
           ? <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => cancelRequest()}/>
           : null
         }
@@ -302,7 +275,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     padding: 16,
     marginVertical: 16,
     marginHorizontal: 8,
