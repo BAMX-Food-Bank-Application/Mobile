@@ -20,25 +20,31 @@ import Colors from '../../Global/styles/Colors';
 
 // FIREBASE
 import {auth} from '../../../config/FirebaseConnection';
-import firestore from '@react-native-firebase/firestore';
 
 // OTHERS
-import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
+import { MailSlurp } from 'mailslurp-client';
+
+const crossFetch = require('cross-fetch');
+
+const mailslurp = new MailSlurp({
+  fetchApi: crossFetch,
+  apiKey: "dc2e43a4f5f1ca12f5fb1ac438e739575f650a708ed381f789cd3af88aa0f3e0",
+});
 
 var isaac = require( 'isaac' );
 var verificationCode;
 
 
+
 const Confirmation = ( {route} ) => {
-  const [user_phoneNumber, setPhoneNumber] = useState("");
   const navigation = useNavigation();
   const firstInput = useRef();
   const secondInput = useRef();
   const thirdInput = useRef();
   const fourthInput = useRef();
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: ''});
-  const UID = auth.currentUser.uid;
+  const user_email = auth.currentUser.email;
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -71,48 +77,33 @@ const Confirmation = ( {route} ) => {
     }
   }
 
-  const sendCode = () => {
-      try {
-        firestore()
-          .collection('userData')
-          .doc(UID)
-          .get()
-          .then((snapshot) => {
-            const data = snapshot.data().phoneNumber
-            setPhoneNumber(data)
-            
-            const random_number = isaac.random( ) * 100000000;
-            
-            verificationCode = (random_number.toString());
-            verificationCode = verificationCode.substring(0,4);
+  const emailSent = async (inbox, options) => {
+    await mailslurp.sendEmail(inbox.id, options);
+    console.log("Sent")
+  }
 
-            const json = JSON.stringify({
-              "messaging_product": "whatsapp",
-                "recipient_type": "individual",
-                "to": "+52"+user_phoneNumber,
-                "type": "text",
-                "text": {
-                  "preview_url": false,
-                  "body": "HOLA TU CODIGO ES ESTE: " + verificationCode
-                  }
-            });
-          
-            axios({
-              method: "post",
-              url: "https://graph.facebook.com/v17.0/147364981785470/messages",
-              data: json,
-              headers: { "Content-Type": "application/json", "Authorization": "Bearer EAACOAQDhfd4BOZBKJtHR5i3Rx54hK6MND2KNQK40UKpCF6UEc2p2tmJHN6nHRvTjVEDCZAVkBWSDy3cU8pjzctBNiqbGDzvxhuXZCGfJTezsDQqpXUntvVmA8ayhjaVVm7jsjMxKJZCnM4iYaab3GYyZBCKDFTCItVSmZArtBQnkdoPIQZAWcW5Lwrl1p9rhGvWXqot0cayB7eHKZCLKk9YvJZBRf2QZA5z0A5XCsZD" },
-            })
-          }); 
+  const sendCode = async () => {
+      try{
+        console.log("Sending")
+        const random_number = isaac.random( ) * 100000000;        
+        verificationCode = (random_number.toString());
+        verificationCode = verificationCode.substring(0,4);
+        const inbox = await mailslurp.createInbox();
+        const options = {
+          to: [user_email],
+          subject: 'Bienvenid@ a BAMX, ',
+          body: 'Tu código para acceder a la aplicación es: ' + verificationCode,
+        };
+        emailSent(inbox, options); 
       } catch (error) {
         alertTrigger('Error en envío', error);
       }
   };
 
   useEffect(() => {
-    setPhoneNumber("")
     sendCode();
   }, []);
+
 
   return (
     <View style={styles.screen}>
@@ -130,8 +121,8 @@ const Confirmation = ( {route} ) => {
       />
       <Text style={styles.poppinssemibold}>Verificación OTP</Text>
       <Text style={styles.codeText}>
-        Ingresa el código que se ha enviado por Whatsapp a {''} {''}
-        <Text style={styles.phoneNumberText}>+52{user_phoneNumber}</Text>
+        Ingresa el código que se ha enviado por email a {''} {''}
+        <Text style={styles.phoneNumberText}>{user_email}</Text>
       </Text>
       <View style={styles.otpContainer}>
         <View style={styles.otpBox}>
