@@ -19,6 +19,13 @@
       'Cancelado': 'gray',
       'Pendiente': '#f07e15',
   }
+
+  const colorStatusText = {
+      'En camino': '66%',
+      'Entregado': '100%',
+      'Cancelado': '0%',
+      'Pendiente': '33%',
+  }
   
 
 const Tag = ({text, selected, activeColor, _onPress}) => {
@@ -57,6 +64,9 @@ const Shipment = ({shipmentId, status, index}) => {
         />
       </View>
       <View style={styles.rightSection}>
+        <View style={{borderRadius: 12, height: 10, backgroundColor: '#CBD5E0'}}>
+          <View style={{backgroundColor: colorStatus[status], borderRadius: 12, height: 10, width: colorStatusText[status]}}></View>
+        </View>
         <Text style={DefaultStyles.poppinsSubtitle}>{status}</Text>
       </View>
     </View>
@@ -170,7 +180,7 @@ const styles = StyleSheet.create({
   rightSection: {
     alignContent: 'center',
     justifyContent: 'center',
-
+    flex: 1
   },
   image: {
     width: 48,

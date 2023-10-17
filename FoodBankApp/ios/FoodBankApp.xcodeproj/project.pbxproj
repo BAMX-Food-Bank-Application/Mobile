@@ -18,6 +18,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B309F1372AD66B79008645BD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B309F1362AD66B79008645BD /* GoogleService-Info.plist */; };
 		B309F1382AD66B79008645BD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B309F1362AD66B79008645BD /* GoogleService-Info.plist */; };
+		B309F13A2ADDCA8E008645BD /* loadingAnim.riv in Resources */ = {isa = PBXBuildFile; fileRef = B309F1392ADDCA8E008645BD /* loadingAnim.riv */; };
 		BF4A6108F5F74A20A51068E1 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */; };
 		CD3D7E2065AF76BAC5076FFC /* Pods_FoodBankApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E4880786DCA5D73C6D4B49D /* Pods_FoodBankApp.framework */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,7 @@
 		9559C6F848F44B3E9EDD3C44 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		B309F1362AD66B79008645BD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B309F1392ADDCA8E008645BD /* loadingAnim.riv */ = {isa = PBXFileReference; lastKnownFileType = file; path = loadingAnim.riv; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EF28C5F8D75C9243EF17E41A /* Pods-FoodBankApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodBankApp.debug.xcconfig"; path = "Target Support Files/Pods-FoodBankApp/Pods-FoodBankApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,6 +155,7 @@
 		AC1C728E85E046A4859BFE10 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B309F1392ADDCA8E008645BD /* loadingAnim.riv */,
 				1BA6E29B75F9414D85A8877C /* Poppins-ExtraBold.ttf */,
 				9D2073F523254D109B0EA890 /* Poppins-Medium.ttf */,
 				919673E6A0AC439194EB4DA8 /* Poppins-Regular.ttf */,
@@ -269,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				B309F13A2ADDCA8E008645BD /* loadingAnim.riv in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				498A7D73C7A247DC8071D6CD /* Poppins-ExtraBold.ttf in Resources */,
 				BF4A6108F5F74A20A51068E1 /* Poppins-Medium.ttf in Resources */,

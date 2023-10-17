@@ -26,7 +26,7 @@ const UserIcon = ({mini, ID, editable}) => {
 
     useEffect(() => {
         getProfileImage(ID);
-    }, []);
+    }, [image]);
 
     return(
         <TouchableOpacity onPress={() => editable ? checkPermissions() ? openImagePicker() : null : null} activeOpacity={1}>

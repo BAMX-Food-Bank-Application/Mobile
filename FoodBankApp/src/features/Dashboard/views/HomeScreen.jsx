@@ -1,48 +1,26 @@
 // Core
-import React from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
+
 // UI
-import {Text, TouchableOpacity, Alert, SafeAreaView, Touchable} from 'react-native';
-
-// Styles
-import DefaultStyles from '../../Global/styles/Defaults';
-import Colors from '../../Global/styles/Colors';
-
-// Components
-import Button from '../../Global/components/Button';
+import {SafeAreaView} from 'react-native';
 
 // Firebase
-import app from '../../../config/FirebaseConnection';
-import {getAuth} from 'firebase/auth';
 import NewRequest from '../components/NewRequest';
 import ShipmentsComponent from '../components/ShipmentsComponent';
+import ProfileDrawer from '../components/ProfileDrawer';
+import Header from '../components/Header';
 
-const HomeScreen = ({ navigation }) => {
-  const auth = getAuth(app);
+const HomeScreen = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-
-  const signOut = async () => {
-    try {
-      await auth.signOut();
-      navigation.navigate('Login');
-      return true;
-    } catch (error) {
-      Alert.alert('No pudimos cerrar tu sesion');
-      return false;
-    }
-  };
-
-  return (
-    <SafeAreaView style={[DefaultStyles.Screen, {paddingHorizontal: 16}]}>
-      <ShipmentsComponent/>
-      <NewRequest/>
-      <TouchableOpacity onPress={() => signOut()}>
-        <Text style={[DefaultStyles.poppinsTitle, {margin:24}]}>LogOut</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('ProfileDetails')}>
-        <Text style={[DefaultStyles.poppinsTitle, {margin:24}]}>Profile</Text>
-      </TouchableOpacity>
+  return (<>
+    {isDrawerOpen && <ProfileDrawer setIsDrawerOpen={setIsDrawerOpen}/> }
+    <SafeAreaView style={{ marginHorizontal: 16}}>
+        <Header setIsDrawerOpen={setIsDrawerOpen}/>
+        <ShipmentsComponent/>
+        <NewRequest/>
     </SafeAreaView>
+  </>
   );
 };
 
