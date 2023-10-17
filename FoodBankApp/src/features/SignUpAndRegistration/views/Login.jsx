@@ -68,12 +68,9 @@ const Login = () => {
     .then(async userCredential => {
       // Check if status is true in firestore
       const user = userCredential.user;
-      const userData = await firestore().collection('userData').doc(user.uid).get();
-      const check1 = userData.data().status;
       const check2 = user.emailVerified;
 
-      if (check1 && check2) navigation.navigate('HomeScreen');
-      else if (!check1) navigation.navigate('Wait');
+      if (check2) navigation.navigate('Confirmation');
       else if (!check2) navigation.navigate('Email');
     })
     .catch(error => {
