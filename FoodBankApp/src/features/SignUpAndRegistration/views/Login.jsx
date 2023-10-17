@@ -29,7 +29,6 @@ import { useNavigation } from '@react-navigation/native';
 // Firebase
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import app from '../../../config/FirebaseConnection';
-import firestore from '@react-native-firebase/firestore';
 import DefaultStyles from '../../Global/styles/Defaults';
 
 const auth = getAuth(app);

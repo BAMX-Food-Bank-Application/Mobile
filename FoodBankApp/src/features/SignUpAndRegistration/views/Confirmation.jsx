@@ -23,19 +23,19 @@ import {auth} from '../../../config/FirebaseConnection';
 
 // OTHERS
 import {useNavigation} from '@react-navigation/native';
-import {MailSlurp} from 'mailslurp-client';
+import { MailSlurp } from 'mailslurp-client';
 
 const crossFetch = require('cross-fetch');
 
 const mailslurp = new MailSlurp({
   fetchApi: crossFetch,
-  apiKey: 'dc2e43a4f5f1ca12f5fb1ac438e739575f650a708ed381f789cd3af88aa0f3e0',
+  apiKey: "dc2e43a4f5f1ca12f5fb1ac438e739575f650a708ed381f789cd3af88aa0f3e0",
 });
 
-var isaac = require('isaac');
+var isaac = require( 'isaac' );
 var verificationCode;
 
-const Confirmation = ({route}) => {
+const Confirmation = ( {route} ) => {
   const navigation = useNavigation();
   const firstInput = useRef();
   const secondInput = useRef();
@@ -54,71 +54,72 @@ const Confirmation = ({route}) => {
     setShowAlert(!showAlert);
   };
 
-  const clearCode = setInterval(() => {
-    verificationCode = '';
-  }, 60000);
+  const clearCode = (
+    setInterval(() => {
+      verificationCode = ""
+    }, 60000)
+  )
 
-  clearCode;
+  clearCode
 
   const handleOTP = (otp, verificationCode) => {
-    const input_otp = otp[1] + otp[2] + otp[3] + otp[4];
-    if (input_otp == verificationCode) {
-      navigation.navigate('HomeScreen');
-    } else if (verificationCode == '') {
+    const input_otp = otp[1] + otp[2] + otp[3] + otp[4] 
+    if(input_otp == verificationCode){
+      navigation.navigate("HomeScreen")
+    }
+    else if(verificationCode == ""){
       alertTrigger('Codigo expirado', 'Por favor intenta de nuevo');
-    } else {
+    }
+    else{
       alertTrigger('Codigo incorrecto', 'Por favor intenta de nuevo');
     }
-  };
+  }
 
   const emailSent = async (inbox, options) => {
-    try {
+    try{
       await mailslurp.sendEmail(inbox.id, options);
-      console.log('Sent');
-    } catch (err) {
-      console.log('Hubo un error', err);
+      console.log("Sent")
+    }catch(err){
+      console.log(err)
     }
-  };
+  }
 
   const sendCode = async () => {
-    try {
-      console.log('Sending');
-      const random_number = isaac.random() * 100000000;
-      verificationCode = random_number.toString();
-      verificationCode = verificationCode.substring(0, 4);
-      const inbox = await mailslurp.createInbox();
-      const options = {
-        to: [user_email],
-        subject: 'Bienvenid@ a BAMX, ',
-        body: 'Tu código para acceder a la aplicación es: ' + verificationCode,
-      };
-      emailSent(inbox, options);
-    } catch (error) {
-      alertTrigger('Error en envío', error);
-    }
+      try{
+        console.log("Sending")
+        const random_number = isaac.random( ) * 100000000;        
+        verificationCode = (random_number.toString());
+        verificationCode = verificationCode.substring(0,4);
+        const inbox = await mailslurp.createInbox();
+        const options = {
+          to: [user_email],
+          subject: 'Bienvenid@ a BAMX, ',
+          body: 'Tu código para acceder a la aplicación es: ' + verificationCode,
+        };
+        emailSent(inbox, options); 
+      } catch (error) {
+        alertTrigger('Error en envío', error);
+      }
   };
 
   useEffect(() => {
     sendCode();
   }, []);
 
+
   return (
     <View style={styles.screen}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Registration')}
-        style={styles.arrowbtn}>
+      <TouchableOpacity onPress={() => navigation.navigate('Registration')} style={styles.arrowbtn}>
         <Image
-          source={{
-            uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b',
-          }}
-          style={styles.arrow}
-        />
+              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
+              style={styles.arrow}
+              />
       </TouchableOpacity>
       <Image
-        source={{
-          uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Flock.png?alt=media&token=217ac8fd-7d81-4625-9059-ee323a20c838',
-        }}
-        style={styles.logo}
+          source={{
+            uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Flock.png?alt=media&token=217ac8fd-7d81-4625-9059-ee323a20c838',
+          }}
+          style={styles.logo}
       />
       <Text style={styles.poppinssemibold}>Verificación OTP</Text>
       <Text style={styles.codeText}>
@@ -175,25 +176,27 @@ const Confirmation = ({route}) => {
           />
         </View>
       </View>
-      <Button
-        content="Verificar"
-        bgColor={Colors.textSecondary}
-        fontColor={Colors.textPrimary}
-        functionality={() => handleOTP(otp, verificationCode)}
-      />
+        <Button
+                content="Verificar"
+                bgColor={Colors.textSecondary}
+                fontColor={Colors.textPrimary}
+                functionality={() => handleOTP(otp, verificationCode)}
+        />
       <View style={[styles.flexRow]}>
-        <Text style={[styles.flex]}>¿No recibiste un mensaje? </Text>
-        <TouchableOpacity style={[styles.flex]} onPress={() => sendCode()}>
-          <Text style={[styles.linkedText]}>Reenviar</Text>
-        </TouchableOpacity>
-      </View>
-      <DefaultAlert
-        alertTitle={alertTitle}
-        alertContent={alertMessage}
-        btnContent={'Aceptar'}
-        modalVisible={showAlert}
-        onHide={() => setShowAlert(false)}
-      />
+          <Text style={[styles.flex]}>¿No recibiste un mensaje? </Text>
+          <TouchableOpacity
+            style={[styles.flex]}
+            onPress={() => sendCode()}>
+            <Text style={[styles.linkedText]}>Reenviar</Text>
+          </TouchableOpacity>
+        </View>
+        <DefaultAlert
+          alertTitle={alertTitle}
+          alertContent={alertMessage}
+          btnContent={'Aceptar'}
+          modalVisible={showAlert}
+          onHide={() => setShowAlert(false)}
+        />
     </View>
   );
 };
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: 16,
     alignSelf: 'center',
-    marginTop: 32,
+    marginTop: 32
   },
   arrow: {
     width: 24,
@@ -237,15 +240,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 20,
   },
-  codeText: {
-    fontFamily: 'Poppins-Medium',
+  codeText:{
+    fontFamily: 'Poppins-Medium', 
     fontSize: 16,
     color: 'black',
     textAlign: 'center',
     marginTop: 24,
   },
   phoneNumberText: {
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-SemiBold', 
     fontSize: 18,
     color: 'black',
     textAlign: 'center',
@@ -276,10 +279,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
     marginHorizontal: 64,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-Medium', 
   },
   poppinsmedium: {
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-Medium', 
     fontSize: 20,
     color: 'black',
     textAlign: 'center',
@@ -294,14 +297,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 32,
+    marginTop: 32
   },
   rowItem: {
     flex: 1,
   },
   linkedText: {
     color: '#E8042C',
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-Medium', 
   },
 });
 

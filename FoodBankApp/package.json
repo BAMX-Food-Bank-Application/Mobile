@@ -19,6 +19,7 @@
     "@react-navigation/native-stack": "^6.9.13",
     "cross-fetch": "^4.0.0",
     "firebase": "^10.3.0",
+    "isaac": "^0.0.5",
     "mailslurp-client": "^15.17.2",
     "react": "18.2.0",
     "react-native": "0.72.4",
