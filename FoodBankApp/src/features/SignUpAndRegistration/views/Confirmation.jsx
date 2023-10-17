@@ -57,7 +57,7 @@ const Confirmation = ( {route} ) => {
   const clearCode = (
     setInterval(() => {
       verificationCode = ""
-    }, 60000)
+    }, 300000)
   )
 
   clearCode
@@ -109,7 +109,7 @@ const Confirmation = ( {route} ) => {
 
   return (
     <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Registration')} style={styles.arrowbtn}>
+      <TouchableOpacity onPress={() => auth.signOut()} style={styles.arrowbtn}>
         <Image
               source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
               style={styles.arrow}
