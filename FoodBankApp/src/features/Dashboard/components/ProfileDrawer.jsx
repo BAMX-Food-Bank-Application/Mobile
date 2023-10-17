@@ -12,7 +12,7 @@ import {auth} from '../../../config/FirebaseConnection';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 
-const ProfileDrawer = ({setIsDrawerOpen}) => {
+const ProfileDrawer = ({setIsDrawerOpen, userData}) => {
   const navigation = useNavigation();
   const [name, setName] = useState('');
   const [image, setImage] = useState(
@@ -82,7 +82,7 @@ const ProfileDrawer = ({setIsDrawerOpen}) => {
             <Text style={styles.text}>Inicio</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('ProfileDetails')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ProfileDetails', {user: userData})}>
           <View style={styles.option}>
             <Image
               source={{
