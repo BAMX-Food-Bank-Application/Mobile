@@ -17,23 +17,27 @@ const LeaderBoardTable = ({Category}) => {
     const [summaryData, setSummaryData] = useState([]);
     const [refresh, setRefresh] = useState(false);
 
-    const tipoDonacion = ['Fruit', 'Vegetable', 'Meat', 'Grains', 'Dairy', 'Clothing', 'Canned', 'Medicine', 'Higiene', 'Others'];
+    const tipoDonacion = ['Fruit', 'Vegetable', 'Meat', 'Grains', 'Dairy', 'Clothing', 'Canned', 'Medicine', 'Hygiene', 'Others'];
 
     const fetchData = async () => {
         const userDataSnapshot = await firestore().collection('userData').get();
-        const summaryDataSnapshot = await firestore().collection('Leaderboard').orderBy(tipoDonacion[Category], 'desc').limit(10).get();
-
+        const summaryDataSnapshot = await firestore().collection('Leaderboard').orderBy(tipoDonacion[Category], 'desc').get();
+    
         const userData = userDataSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const _summaryData = summaryDataSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
+    
         setSummaryData(_summaryData);
         setLeaderBoardData(userData);
     }
 
     useEffect(() => {
         fetchData();
-    }
-    , []);
+    }, []);
+    useEffect(() => {
+        const sortedSummaryData = summaryData.sort((a, b) => b[tipoDonacion[Category]] - a[tipoDonacion[Category]]).slice(0, 10);
+        setSummaryData(sortedSummaryData);
+    }, [Category]);
+    
 
     const onRefresh = () => {
         setRefresh(true);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView} from 'react-native';
 
 // Components
@@ -10,15 +10,33 @@ import DefaultStyles from '../../Global/styles/Defaults';
 import Colors from '../../Global/styles/Colors';
 
 // Firebase
-import {auth} from '../../../config/FirebaseConnection';
 import firestore from '@react-native-firebase/firestore';
 
 // Others
-import {useNavigation} from '@react-navigation/native';
-
+import { validateEmail, validateNumbers } from '../../Global/utils/regexValidation';
 
 export default function SingleDonation() {
-    const navigation = useNavigation();
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+
+    const validation = () => {
+        if(validateEmail(email)) return false;
+        return true;
+    }
+
+    const newGuest = () => {
+        firestore()
+        .collection("Guests")
+        .add({
+            Name: name,
+            Email: email,
+            Phone: phone,
+        })
+    };
+
+
     
     return ( 
         <SafeAreaView style={DefaultStyles.screen}>
@@ -36,12 +54,30 @@ export default function SingleDonation() {
                 
             </View>
             <View style={DefaultStyles.flexColumn}>
-                <TextInput placeholder="Nombre:" placeholderTextColor={Colors.textDisabled} style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}/>
-                <TextInput placeholder="Correo:" placeholderTextColor={Colors.textDisabled} style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}/>
-                <TextInput placeholder="Teléfono:" placeholderTextColor={Colors.textDisabled} style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}/>                
+                <TextInput 
+                placeholder="Nombre:" 
+                placeholderTextColor={Colors.textDisabled} 
+                style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}
+                value={name} onChangeText={setName}
+                maxLength={100}
+                />
+                <TextInput 
+                placeholder="Correo:" 
+                placeholderTextColor={Colors.textDisabled} 
+                style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}
+                value={email} onChangeText={setEmail}
+                maxLength={100}
+                />
+                <TextInput 
+                placeholder="Teléfono:" 
+                placeholderTextColor={Colors.textDisabled} 
+                style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}
+                value={phone} onChangeText={setPhone}
+                maxLength={10}
+                />                
             </View>
             <View >
-                <Button content={"Continuar"} functionality={() => console.log("Boop!")} bgColor={Colors.primary} fontColor={Colors.textSecondary}/>
+                <Button content={"Continuar"} functionality={() => newGuest()} bgColor={Colors.primary} fontColor={Colors.textSecondary}/>
             </View>
         </SafeAreaView>
     );

@@ -1,26 +1,35 @@
 // Core
-import React, {useState} from 'react';
-
+import React, { useState, useEffect } from 'react';
 // UI
 import {SafeAreaView} from 'react-native';
 
-// Firebase
-import NewRequest from '../components/NewRequest';
+// Components
 import ShipmentsComponent from '../components/ShipmentsComponent';
 import ProfileDrawer from '../components/ProfileDrawer';
-import Header from '../components/Header';
 
 const HomeScreen = () => {
+  const [userData, setUserData] = useState({});
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  return (<>
+  const credentials = auth.currentUser;
+
+  const getUserData = async () => {
+    const userQuery = await firestore().collection('userData').doc(credentials.uid).get();
+    setUserData(userQuery.data());
+  }
+
+  useEffect(() => {
+    getUserData();    
+  }, []);
+
+  return (
+    <>
     {isDrawerOpen && <ProfileDrawer setIsDrawerOpen={setIsDrawerOpen}/> }
-    <SafeAreaView style={{ marginHorizontal: 16}}>
-        <Header setIsDrawerOpen={setIsDrawerOpen}/>
-        <ShipmentsComponent/>
-        <NewRequest/>
+    <SafeAreaView style={{paddingHorizontal: 16}}>
+      <ShipmentsComponent user={userData}/>
+      <NewRequest/>
     </SafeAreaView>
-  </>
+    </>
   );
 };
 

@@ -23,9 +23,11 @@ import {getAuth} from 'firebase/auth';
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = screenWidth - 32;
 
-const ProfileDetails = () => {
+const ProfileDetails = ({route}) => {
 
     const auth = getAuth(app);
+
+    const {user} = route.params;
 
     const [currentPage, setCurrentPage] = useState(0);
     const [name, setName] = useState('');
@@ -37,16 +39,14 @@ const ProfileDetails = () => {
     const donationType = ['Fruit', 'Vegetable', 'Meat', 'Grains', 'Dairy', 'Clothing', 'Canned', 'Medicine', 'Higiene', 'Others'];
 
     const getUserData = async () => {
+
         const UID = auth.currentUser.uid;
-        
-        const snapshot = await firestore().collection('userData').doc(UID).get();
-        const supplierName = snapshot.data().name;
         const supplierEmail = auth.currentUser.email;
 
         const summaryDataSnapshot = await firestore().collection('Leaderboard').doc(UID).get();
         const _summaryData = summaryDataSnapshot.data();
 
-        setName(supplierName);
+        setName(user.name);
         setEmail(supplierEmail);
         setSummaryData(_summaryData);
 
@@ -71,7 +71,7 @@ const ProfileDetails = () => {
                     <View style={{paddingVertical: 16}}>
                         <ReturnButton/>
                     </View>
-                    <View>
+                    <View style={styles.heroeContainer}>
                         <View style={{position: 'absolute', top:-75, alignItems: 'center'}}>
                             <UserIcon ID={auth.currentUser.uid} editable={true}/>
                         </View >
@@ -82,7 +82,7 @@ const ProfileDetails = () => {
                         <View>
                             <ScrollView horizontal={true}
                                 pagingEnabled={true} 
-                                snapToInterval={cardWidth + 32} 
+                                snapToInterval={cardWidth + 16} 
                                 onScroll={handleScroll} 
                                 alwaysBounceHorizontal={false} 
                                 disableIntervalMomentum={true} 
@@ -131,6 +131,17 @@ const ProfileDetails = () => {
 };
 
 const styles = StyleSheet.create({
+    heroeContainer: {
+        borderRadius: 16,
+        backgroundColor: Colors.secondary,
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: cardWidth/4,
+        marginTop: 42,
+    },
     card: {
         display: 'flex',
         flexDirection: 'column',

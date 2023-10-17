@@ -3,7 +3,7 @@
   import {useNavigation} from '@react-navigation/native';
 
   // UI
-  import {FlatList, Image, View, StyleSheet, Text, TouchableOpacity, RefreshControl} from 'react-native';
+  import {FlatList, Image, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
   // Styles
   import Colors from '../../Global/styles/Colors';
@@ -47,59 +47,63 @@ const Tag = ({text, selected, activeColor, _onPress}) => {
   )
 };
 
-const Shipment = ({shipmentId, status, index}) => {
-  const navigation = useNavigation();
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate('RequestDetails', { docID: shipmentId })}>
-    <View style={styles.shipmentContainer}>
-        <Text style={DefaultStyles.poppinsTitle}>Cargamento #{index}</Text>
-        <View style={styles.shipment}>
-        <View style={[styles.image, {backgroundColor: colorStatus[status]}]}>
-        <Image
-          source={{
-            uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Fcamion.png?alt=media&token=44bf84ed-3c81-47b1-ade9-83470a48d829',
-          }}
-          width={24}
-          height={24}
-        />
-      </View>
-      <View style={styles.rightSection}>
-        <View style={{borderRadius: 12, height: 10, backgroundColor: '#CBD5E0'}}>
-          <View style={{backgroundColor: colorStatus[status], borderRadius: 12, height: 10, width: colorStatusText[status]}}></View>
-        </View>
-        <Text style={DefaultStyles.poppinsSubtitle}>{status}</Text>
-      </View>
-    </View>
-    </View>
-    </TouchableOpacity>
-  );
-};
-
-const ShipmentsComponent = ({navigation}) => {
+const ShipmentsComponent = ({navigation, user}) => {
   const [shipments, setShipments] = useState([]);
   const [delivered, setDelivered] = useState(false);
   const [cancelled, setCancelled] = useState(false);
   const [inTransit, setInTransit] = useState(false);
   const [pending, setPending] = useState(false);
-
-  const [refresh, setRefresh] = useState(false);
+  const [snapshot, setSnapshot] = useState([]);
+  const [pageSize, setPageSize] = useState(25);
 
   let unsubscribe = null;
 
-const getDocumentsData = () => {
-  const UID = auth.currentUser.uid;
-  const shipments = firestore().collection('userData').doc(UID).collection('requestsHistory').orderBy('requestID', 'asc');
-  
-  unsubscribe = shipments.onSnapshot((querySnapshot) => {
-    let data = querySnapshot.docs.map((doc) => {
-      if (doc.id === 'summary') {
-        return null;
-      }
-      return { id: doc.id, ...doc.data() };
-    }).filter(doc => doc !== null);
-
-    const filter = [];
     
+  const Shipment = ({status, index}) => {
+    const navigation = useNavigation();
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('RequestDetails', { docData: shipments.filter(doc => doc.requestID == index), userData: user})}>
+      <View style={styles.shipmentContainer}>
+          <Text style={DefaultStyles.poppinsTitle}>Cargamento #{index}</Text>
+          <View style={styles.shipment}>
+          <View style={[styles.image, {backgroundColor: colorStatus[status]}]}>
+          <Image
+            source={{
+              uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Fcamion.png?alt=media&token=44bf84ed-3c81-47b1-ade9-83470a48d829',
+            }}
+            width={24}
+            height={24}
+          />
+        </View>
+        <View style={styles.rightSection}>
+          <Text style={DefaultStyles.poppinsSubtitle}>{status}</Text>
+        </View>
+      </View>
+      </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const getDocumentsData = () => {
+    const UID = auth.currentUser.uid;
+    const shipments = firestore().collection('userData').doc(UID).collection('requestsHistory').orderBy('requestID', 'asc').limit(pageSize);
+    
+    unsubscribe = shipments.onSnapshot((querySnapshot) => {
+      let data = querySnapshot.docs.map((doc) => {
+        if (doc.id === 'summary') {
+          return null;
+        }
+        return { id: doc.id, ...doc.data() };
+      }).filter(doc => doc !== null);
+      setSnapshot(data);
+
+      setShipments(data);
+    });
+  };
+
+  const filterData = () => {
+    const filter = [];
+      
     if(pending) filter.push("Pendiente");
     if(delivered) filter.push("Entregado");
     if(cancelled) filter.push("Cancelado");
@@ -107,24 +111,26 @@ const getDocumentsData = () => {
 
     if(filter.length === 0) {
       // If none of the tags are selected, return all documents
-      setShipments(data);
+      setShipments(snapshot);
     } else {
       // If any of the tags are selected, filter the documents based on the status
-      data = data.filter(doc => filter.includes(doc.status));
+      data = snapshot.filter(doc => filter.includes(doc.status));
       setShipments(data);
     }
-  });
-};
+  }
+    useEffect(() => {
+      getDocumentsData();
+      return () => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      };  
+    }, []);
 
-  useEffect(() => {
-    getDocumentsData();
-    
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
-  }, [delivered, cancelled, inTransit, pending]);
+    useEffect(() => {
+      filterData();
+    }, [pending, inTransit, delivered, cancelled]);
+  
 
   return (
     <View style={styles.container}>
@@ -143,16 +149,8 @@ const getDocumentsData = () => {
             showsVerticalScrollIndicator={false}
               data={shipments}
               renderItem={({item}) => (
-                
-                <Shipment shipmentId={item.id} index={item.requestID} status={item.status} nav={navigation} />
+                <Shipment shipmentId={item.id} index={String(item.requestID).padStart(5, '0')} status={item.status} nav={navigation} />
               )}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refresh}
-                  onRefresh={() => getDocumentsData().then((data) => {
-                    setShipments(data);
-                  })}/>
-              }
             />
           )
           :(<Text style={[DefaultStyles.poppinsSubtitle, {color: Colors.textSecondary}]}>No hay cargamentos</Text>)
