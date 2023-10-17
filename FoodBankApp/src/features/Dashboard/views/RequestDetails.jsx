@@ -50,6 +50,13 @@ const RequestDetails = ({route}) => {
     'VR' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcategories%2FVE.png?alt=media&token=60eb6360-dfaa-42b9-ba28-9ed4b58e0a04&_gl=1*1lwcmaz*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyNTYxOC4xNDguMS4xNjk3MTI2MTMzLjMxLjAuMA..'
   };
 
+  const colorStatus = {
+      'En camino': '#4200ff',
+      'Entregado': '#38b503',
+      'Cancelado': 'gray',
+      'Pendiente': '#f07e15',
+  }
+
 
   const navigation = useNavigation();
 
@@ -197,8 +204,8 @@ const RequestDetails = ({route}) => {
         
           <View style={{flexDirection: "row", display:'flex', gap: 16}}>
             <View style={styles.halfCardView}>
-              <View style={{backgroundColor: Colors.blueAccent, padding:16, borderRadius: 48}}>
-                <Image style={{height:24, width:24, backgroundColor: Colors.blueAccent,}} source={{uri:"https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Fcamion.png?alt=media&token=44bf84ed-3c81-47b1-ade9-83470a48d829&_gl=1*1unjq6*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyODUwNS4xNDkuMS4xNjk3MTI5NzczLjU2LjAuMA.."}}/>
+              <View style={{backgroundColor: colorStatus[data.status], padding:16, borderRadius: 48}}>
+                <Image style={{height:24, width:24, backgroundColor: colorStatus[data.status],}} source={{uri:"https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Fcamion.png?alt=media&token=44bf84ed-3c81-47b1-ade9-83470a48d829&_gl=1*1unjq6*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyODUwNS4xNDkuMS4xNjk3MTI5NzczLjU2LjAuMA.."}}/>
               </View>
               <Text style={DefaultStyles.poppinsMedium}>{data.status}</Text>
             </View>
@@ -217,8 +224,8 @@ const RequestDetails = ({route}) => {
         
         {
           data.status === 'Cancelado' || data.status === 'Entregado' 
-          ? <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => cancelRequest()}/>
-          : null
+          ? null
+          : <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => cancelRequest()}/>
         }
         
 

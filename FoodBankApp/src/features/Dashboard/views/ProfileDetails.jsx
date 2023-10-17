@@ -65,9 +65,9 @@ const ProfileDetails = ({route}) => {
 
     if(!isLoading) {
         return (
-            <SafeAreaView style={{display: 'flex', flexDirection: 'column', backgroundColor: 'red'}}>
+            <SafeAreaView style={{display: 'flex', flexDirection: 'column', backgroundColor: Colors.defaultBG}}>
                 <LoadingComponent loading={isLoading}/>
-                <View style={[DefaultStyles.screen, {backgroundColor: Colors.textSecondary, height: '100%', paddingHorizontal: 8}]}>
+                <View style={[DefaultStyles.screen, { height: '100%', paddingHorizontal: 8}]}>
                     <View style={{paddingVertical: 16}}>
                         <ReturnButton/>
                     </View>

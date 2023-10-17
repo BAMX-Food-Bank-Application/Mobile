@@ -69,13 +69,16 @@ const ShipmentsComponent = ({navigation, user}) => {
           <View style={[styles.image, {backgroundColor: colorStatus[status]}]}>
           <Image
             source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Fcamion.png?alt=media&token=44bf84ed-3c81-47b1-ade9-83470a48d829',
+              uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcamion.png?alt=media&token=36e60c65-f444-4e3b-be63-7f8d86f4ebb8&_gl=1*1qpdmh3*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzUwNDk1NS4xNTguMS4xNjk3NTA2MDU4LjU4LjAuMA..',
             }}
-            width={24}
-            height={24}
+            width={28}
+            height={28}
           />
         </View>
         <View style={styles.rightSection}>
+        <View style={{borderRadius: 12, height: 10, backgroundColor: '#CBD5E0'}}>
+          <View style={{backgroundColor: colorStatus[status], borderRadius: 12, height: 10, width: colorStatusText[status]}}></View>
+        </View>
           <Text style={DefaultStyles.poppinsSubtitle}>{status}</Text>
         </View>
       </View>
