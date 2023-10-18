@@ -21,6 +21,9 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore';
 import ReturnButton from '../../Global/components/ReturnButton';
 
+// Others
+import userFetch from '../../../hooks/userFetch';
+
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = screenWidth - 24;
 
@@ -28,7 +31,9 @@ const RequestDetails = ({route}) => {
   const [productList, setProductList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { userData, docData } = route.params;
+  const {userDoc} = userFetch();
+
+  const { docData } = route.params;
   const data = docData[0];
 
   const [alertVisible, setAlertVisible] = useState(false);  
@@ -37,7 +42,7 @@ const RequestDetails = ({route}) => {
   const [btnContent, setBtnContent] = useState(['','']);
   const [isLoading, setIsLoading] = useState(true);
 
-  const images = {
+  const categoryImage = {
     'FR' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcategories%2FFR.png?alt=media&token=453a699d-11ca-4319-8143-77569313ce58&_gl=1*1id5krl*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyNTYxOC4xNDguMS4xNjk3MTI1NzY2LjYwLjAuMA..',
     'CA' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcategories%2FCA.png?alt=media&token=0ef6352d-1c2a-413d-baef-212956ee3e28&_gl=1*14fghs9*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyNTYxOC4xNDguMS4xNjk3MTI1ODM3LjYwLjAuMA..',
     'EN' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcategories%2FEN.png?alt=media&token=e223e649-e8aa-4215-bbce-082934504fef&_gl=1*isf10x*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyNTYxOC4xNDguMS4xNjk3MTI2MDQzLjYwLjAuMA..',
@@ -49,6 +54,12 @@ const RequestDetails = ({route}) => {
     'RO' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcategories%2FRO.png?alt=media&token=498be3ad-5007-48b9-bd0c-f6ccd18cbb66&_gl=1*13x58rh*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyNTYxOC4xNDguMS4xNjk3MTI2MTE0LjUwLjAuMA..',
     'VR' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcategories%2FVE.png?alt=media&token=60eb6360-dfaa-42b9-ba28-9ed4b58e0a04&_gl=1*1lwcmaz*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyNTYxOC4xNDguMS4xNjk3MTI2MTMzLjMxLjAuMA..'
   };
+  const statusImage ={
+    'En camino' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcamion.png?alt=media&token=36e60c65-f444-4e3b-be63-7f8d86f4ebb8&_gl=1*13a7sag*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU1MTA2Ny4xNjAuMS4xNjk3NTUyMTI0LjMuMC4w',
+    'Entregado' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcheck.png?alt=media&token=a33b145d-ee7f-40f6-b7c0-4803a882235b&_gl=1*vqhh4b*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU1MTA2Ny4xNjAuMS4xNjk3NTUyMzk5LjI1LjAuMA..',
+    'Cancelado' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcancelado.png?alt=media&token=83d60d6f-7601-4abd-aa18-08796baf593c&_gl=1*1b17px4*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU1MTA2Ny4xNjAuMS4xNjk3NTUyMzgzLjQxLjAuMA..',
+    'Pendiente' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fpendiente.png?alt=media&token=d6e6c8ec-ff1b-4086-b95f-81bba6ccf5e0&_gl=1*a7776s*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU1MTA2Ny4xNjAuMS4xNjk3NTUyNDEyLjEyLjAuMA..',
+  }
 
   const colorStatus = {
       'En camino': '#4200ff',
@@ -56,7 +67,6 @@ const RequestDetails = ({route}) => {
       'Cancelado': 'gray',
       'Pendiente': '#f07e15',
   }
-
 
   const navigation = useNavigation();
 
@@ -136,8 +146,8 @@ const RequestDetails = ({route}) => {
         <View style={[styles.mainCardView, {padding:32}]}>
             <UserIcon ID={auth.currentUser.uid} mini={true}/>
             <View style={[DefaultStyles.flexColumn, {alignItems: 'flex-start'}]}>
-              <Text style={DefaultStyles.poppinsRegular}>{userData.name}</Text>
-              <Text style={DefaultStyles.poppinsRegular}>{userData.nameCorp}</Text> 
+              <Text style={DefaultStyles.poppinsRegular}>{userDoc.name}</Text>
+              <Text style={DefaultStyles.poppinsRegular}>{userDoc.nameCorp}</Text> 
             </View>
         </View>
         <Text style={[DefaultStyles.poppinsTitle, {marginTop: 16, marginBottom: 8}]}>Productos: </Text>
@@ -162,7 +172,7 @@ const RequestDetails = ({route}) => {
                       <View style={{width:cardWidth - 64}}>
                         <View style={[styles.mainCardView]}>
                           <View style={styles.subCardView}>
-                            <Image style={{width:36, height:36}} source={{uri: images[product.Type]}}/>
+                            <Image style={{width:36, height:36}} source={{uri: categoryImage[product.Type]}}/>
                           </View>
 
                           <View>
@@ -205,7 +215,7 @@ const RequestDetails = ({route}) => {
           <View style={{flexDirection: "row", display:'flex', gap: 16}}>
             <View style={styles.halfCardView}>
               <View style={{backgroundColor: colorStatus[data.status], padding:16, borderRadius: 48}}>
-                <Image style={{height:24, width:24, backgroundColor: colorStatus[data.status],}} source={{uri:"https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Fcamion.png?alt=media&token=44bf84ed-3c81-47b1-ade9-83470a48d829&_gl=1*1unjq6*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzEyODUwNS4xNDkuMS4xNjk3MTI5NzczLjU2LjAuMA.."}}/>
+                <Image style={{height:24, width:24, backgroundColor: colorStatus[data.status],}} source={{uri: statusImage[data.status]}}/>
               </View>
               <Text style={DefaultStyles.poppinsMedium}>{data.status}</Text>
             </View>

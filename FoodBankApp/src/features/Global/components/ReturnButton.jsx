@@ -18,11 +18,12 @@ const styles = StyleSheet.create({
     arrow: {
         width: 24,
         height: 24,
-
       },
       arrowbtn: {
         width: 24,
         height: 24,
+        marginTop: 32,
+        marginLeft: 32,
       },
   });
 

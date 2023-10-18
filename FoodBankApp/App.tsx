@@ -5,9 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
-  
-  // <AppNavigation></AppNavigation>
-AsyncStorage.clear();
 
 const hideSplashScreen = () => {
   SplashScreen.hide();

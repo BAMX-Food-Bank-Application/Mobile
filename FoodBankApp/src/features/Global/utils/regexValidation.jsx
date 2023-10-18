@@ -15,7 +15,7 @@ const validatePassword = (_password) => {
 }
 
 const validateNumbers = (_number) => {
-    const numberRegex = /^[0-9]+$/;
+    const numberRegex = /[0-9]{12}/;
     return numberRegex.test(_number);
 }
 

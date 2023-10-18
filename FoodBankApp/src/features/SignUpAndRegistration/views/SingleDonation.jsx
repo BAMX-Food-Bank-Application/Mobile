@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView} from 'react-native';
+import {View, Text, TextInput, SafeAreaView} from 'react-native';
 
 // Components
 import Button from '../../Global/components/Button';
 import ReturnButton from '../../Global/components/ReturnButton';
+import DefaultAlert from '../../Global/components/DefaultAlert';
 
 // Styles
 import DefaultStyles from '../../Global/styles/Defaults';
@@ -14,29 +15,61 @@ import firestore from '@react-native-firebase/firestore';
 
 // Others
 import { validateEmail, validateNumbers } from '../../Global/utils/regexValidation';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SingleDonation() {
+
+    navigation = useNavigation();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [error, setError] = useState('');
+
+    const [alertTitle, setAlertTitle] = useState('');
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    triggerAlert = (title, message) => {
+        setAlertTitle(title);
+        setAlertMessage(message);
+        setAlertVisible(!alertVisible);
+    }
 
     const validation = () => {
-        if(validateEmail(email)) return false;
+        if(name === '' || email === '' || phone === ''){
+            triggerAlert("Error", "Por favor llena todos los campos");
+            return false;
+        }
+        if(validateEmail(email)){
+            setError("Correo inválido");
+            return false;
+        }
+        if(validateNumbers(phone)){
+            setError("Número inválido");
+            return false;
+        }
         return true;
     }
 
     const newGuest = () => {
+        if (validation()){
+
         firestore()
-        .collection("Guests")
+        .collection("firstContact")
         .add({
             Name: name,
             Email: email,
             Phone: phone,
         })
+        .then(() => {
+            triggerAlert("¡Éxito!", "Se ha registrado tu solicitud, un administrador se pondrá en contacto contigo");
+        })
+        .catch((error) => {
+            triggerAlert("Error", "Ha ocurrido un error, por favor intenta más tarde");
+        });
     };
-
-
+        }
     
     return ( 
         <SafeAreaView style={DefaultStyles.screen}>
@@ -53,32 +86,39 @@ export default function SingleDonation() {
                 </View>
                 
             </View>
-            <View style={DefaultStyles.flexColumn}>
+            <View style={[DefaultStyles.flexColumn]}>
                 <TextInput 
-                placeholder="Nombre:" 
-                placeholderTextColor={Colors.textDisabled} 
-                style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}
-                value={name} onChangeText={setName}
-                maxLength={100}
+                    placeholder="Nombre:" 
+                    placeholderTextColor={Colors.textDisabled} 
+                    style={[DefaultStyles.input, DefaultStyles.poppinsRegular]}
+                    value={name} onChangeText={setName}
+                    maxLength={100}
                 />
                 <TextInput 
-                placeholder="Correo:" 
-                placeholderTextColor={Colors.textDisabled} 
-                style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}
-                value={email} onChangeText={setEmail}
-                maxLength={100}
+                    placeholder="Correo:" 
+                    placeholderTextColor={Colors.textDisabled} 
+                    style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {borderColor: error === "Correo inválido" ? Colors.primary : Colors.textPrimary}]}
+                    value={email} onChangeText={setEmail}
+                    maxLength={100}
                 />
                 <TextInput 
-                placeholder="Teléfono:" 
-                placeholderTextColor={Colors.textDisabled} 
-                style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {color: Colors.textPrimary}]}
-                value={phone} onChangeText={setPhone}
-                maxLength={10}
-                />                
+                    placeholder="Teléfono:" 
+                    placeholderTextColor={Colors.textDisabled} 
+                    style={[DefaultStyles.input, DefaultStyles.poppinsRegular, {borderColor: error === "Número inválido" ? Colors.primary : Colors.textPrimary}]}
+                    value={phone} onChangeText={setPhone}
+                    maxLength={10}
+                />             
             </View>
-            <View >
-                <Button content={"Continuar"} functionality={() => newGuest()} bgColor={Colors.primary} fontColor={Colors.textSecondary}/>
-            </View>
+            <Button content={"Continuar"} functionality={() => newGuest()} bgColor={Colors.primary} fontColor={Colors.textSecondary}/>
+            <DefaultAlert 
+                alertTitle={alertTitle} 
+                alertContent={alertMessage} 
+                btnContent={"Aceptar"} 
+                bgColor={Colors.defaultBG} 
+                fontColor={Colors.textPrimary} 
+                modalVisible={alertVisible} 
+                onHide={() => alertTitle === "¡Éxito!" ? navigation.goBack() : triggerAlert()} 
+            />
         </SafeAreaView>
     );
 }

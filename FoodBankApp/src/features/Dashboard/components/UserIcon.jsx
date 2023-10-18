@@ -8,9 +8,8 @@ import { StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 
 
 
-const UserIcon = ({mini, ID, editable}) => {
+const UserIcon = ({mini, ID, editable, profile}) => {
 
-    // "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg"
     const [image, setImage] = useState('https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg');
 
     const getProfileImage = async (_ID) => {
@@ -21,17 +20,16 @@ const UserIcon = ({mini, ID, editable}) => {
         }catch(error){
             return;
         }
-    
     };
 
     useEffect(() => {
-        getProfileImage(ID);
-    }, [image]);
+        ID ? getProfileImage(ID) : null;
+    }, []);
 
     return(
         <TouchableOpacity onPress={() => editable ? checkPermissions() ? openImagePicker() : null : null} activeOpacity={1}>
             <View style={mini ? [styles.imageContainer, {width: 65, height: 65, elevation: 5}]: styles.imageContainer}> 
-                <Image style={mini ? [styles.image, {width: 60, height: 60}] : styles.image} source={{uri:image}}/>
+                <Image style={mini ? [styles.image, {width: 60, height: 60}] : styles.image} source={{uri: profile ? profile : image}}/>
             </View>
         </TouchableOpacity>
     )

@@ -9,15 +9,12 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {auth} from '../../../config/FirebaseConnection';
-import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
+import DefaultStyles from '../../Global/styles/Defaults';
+import Colors from '../../Global/styles/Colors';
+import UserIcon from '../components/UserIcon';
 
-const ProfileDrawer = ({setIsDrawerOpen, userData}) => {
+const ProfileDrawer = ({setIsDrawerOpen, userData, userImage}) => {
   const navigation = useNavigation();
-  const [name, setName] = useState('');
-  const [image, setImage] = useState(
-    'https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg',
-  );
 
   const signOut = async () => {
     try {
@@ -32,86 +29,59 @@ const ProfileDrawer = ({setIsDrawerOpen, userData}) => {
 
   const userUID = auth.currentUser.uid;
 
-  const getProfileImage = async () => {
-    try {
-      const ref = storage().ref('/ProfilePictures/' + userUID + '.jpg');
-      const url = await ref.getDownloadURL();
-      setImage(url);
-    } catch (error) {
-      return;
-    }
-  };
-
-  const getUserData = async () => {
-    try {
-      const snapshot = await firestore()
-        .collection('userData')
-        .doc(userUID)
-        .get();
-      const supplierName = snapshot.data().name;
-      setName(supplierName);
-    } catch (error) {
-      return;
-    }
-  };
-
-  
-
-  useEffect(() => {
-    getProfileImage();
-    getUserData();
-  }, []);
-
   return (
     <View style={styles.full}>
-      <TouchableOpacity onPress={()=>setIsDrawerOpen(false)} style={{flex: 1}}></TouchableOpacity>
-      <View style={{flex: 2, alignSelf: 'flex-end',
-    alignItems: 'center',height: '100%', backgroundColor: '#E8042C', borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,}}>
+      <TouchableOpacity onPress={()=>setIsDrawerOpen(false)} style={DefaultStyles.flexItem}></TouchableOpacity>
+      <View style={styles.container}>
         <View style={styles.icon}>
-          <Image source={{uri: image}} style={styles.image}></Image>
-          <Text style={styles.text}>{`${name} \n`} </Text>
+          <UserIcon profile={userImage}/>
+          <Text style={[DefaultStyles.poppinsSemiBold, {color:Colors.textSecondary}]}>{`${userData.name} \n`} </Text>
         </View>
+        
         <TouchableOpacity onPress={() => setIsDrawerOpen(false)}>
           <View style={styles.option}>
             <Image
               source={{
                 uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Ficonamoon_home.png?alt=media&token=12d268a7-544e-49b4-8f01-b7c62a8c40ff',
               }}
-              style={styles.image2}></Image>
-            <Text style={styles.text}>Inicio</Text>
+              style={styles.image}></Image>
+            <Text style={[DefaultStyles.poppinsSemiBold, {color:Colors.textSecondary}]}>Inicio</Text>
           </View>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => navigation.navigate('ProfileDetails', {user: userData})}>
           <View style={styles.option}>
             <Image
               source={{
                 uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Favatar.png?alt=media&token=bc37b5c9-ad2e-49b1-b171-7fb7dadf9cfb&_gl=1*gez6ze*_ga*OTgxMDEyMDA3LjE2OTIyMTE1NTA.*_ga_CW55HF8NVT*MTY5NzA1OTk1NC4yMy4xLjE2OTcwNTk5NzQuNDAuMC4w',
               }}
-              style={styles.image2}></Image>
-            <Text style={styles.text}>Mi {'\n'}perfil</Text>
+              style={styles.image}></Image>
+            <Text style={[DefaultStyles.poppinsSemiBold, {color:Colors.textSecondary}]}>Mi {'\n'}perfil</Text>
           </View>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => navigation.navigate('CreateRequest')}>
           <View style={styles.option}>
             <Image
               source={{
                 uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2FNuevo.png?alt=media&token=29fe0a17-c370-4c6d-94b3-1d74f24b088d',
               }}
-              style={styles.image2}></Image>
-            <Text style={styles.text}>Nuevo {'\n'}cargamento</Text>
+              style={styles.image}></Image>
+            <Text style={[DefaultStyles.poppinsSemiBold, {color:Colors.textSecondary}]}>Nuevo {'\n'}cargamento</Text>
           </View>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.logoutcon} onPress={() => signOut()}>
           <View style={styles.logout}>
             <Image
               source={{
                 uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Fassets%2FDashboard%2Flogout.png?alt=media&token=e8d6a3d6-1550-4fd6-971b-d5124d083737',
               }}
-              style={styles.image2}></Image>
-            <Text style={styles.text}>Cerrar Sesión</Text>
+              style={styles.image}></Image>
+            <Text style={[DefaultStyles.poppinsSemiBold, {color:Colors.textSecondary}]}>Cerrar Sesión</Text>
           </View>
         </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -128,26 +98,20 @@ const styles = StyleSheet.create({
     animationDuration: 1000,
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
+  container: {
+    flex: 2, alignSelf: 'flex-end',
+        alignItems: 'center',height: '100%', backgroundColor: '#E8042C', borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 20
+  },
   icon: {
     alignItems: 'center',
     padding: 16,
     marginTop: '5%',
   },
   image: {
-    width: 64,
-    height: 64,
-    borderRadius: 200,
-    marginBottom: 16,
-  },
-  image2: {
     width: 40,
     height: 40,
     marginRight: 20,
-  },
-  text: {
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: 16,
-    color: '#FFFFFF',
   },
   option: {
     flexDirection: 'row',
