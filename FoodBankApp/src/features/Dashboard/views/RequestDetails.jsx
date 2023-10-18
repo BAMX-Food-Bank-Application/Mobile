@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {auth} from '../../../config/FirebaseConnection';
 
 // UI
-import {ScrollView, Text, TouchableOpacity, StyleSheet, View, Image, Dimensions} from 'react-native';
+import {ScrollView, Text, StyleSheet, View, Image, Dimensions} from 'react-native';
 
 // Components
 import DefaultAlert from '../../Global/components/DefaultAlert';
@@ -103,7 +103,7 @@ const RequestDetails = ({route}) => {
     setIsLoading(false);
   };
 
-  const cancelRequest = () => {
+  const updateRequest = (targetStatus) => {
     const { docID } = route.params;
     const UID = auth.currentUser.uid;
     const date = new Date();
@@ -115,7 +115,7 @@ const RequestDetails = ({route}) => {
         .collection('requestsHistory')
         .doc(docID)
         .update({
-          status: 'Cancelado',
+          status: targetStatus,
           cancellationDate: formatedDate,
         })
         .then(() => {
@@ -235,9 +235,8 @@ const RequestDetails = ({route}) => {
         {
           data.status === 'Cancelado' || data.status === 'Entregado' 
           ? null
-          : <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => cancelRequest()}/>
-        }
-        
+          : <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => updateRequest('Cancelado')}/>
+        }        
 
       </View>  
 

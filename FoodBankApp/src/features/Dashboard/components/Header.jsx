@@ -70,7 +70,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    top: -32,
+    top: -8,
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',

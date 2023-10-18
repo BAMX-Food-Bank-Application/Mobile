@@ -74,7 +74,7 @@ const LeaderBoardTable = ({Category}) => {
                                 <Text style={[DefaultStyles.poppinsRegular, styles.column, {color:'black'}]}>{leaderBoardData.find(doc => doc.id === user.id) ? leaderBoardData.find(doc => doc.id === user.id).nameCorp : 'placeholder' }</Text>
                                 <Text style={[DefaultStyles.poppinsRegular, styles.column, {width: '33%', color:'black'}]}>
                                 {
-                                    summaryData.find(doc => doc.id === user.id) ? summaryData.find(doc => doc.id === user.id)[tipoDonacion[Category]] : 0
+                                    summaryData.find(doc => doc.id === user.id) ? summaryData.find(doc => doc.id === user.id)[tipoDonacion[Category]].toFixed(3) : 0
                                 }
                                 {
                                     Category <= 7 ? ' Toneladas' : ' Unidades'

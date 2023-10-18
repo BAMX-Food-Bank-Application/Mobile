@@ -98,7 +98,7 @@ const ProfileDetails = ({route}) => {
                                                 </Text>
                                                 <Text style={DefaultStyles.poppinsSubtitle}>
                                                     {
-                                                        summaryData[donationType[index]] ? summaryData[donationType[index]] : 0
+                                                        summaryData[donationType[index]] ? summaryData[donationType[index]].toFixed(3) : 0
                                                     } 
                                                     {
                                                         index < 6 ? ' Toneladas' : ' Unidades'

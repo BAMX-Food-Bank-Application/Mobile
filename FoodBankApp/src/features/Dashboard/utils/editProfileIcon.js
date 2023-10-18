@@ -3,7 +3,8 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import {auth} from '../../../config/FirebaseConnection';
 
-export const checkPermissions = async () => {
+export const checkPermissions = () => {
+  return new Promise(async (resolve, reject) => {
     try {
         const permission = 
         Platform.Version >= 33 
@@ -12,74 +13,62 @@ export const checkPermissions = async () => {
     
         const hasPermission = await PermissionsAndroid.check(permission);
     
-        if (hasPermission) return true;
+        if (hasPermission) resolve();
     
         const status = await PermissionsAndroid.request(permission);
     
         if (status === PermissionsAndroid.RESULTS.GRANTED) {
-          return true;
+          resolve();
         } else if (status === PermissionsAndroid.RESULTS.DENIED) {
-          console.log('Permission denied');
-          return false;
+          reject("Denegado")
         } else {
-          console.log('Permission permanently denied');
-          return false;
+          reject("Denegado")
         }
       } catch (error) {
-        console.log(error, error.code);
-        return false;
+        reject(error);
     }
+  });
+    
 }
 
 const uploadImage = async (image) => {
-
+  return new Promise((resolve, reject) => {
     const userId = auth.currentUser.uid;
     const ref = storage().ref('/ProfilePictures/'+userId+'.jpg');
 
     const filePath = image.path;
-    console.log("File URI: ", filePath);
 
     const task = ref.putFile(filePath);
 
-    task.on('state_changed', taskSnapshot => {
-        console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-    });
-
     task.then(() => {
-        console.log('Image uploaded to the bucket!');
+      resolve();
     })
-    .catch((e) => console.log('uploading image error => ', e));
+    .catch((error) => {
+      reject(error);
+    });
+  });
 
-}
-
-
-export const openCamera = async () => {
-    ImageCropPicker.openCamera({
-        width: 300,
-        height: 400,
-        cropping: true,
-        showCropGuidelines: false,
-        mediaType: 'photo',
-        cropperCircleOverlay: true,
-        }).then(image => {
-            uploadImage(image.path, 'test')
-        }).catch(err => {
-            console.log(err);
-        });
 }
 
 export const openImagePicker = async () => {
+  return new Promise((resolve, reject) => {
+    
     ImageCropPicker.openPicker({
-        width: 300,
-        height: 400,
-        cropping: true,
-        showCropGuidelines: false,
-        mediaType: 'photo',
-        cropperCircleOverlay: true,
+      width: 300,
+      height: 400,
+      cropping: true,
+      showCropGuidelines: false,
+      mediaType: 'photo',
+      cropperCircleOverlay: true,
 
-        }).then(image => {
-          uploadImage(image, 'test')
-        }).catch(err => {
-            console.log(err);
-        });
+      }).then(image => {
+        uploadImage(image, 'test')
+        .then(() => 
+        resolve()
+        )
+        .catch(err => reject(err));
+      }).catch(err => {
+        ImageCropPicker.clean();
+      });
+  });
 }

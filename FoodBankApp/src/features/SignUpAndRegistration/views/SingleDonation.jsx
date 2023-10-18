@@ -61,6 +61,7 @@ export default function SingleDonation() {
             Name: name,
             Email: email,
             Phone: phone,
+            notificationChecked: Boolean(false),
         })
         .then(() => {
             triggerAlert("¡Éxito!", "Se ha registrado tu solicitud, un administrador se pondrá en contacto contigo");

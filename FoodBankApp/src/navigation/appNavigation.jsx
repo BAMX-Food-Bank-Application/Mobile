@@ -38,7 +38,7 @@ export default function AppNavigation() {
       :
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Wait"
+          initialRouteName="Email"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />

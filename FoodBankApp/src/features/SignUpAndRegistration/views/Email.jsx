@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
   import {
     View,
     Text,
@@ -7,6 +7,7 @@ import React, {useEffect} from 'react';
 
   // Components
   import Logo from '../../Global/components/Logo';
+  import DefaultAlert from '../../Global/components/DefaultAlert';
 
   // Styles
   import DefaultStyles from '../../Global/styles/Defaults';
@@ -19,6 +20,7 @@ import React, {useEffect} from 'react';
   import {useNavigation} from '@react-navigation/native';
 
   const Email = () => {
+    const [alertVisible, setAlertVisible] = useState(false);
 
     const navigation = useNavigation();
 
@@ -34,7 +36,7 @@ import React, {useEffect} from 'react';
             navigation.navigate('HomeScreen');
           }
         }).catch(error => {
-          console.log('Error: ', error);
+          setAlertVisible(true);
         });
       }, 1000);
   
@@ -52,6 +54,7 @@ import React, {useEffect} from 'react';
               <Text style={DefaultStyles.poppinsSubtitle}>Se ha enviado un correo de confirmación, por favor revise su bandeja de entrada.</Text>
           </View>
         </View>
+        <DefaultAlert alertTitle={"Ha ocurrido un error"} alertContent={"Intente de nuevo más tarde"} btnContent={"Aceptar"} onHide={() => {auth.signOut();}} modalVisible={alertVisible}/>
       </View>
     );
   };
