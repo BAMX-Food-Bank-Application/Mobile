@@ -104,8 +104,6 @@ const Registration = () => {
         createUserWithEmailAndPassword(auth, email, password)
           .then(userCredential => {
             // Creating user data in firestore
-            console.log('User created: ' + userCredential.user.uid);
-
             firestore()
               .collection('userData')
               .doc(userCredential.user.uid)

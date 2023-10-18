@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -35,7 +35,7 @@ const ProfileDrawer = ({setIsDrawerOpen, userData, userImage}) => {
       <View style={styles.container}>
         <View style={styles.icon}>
           <UserIcon profile={userImage}/>
-          <Text style={[DefaultStyles.poppinsSemiBold, {color:Colors.textSecondary}]}>{`${userData.name} \n`} </Text>
+          <Text style={[DefaultStyles.poppinsSemiBold, {color:Colors.textSecondary, marginTop: '10%'}]}>{`${userData.name} \n`} </Text>
         </View>
         
         <TouchableOpacity onPress={() => setIsDrawerOpen(false)}>
@@ -89,7 +89,6 @@ const ProfileDrawer = ({setIsDrawerOpen, userData, userImage}) => {
 
 const styles = StyleSheet.create({
   full: {
-    paddingVertical: 50,
     flexDirection: 'row',
     position: 'absolute',
     zIndex: 1,
@@ -99,9 +98,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   container: {
-    flex: 2, alignSelf: 'flex-end',
-        alignItems: 'center',height: '100%', backgroundColor: '#E8042C', borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20
+    flex: 2, 
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    height: '100%', 
+    backgroundColor: '#E8042C', 
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
   },
   icon: {
     alignItems: 'center',
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
   },
   logoutcon: {
     position: 'absolute',
-    bottom: 0,
+    bottom: '8%',
     marginBottom: 20,
     width: 200,
     alignItems: 'center',

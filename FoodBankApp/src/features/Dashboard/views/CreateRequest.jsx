@@ -69,30 +69,30 @@ const CreateRequest = () => {
 
   // Validation
     const validateInputs = () => {
-    let isValid = true;
-    inputs.forEach((input) => {
+
+      inputs.forEach((input) => {
       if (input.productName === '' || input.weight === '' || input.type === '' || input.unit === '' || input.expirationDate === '') {
         triggerAlert('Error', 'Por favor, llena todos los campos')
-        isValid = false;
+        return false;
       }
       else if (input.productName === '') {
         triggerAlert('Error', 'Ingresa el nombre del producto')
-        isValid = false;
-      } else if (input.weight === '') {
-        triggerAlert('Error', 'Ingresa la cantidad del producto')
-        isValid = false;
+        return false;
+      } else if (input.weight === '' || Number(input.weight) <= 0) {
+        triggerAlert('Error', 'Ingrese una cantidad válida')
+        return false;
       } else if (input.type === '') {
         triggerAlert('Error', 'Selecciona el tipo de producto')
-        isValid = false;
+        return false;
       } else if (input.unit === '') {
         triggerAlert('Error', 'Selecciona la unidad del producto')
-        isValid = false;
+        return false;
       } else if (input.expirationDate === '') {
         triggerAlert('Error', 'Ingresa la fecha de caducidad del producto')
-        isValid = false;
+        return false;
       } 
     });
-    return isValid;
+    return true;
   };
 
   // Handle everything
@@ -149,7 +149,6 @@ const CreateRequest = () => {
     let weights = [];
     let units = [];
     let expirationDates = [];
-
 
     if (!validateInputs()) return;
 
@@ -262,11 +261,10 @@ const CreateRequest = () => {
           };
           await firestore().collection('userData').doc(UID).collection('requestsHistory').doc('summary').set(summaryRef);
         }
-        await triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito')
+        triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito')
     } 
     catch (error){
       triggerAlert('Error', 'No se pudo crear la solicitud')
-      console.log('Error (0x4): ', error);
     }
     
   }
