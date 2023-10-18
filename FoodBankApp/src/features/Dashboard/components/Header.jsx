@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {Image, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {auth} from '../../../config/FirebaseConnection';
 import storage from '@react-native-firebase/storage';
+import DefaultStyles from '../../Global/styles/Defaults';
+import Colors from '../../Global/styles/Colors';
 
 const Header = ({setIsDrawerOpen}) => {
   const [image, setImage] = useState(
@@ -53,7 +55,7 @@ const Header = ({setIsDrawerOpen}) => {
           height={16}
           style={{marginRight: 8}}
         />
-        <Text>BAMX Guadalajara</Text>
+        <Text style={[DefaultStyles.poppinsMedium, {color: Colors.textPrimary}]}>BAMX Guadalajara</Text>
       </View>
       <TouchableOpacity
         onPress={() => setIsDrawerOpen(true)}
@@ -68,6 +70,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
+    top: -32,
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
@@ -91,12 +94,11 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   imageContainerLeft: {
-    borderRadius: 100,
+    borderRadius: 20,
     width: 64,
     height: 64,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 10,
   },
 });

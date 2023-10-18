@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 // UI
 import {SafeAreaView} from 'react-native';
 
+// Styles
+import DefaultStyles from '../../Global/styles/Defaults';
+
 // Components
 import ShipmentsComponent from '../components/ShipmentsComponent';
 import ProfileDrawer from '../components/ProfileDrawer';
@@ -14,28 +17,20 @@ import { auth } from '../../../config/FirebaseConnection';
 import Header from '../components/Header';
 import firestore from '@react-native-firebase/firestore';
 
+// Hooks
+import userFetch from '../../../hooks/userFetch';
+
 
 const HomeScreen = () => {
-  const [userData, setUserData] = useState({});
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const credentials = auth.currentUser;
-
-  const getUserData = async () => {
-    const userQuery = await firestore().collection('userData').doc(credentials.uid).get();
-    setUserData(userQuery.data());
-  }
-
-  useEffect(() => {
-    getUserData();    
-  }, []);
+  const {userDoc, userImage} = userFetch();
 
   return (
     <>
-    {isDrawerOpen && <ProfileDrawer setIsDrawerOpen={setIsDrawerOpen} userData={userData}/> }
-    <SafeAreaView style={{marginHorizontal: 16}}>
+    {isDrawerOpen && <ProfileDrawer setIsDrawerOpen={setIsDrawerOpen} userData={userDoc} userImage={userImage}/> }
+    <SafeAreaView style={[DefaultStyles.screen]}>
       <Header setIsDrawerOpen={setIsDrawerOpen}/>
-      <ShipmentsComponent user={userData}/>
+      <ShipmentsComponent user={userDoc}/>
       <NewRequest/>
     </SafeAreaView>
     </>

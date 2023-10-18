@@ -69,8 +69,10 @@ const Password = () => {
 
 
   return (
-    <SafeAreaView style={DefaultStyles.screen}>
+    <SafeAreaView style={DefaultStyles.flexItem}>
       <ReturnButton/>
+      <View style={DefaultStyles.screen}>
+
       <View style={{display: 'flex', padding: 24, alignItems: 'center'}}>
           <Text style={[DefaultStyles.poppinsTitle, {textAlign: 'center'}]}>Restaurar contraseña</Text>
           <Text style={[DefaultStyles.poppinsSubtitle, {textAlign: 'center'}]}>Ingresa el correo con el que te registraste en la app</Text>
@@ -88,8 +90,7 @@ const Password = () => {
           <Button content='Continuar' functionality={() => handleNewToken()} bgColor={Colors.textSecondary} fontColor={Colors.textPrimary}/>
         </View>
       </View>
-
-
+      </View>
       <DefaultAlert
           alertTitle={alertTitle}
           alertContent={alertMessage}

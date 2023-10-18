@@ -23,6 +23,11 @@ const DefaultStyles = StyleSheet.create({
       color: Colors.textPrimary,
       fontFamily: 'Poppins-Medium', 
     },
+    poppinsSemiBold: {
+      color: Colors.textPrimary,
+      fontFamily: 'Poppins-SemiBold',
+      fontSize: 16,
+    },
     flexItem: {
         flex: 1
     },
@@ -49,10 +54,11 @@ const DefaultStyles = StyleSheet.create({
     },
     screen: {
       alignContent: 'center',
+      justifyContent: 'center',
+      flex: 1,
       backgroundColor: '#EFEFEF',
-      paddingHorizontal: 32,
-      paddingTop: 24,
-      paddingBottom: 8,
+      paddingHorizontal: 16,
+      
     },
     input: {
       width: '100%',
@@ -71,9 +77,7 @@ const DefaultStyles = StyleSheet.create({
       justifyContent: 'space-between',
       alignItems: 'center',
       alignContent: 'center',
-      padding: 10,
       marginBottom: 16,
-      marginTop: 16,
       columnGap: 16,
     },
   });

@@ -27,6 +27,12 @@
       'Pendiente': '33%',
   }
   
+  const images ={
+    'En camino' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcamion.png?alt=media&token=36e60c65-f444-4e3b-be63-7f8d86f4ebb8&_gl=1*13a7sag*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU1MTA2Ny4xNjAuMS4xNjk3NTUyMTI0LjMuMC4w',
+    'Entregado' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcheck.png?alt=media&token=a33b145d-ee7f-40f6-b7c0-4803a882235b&_gl=1*1ie9eho*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU2MTU5Mi4xNjIuMS4xNjk3NTY4MDU1LjUxLjAuMA..',
+    'Cancelado' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcancelado.png?alt=media&token=83d60d6f-7601-4abd-aa18-08796baf593c&_gl=1*1b17px4*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU1MTA2Ny4xNjAuMS4xNjk3NTUyMzgzLjQxLjAuMA..',
+    'Pendiente' : 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fpendiente.png?alt=media&token=d6e6c8ec-ff1b-4086-b95f-81bba6ccf5e0&_gl=1*a7776s*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzU1MTA2Ny4xNjAuMS4xNjk3NTUyNDEyLjEyLjAuMA..',
+  }
 
 const Tag = ({text, selected, activeColor, _onPress}) => {
   const [isSelected, setIsSelected] = useState(selected);
@@ -69,7 +75,7 @@ const ShipmentsComponent = ({navigation, user}) => {
           <View style={[styles.image, {backgroundColor: colorStatus[status]}]}>
           <Image
             source={{
-              uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Fcamion.png?alt=media&token=36e60c65-f444-4e3b-be63-7f8d86f4ebb8&_gl=1*1qpdmh3*_ga*MjQ1OTk0NTYzLjE2OTIxOTcxOTI.*_ga_CW55HF8NVT*MTY5NzUwNDk1NS4xNTguMS4xNjk3NTA2MDU4LjU4LjAuMA..',
+              uri: images[status],
             }}
             width={28}
             height={28}

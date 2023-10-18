@@ -65,9 +65,9 @@ const ProfileDetails = ({route}) => {
 
     if(!isLoading) {
         return (
-            <SafeAreaView style={{display: 'flex', flexDirection: 'column', backgroundColor: Colors.defaultBG}}>
+            <SafeAreaView style={{display: 'flex', flex: 1, flexDirection: 'column', backgroundColor: Colors.primary}}>
                 <LoadingComponent loading={isLoading}/>
-                <View style={[DefaultStyles.screen, { height: '100%', paddingHorizontal: 8}]}>
+                <View style={[DefaultStyles.screen, { height: '100%', paddingHorizontal: 8, paddingBottom: 8}]}>
                     <View style={{paddingVertical: 16}}>
                         <ReturnButton/>
                     </View>
@@ -157,42 +157,42 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        },
-        mainContent: {
-        width: '80%',
-        aspectRatio: 1,
-        borderRadius: 16,
-        backgroundColor: Colors.primary,
-        overflow: 'visible',
-        alignItems: 'center',
+    },
+    mainContent: {
+    width: '80%',
+    aspectRatio: 1,
+    borderRadius: 16,
+    backgroundColor: Colors.primary,
+    overflow: 'visible',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    },
+    image: {
+    width: '100%',
+    height: '50%',
+    resizeMode: 'cover',
+    position: 'absolute',
+    top: -50, // Adjust this value as needed to overlap the upper border
+    borderRadius: 16,
+    },
+    carrouselIndex: {
+        display: 'flex',
+        flexDirection: 'row',
         justifyContent: 'center',
-        position: 'relative',
-        },
-        image: {
+        alignItems: 'center',
         width: '100%',
-        height: '50%',
-        resizeMode: 'cover',
-        position: 'absolute',
-        top: -50, // Adjust this value as needed to overlap the upper border
-        borderRadius: 16,
+        marginBottom: 16,
+        height: 16,
         },
-        carrouselIndex: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            marginBottom: 16,
-            height: 16,
-            },
-        carrouselIndicator: {
-            width: 8,
-            height: 8,
-            borderRadius: 8,
-            marginHorizontal: 4,
-            borderWidth: 1,
-            borderColor: Colors.textSecondary,
-        }
+    carrouselIndicator: {
+        width: 8,
+        height: 8,
+        borderRadius: 8,
+        marginHorizontal: 4,
+        borderWidth: 1,
+        borderColor: Colors.textSecondary,
+    }
 });
 
 export default ProfileDetails;

@@ -224,7 +224,8 @@ const CreateRequest = () => {
         expirationDates: expirationDates, 
         creationDate: new Date().toLocaleDateString(),
         status: 'Pendiente',
-        requestID: docsRegistered,
+        requestID: docsRegistered + 1,
+        notificationChecked: false,
       };   
 
         if (docsRegistered > 0){

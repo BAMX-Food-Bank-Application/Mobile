@@ -29,7 +29,6 @@ export default function AppNavigation() {
         <Stack.Navigator
           initialRouteName="HomeScreen"
           screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Email" component={Email} />
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="CreateRequest" component={CreateRequest} />
           <Stack.Screen name = "RequestDetails" component = {RequestDetails}/>
