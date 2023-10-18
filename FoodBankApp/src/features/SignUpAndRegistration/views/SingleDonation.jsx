@@ -58,9 +58,9 @@ export default function SingleDonation() {
         firestore()
         .collection("firstContact")
         .add({
-            Name: name,
-            Email: email,
-            Phone: phone,
+            name: name,
+            email: email,
+            phone: phone,
             notificationChecked: Boolean(false),
         })
         .then(() => {
