@@ -67,9 +67,17 @@ const Login = () => {
       // Check if status is true in firestore
       const user = userCredential.user;
       const check2 = user.emailVerified;
-
-      if (check2) navigation.navigate('Confirmation');
-      else if (!check2) navigation.navigate('Email');
+      await firestore().collection('userData').doc(user.uid).get().then(doc => {
+        if(doc.data().role === 'Admin'){
+          triggerAlert("Usuario no autorizado", "El usuario no tiene permisos para acceder a esta aplicación.")
+        }
+        else{
+          if (check2) navigation.navigate('Confirmation');
+          else if (!check2) navigation.navigate('Email');
+        }
+      }).catch(error => {
+        alertTrigger('Error', 'Se produjo un error inesperado, intente de nuevo más tarde.');
+      })
     })
     .catch(error => {
       // Handle authentication error
