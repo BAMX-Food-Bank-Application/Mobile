@@ -77,23 +77,23 @@ const CreateRequest = () => {
       inputs.forEach((input) => {
       if (input.productName === '' || input.weight === '' || input.type === '' || input.unit === '' || input.expirationDate === '') {
         triggerAlert('Error', 'Por favor, llena todos los campos')
-        return false;
+        throw new Error('Validation failed');
       }
       else if (input.productName === '') {
         triggerAlert('Error', 'Ingresa el nombre del producto')
-        return false;
+        throw new Error('Validation failed');
       } else if (input.weight === '' || Number(input.weight) <= 0) {
         triggerAlert('Error', 'Ingrese una cantidad válida')
-        return false;
+        throw new Error('Validation failed');
       } else if (input.type === '') {
         triggerAlert('Error', 'Selecciona el tipo de producto')
-        return false;
+        throw new Error('Validation failed');
       } else if (input.unit === '') {
         triggerAlert('Error', 'Selecciona la unidad del producto')
-        return false;
+        throw new Error('Validation failed');
       } else if (input.expirationDate === '') {
         triggerAlert('Error', 'Ingresa la fecha de caducidad del producto')
-        return false;
+        throw new Error('Validation failed');
       } 
     });
     return true;
@@ -148,126 +148,133 @@ const CreateRequest = () => {
   
   // Final method for request creation
   const handleRequest = async () => {
-    let names = [];
-    let types = [];
-    let weights = [];
-    let units = [];
-    let expirationDates = [];
-
-    if (!validateInputs()) return;
-
-    const requestSummary = {
-      Fruit: 0,
-      Vegetable: 0,
-      Grains: 0,
-      Canned: 0,
-      Meat: 0,
-      Dairy: 0,
-      Clothing: 0,
-      Medicine: 0,
-      Hygiene: 0,
-      Others: 0,
-    };
-
-    inputs.forEach((input) => {
-      names.push(input.productName);
-      types.push(input.type);
-      weights.push(input.weight);
-      units.push(input.unit);
-      expirationDates.push(input.expirationDate);
-
-      if(input.unit === 'KG') input.weight /= 1000;
-      if(input.unit === 'TON') input.weight *= 1;
-
-      switch (input.type) {
-        case 'FR':
-          requestSummary.Fruit += input.weight;
-          break;
-        case 'VR':
-          requestSummary.Vegetable += input.weight;
-          break;
-        case 'GR':
-          requestSummary.Grains += input.weight;
-          break;
-        case 'EN':
-          requestSummary.Canned += input.weight;
-          break;
-        case 'CA':
-          requestSummary.Meat += input.weight;
-          break;
-        case 'LA':
-          requestSummary.Dairy += input.weight;
-          break;
-        case 'RO':
-          requestSummary.Clothing += input.weight;
-          break;
-        case 'ME':
-          requestSummary.Medicine += input.weight;
-          break;
-        case 'HP':
-          requestSummary.Hygiene += input.weight;
-          break;
-        case 'OT':
-          requestSummary.Others += input.weight;
-          break;
-      }
-
-    });
     try{
-      const UID = auth.currentUser.uid;  
+      validateInputs()
 
-      const docsRegistered = (await firestore().collection('userData').doc(UID).collection('requestsHistory').get()).size;
-
-      const requestData = {
-        supplierID: UID,
-        type: types,
-        productName: names,
-        weight: weights,
-        unit: units,
-        expirationDates: expirationDates, 
-        creationDate: getDate(),
-        status: 'Pendiente',
-        requestID: docsRegistered + 1,
-        notificationChecked: false,
-      };   
-      await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
-        if (docsRegistered > 0){
-          
-          await firestore().collection('Leaderboard').doc(UID).update(
-            {
-              Fruit: firestore.FieldValue.increment(requestSummary.Fruit),
-              Vegetable: firestore.FieldValue.increment(requestSummary.Vegetable),
-              Grains: firestore.FieldValue.increment(requestSummary.Grains),
-              Canned: firestore.FieldValue.increment(requestSummary.Canned),
-              Meat: firestore.FieldValue.increment(requestSummary.Meat),
-              Dairy: firestore.FieldValue.increment(requestSummary.Dairy),
-              Clothing: firestore.FieldValue.increment(requestSummary.Clothing),
-              Medicine: firestore.FieldValue.increment(requestSummary.Medicine),
-              Hygiene: firestore.FieldValue.increment(requestSummary.Hygiene),
-              Others: firestore.FieldValue.increment(requestSummary.Others),
-            }
-          );
-
+      let names = [];
+      let types = [];
+      let weights = [];
+      let units = [];
+      let expirationDates = [];
+  
+  
+      const requestSummary = {
+        Fruit: 0,
+        Vegetable: 0,
+        Grains: 0,
+        Canned: 0,
+        Meat: 0,
+        Dairy: 0,
+        Clothing: 0,
+        Medicine: 0,
+        Hygiene: 0,
+        Others: 0,
+      };
+  
+      inputs.forEach((input) => {
+        names.push(input.productName);
+        types.push(input.type);
+        weights.push(input.weight);
+        units.push(input.unit);
+        expirationDates.push(input.expirationDate);
+  
+        if(input.unit === 'KG') input.weight /= 1000;
+        if(input.unit === 'TON') input.weight *= 1;
+  
+        switch (input.type) {
+          case 'FR':
+            requestSummary.Fruit += input.weight;
+            break;
+          case 'VR':
+            requestSummary.Vegetable += input.weight;
+            break;
+          case 'GR':
+            requestSummary.Grains += input.weight;
+            break;
+          case 'EN':
+            requestSummary.Canned += input.weight;
+            break;
+          case 'CA':
+            requestSummary.Meat += input.weight;
+            break;
+          case 'LA':
+            requestSummary.Dairy += input.weight;
+            break;
+          case 'RO':
+            requestSummary.Clothing += input.weight;
+            break;
+          case 'ME':
+            requestSummary.Medicine += input.weight;
+            break;
+          case 'HP':
+            requestSummary.Hygiene += input.weight;
+            break;
+          case 'OT':
+            requestSummary.Others += input.weight;
+            break;
         }
-        else{
-          const summaryRef = {
-            Fruit: requestSummary.Fruit,
-            Vegetable: requestSummary.Vegetable,
-            Grains: requestSummary.Grains,
-            Canned: requestSummary.Canned,
-            Meat: requestSummary.Meat,
-            Dairy: requestSummary.Dairy,
-            Clothing: requestSummary.Clothing,
-            Medicine: requestSummary.Medicine,
-            Hygiene: requestSummary.Hygiene,
-            Others: requestSummary.Others,
-          };
-          await firestore().collection('Leaderboard').doc(UID).set(summaryRef);
-        }
-        triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito')
+  
+      });
+      try{
+        const UID = auth.currentUser.uid;  
+  
+        const docsRegistered = (await firestore().collection('userData').doc(UID).collection('requestsHistory').get()).size;
+  
+        const requestData = {
+          supplierID: UID,
+          type: types,
+          productName: names,
+          weight: weights,
+          unit: units,
+          expirationDates: expirationDates, 
+          creationDate: getDate(),
+          status: 'Pendiente',
+          requestID: docsRegistered + 1,
+          notificationChecked: false,
+        };   
+  
+        await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
+          if (docsRegistered > 0){
+            
+            await firestore().collection('Leaderboard').doc(UID).update(
+              {
+                Fruit: firestore.FieldValue.increment(requestSummary.Fruit),
+                Vegetable: firestore.FieldValue.increment(requestSummary.Vegetable),
+                Grains: firestore.FieldValue.increment(requestSummary.Grains),
+                Canned: firestore.FieldValue.increment(requestSummary.Canned),
+                Meat: firestore.FieldValue.increment(requestSummary.Meat),
+                Dairy: firestore.FieldValue.increment(requestSummary.Dairy),
+                Clothing: firestore.FieldValue.increment(requestSummary.Clothing),
+                Medicine: firestore.FieldValue.increment(requestSummary.Medicine),
+                Hygiene: firestore.FieldValue.increment(requestSummary.Hygiene),
+                Others: firestore.FieldValue.increment(requestSummary.Others),
+              }
+            );
+  
+          }
+          else{
+            const summaryRef = {
+              Fruit: requestSummary.Fruit,
+              Vegetable: requestSummary.Vegetable,
+              Grains: requestSummary.Grains,
+              Canned: requestSummary.Canned,
+              Meat: requestSummary.Meat,
+              Dairy: requestSummary.Dairy,
+              Clothing: requestSummary.Clothing,
+              Medicine: requestSummary.Medicine,
+              Hygiene: requestSummary.Hygiene,
+              Others: requestSummary.Others,
+            };
+            await firestore().collection('Leaderboard').doc(UID).set(summaryRef);
+          }
+          triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito')
+      } 
+      catch (error){
+        triggerAlert('Error', 'No se pudo crear la solicitud')
+      }
     } 
-    catch (error){
-      triggerAlert('Error', 'No se pudo crear la solicitud')
+    catch (error) {
+
     }
     
   }
@@ -312,8 +319,9 @@ const CreateRequest = () => {
             <TextInput
               placeholder="Nombre del producto"
               placeholderTextColor={Colors.textDisabled}
-              value={inputs[index].productName} // Use the value from the inputs state array
+              value={inputs[index].productName} 
               onChangeText={(text) => handleInputChange(text, index, 'productName')}
+              maxLength={100}
               style={[styles.flexItem, styles.input]}
             />
             <View style={{flexDirection: 'row'}}>
@@ -321,7 +329,8 @@ const CreateRequest = () => {
               placeholder="Cantidad"
               placeholderTextColor={Colors.textDisabled}
               keyboardType="numeric"
-              value={inputs[index].weight.toString()} // Convert the number to a string
+              maxLength={32}
+              value={inputs[index].weight.toString()} 
               onChangeText={(text) => handleInputChange(text, index, 'weight') }
               style={[styles.flexItem, styles.input]}
             />
@@ -358,7 +367,7 @@ const CreateRequest = () => {
                         mode="calendar" 
                         minimumDate={getToday()}
                         onSelectedChange={date =>{ 
-                          date = date.substring(5, 7) + '/' + date.substring(8, 10) + '/' + date.substring(0, 4);
+                          date = date.substring(8, 10) + '/' + date.substring(5, 7) + '/' + date.substring(0, 4);
                           handleDate(date, index);
                         }}  
                     />
