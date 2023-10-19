@@ -44,6 +44,8 @@ const ProfileDetails = ({route}) => {
         const supplierEmail = auth.currentUser.email;
 
         const summaryDataSnapshot = await firestore().collection('Leaderboard').doc(UID).get();
+        console.log(UID);
+        console.log(summaryDataSnapshot.data());
         const _summaryData = summaryDataSnapshot.data();
 
         setName(user.name);

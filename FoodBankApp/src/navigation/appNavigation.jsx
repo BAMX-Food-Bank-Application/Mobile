@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import userAuth from '../hooks/userAuth';
 
 // Libs
@@ -7,7 +7,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 // Screens
 import Login from '../features/SignUpAndRegistration/views/Login';
-import Registration from '../features/SignUpAndRegistration/views/Registration';
 import SingleDonation from '../features/SignUpAndRegistration/views/SingleDonation';
 import Password from '../features/SignUpAndRegistration/views/Password';
 import HomeScreen from '../features/Dashboard/views/HomeScreen';
@@ -19,12 +18,17 @@ import ProfileDetails from '../features/Dashboard/views/ProfileDetails';
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
+  const [verification, setVerification] = useState(false);
 
   const {user} = userAuth();
 
+  useEffect(() => {
+    user != null ? setVerification(user.emailVerified): null;
+  }, [user])
+
   return (     
     user? 
-      user.emailVerified?
+      verification?
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="HomeScreen"
@@ -50,7 +54,6 @@ export default function AppNavigation() {
       initialRouteName="Login"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Registration" component={Registration} />
       <Stack.Screen name="Password" component={Password} />
       <Stack.Screen name="SingleDonation" component={SingleDonation}/>
     </Stack.Navigator>

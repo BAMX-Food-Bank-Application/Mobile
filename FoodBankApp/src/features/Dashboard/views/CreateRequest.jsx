@@ -9,14 +9,18 @@ import {
   Image,
   Modal
 } from 'react-native';
+
 // Components
 import Button from '../../Global/components/Button';
 import DefaultAlert from '../../Global/components/DefaultAlert';
 import ConfirmDialog from '../../Global/components/ConfirmDialog';
-import DatePicker, {getToday, getFormatedDate} from 'react-native-modern-datepicker';
+import DatePicker, {getToday} from 'react-native-modern-datepicker';
 
 // Styles
 import Colors from '../../Global/styles/Colors';
+
+// Utils
+import {getDate} from '../../Global/utils/dataUtils';
 
 // Others
 import {useNavigation} from '@react-navigation/native';
@@ -221,14 +225,13 @@ const CreateRequest = () => {
         weight: weights,
         unit: units,
         expirationDates: expirationDates, 
-        creationDate: new Date().toLocaleDateString(),
+        creationDate: getDate(),
         status: 'Pendiente',
         requestID: docsRegistered + 1,
         notificationChecked: false,
       };   
-
+      await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
         if (docsRegistered > 0){
-          await firestore().collection('userData').doc(UID).collection('requestsHistory').add(requestData);
           
           await firestore().collection('Leaderboard').doc(UID).update(
             {
@@ -248,18 +251,18 @@ const CreateRequest = () => {
         }
         else{
           const summaryRef = {
-            Fruit: 0,
-            Vegetable: 0,
-            Grains: 0,
-            Canned: 0,
-            Meat: 0,
-            Dairy: 0,
-            Clothing: 0,
-            Medicine: 0,
-            Hygiene: 0,
-            Others: 0,
+            Fruit: requestSummary.Fruit,
+            Vegetable: requestSummary.Vegetable,
+            Grains: requestSummary.Grains,
+            Canned: requestSummary.Canned,
+            Meat: requestSummary.Meat,
+            Dairy: requestSummary.Dairy,
+            Clothing: requestSummary.Clothing,
+            Medicine: requestSummary.Medicine,
+            Hygiene: requestSummary.Hygiene,
+            Others: requestSummary.Others,
           };
-          await firestore().collection('userData').doc(UID).collection('requestsHistory').doc('summary').set(summaryRef);
+          await firestore().collection('Leaderboard').doc(UID).set(summaryRef);
         }
         triggerAlert('Solicitud creada', 'Tu solicitud ha sido creada con éxito')
     } 

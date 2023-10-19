@@ -20,7 +20,7 @@ const LeaderBoardTable = ({Category}) => {
     const tipoDonacion = ['Fruit', 'Vegetable', 'Meat', 'Grains', 'Dairy', 'Clothing', 'Canned', 'Medicine', 'Hygiene', 'Others'];
 
     const fetchData = async () => {
-        const userDataSnapshot = await firestore().collection('userData').get();
+        const userDataSnapshot = await firestore().collection('userData').where('role', '==' ,'Ally').get();
         const summaryDataSnapshot = await firestore().collection('Leaderboard').orderBy(tipoDonacion[Category], 'desc').get();
     
         const userData = userDataSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -71,7 +71,7 @@ const LeaderBoardTable = ({Category}) => {
                                     <UserIcon mini={true} ID={user.id}/>
                                 </View>
 
-                                <Text style={[DefaultStyles.poppinsRegular, styles.column, {color:'black'}]}>{leaderBoardData.find(doc => doc.id === user.id) ? leaderBoardData.find(doc => doc.id === user.id).nameCorp : 'placeholder' }</Text>
+                                <Text style={[DefaultStyles.poppinsRegular, styles.column, {color:'black'}]}>{leaderBoardData.find(doc => doc.id === user.id) ? leaderBoardData.find(doc => doc.id === user.id).nameCorp : '%ERROR%' }</Text>
                                 <Text style={[DefaultStyles.poppinsRegular, styles.column, {width: '33%', color:'black'}]}>
                                 {
                                     summaryData.find(doc => doc.id === user.id) ? summaryData.find(doc => doc.id === user.id)[tipoDonacion[Category]].toFixed(3) : 0
