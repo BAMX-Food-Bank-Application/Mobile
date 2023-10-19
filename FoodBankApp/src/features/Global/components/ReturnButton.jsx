@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const ReturnButton = () => {
+const ReturnButton = (styled) => {
     const navigation = useNavigation();
     return(
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.arrowbtn}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.arrowbtn, styled ? {marginTop: 32, marginLeft: 32} : null]}>
             <Image
               source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
               style={styles.arrow}
@@ -22,8 +22,6 @@ const styles = StyleSheet.create({
       arrowbtn: {
         width: 24,
         height: 24,
-        marginTop: 32,
-        marginLeft: 32,
       },
   });
 

@@ -21,7 +21,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import firestore from '@react-native-firebase/firestore';
 import ReturnButton from '../../Global/components/ReturnButton';
 
-// Others
+// Utils
+import {getDate} from '../../Global/utils/dataUtils';
+
+// Hooks
 import userFetch from '../../../hooks/userFetch';
 
 const screenWidth = Dimensions.get('window').width;
@@ -102,21 +105,18 @@ const RequestDetails = ({route}) => {
 
     setIsLoading(false);
   };
-
-  const updateRequest = (targetStatus) => {
-    const { docID } = route.params;
+  const cancelRequest = () => {
     const UID = auth.currentUser.uid;
-    const date = new Date();
-    const formatedDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
     try {
       firestore()
         .collection('userData')
         .doc(UID)
         .collection('requestsHistory')
-        .doc(docID)
+        .doc(docData[0].id)
         .update({
-          status: targetStatus,
-          cancellationDate: formatedDate,
+          status: 'Cancelado',
+          cancellationDate: getDate(),
         })
         .then(() => {
           triggerAlert('Cargamento cancelado', 'El cargamento ha sido cancelado', 'Ok');
@@ -137,7 +137,7 @@ const RequestDetails = ({route}) => {
       <LoadingComponent loading={isLoading}/>
       <View style={styles.screen}>
           <View style={DefaultStyles.header}>
-            <ReturnButton/>
+            <ReturnButton styled={false}/>
             <Text style={[DefaultStyles.poppinsTitle, {flex: 4}]}>Cargamento #{String(data.requestID).padStart(5, '0')}</Text>
           </View>
         <View>
@@ -235,7 +235,7 @@ const RequestDetails = ({route}) => {
         {
           data.status === 'Cancelado' || data.status === 'Entregado' 
           ? null
-          : <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => updateRequest('Cancelado')}/>
+          : <Button content={'Cancelar cargamento'} bgColor={Colors.primary} fontColor={Colors.textSecondary} functionality={() => cancelRequest()}/>
         }        
 
       </View>  
