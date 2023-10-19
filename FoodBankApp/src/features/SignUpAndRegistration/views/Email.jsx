@@ -33,7 +33,7 @@ import React, {useState, useEffect} from 'react';
         auth.currentUser.reload().then(() => {
           if (auth.currentUser.emailVerified) {
             clearInterval(interval);
-            navigation.navigate('HomeScreen');
+            auth.signOut();
           }
         }).catch(error => {
           setAlertVisible(true);

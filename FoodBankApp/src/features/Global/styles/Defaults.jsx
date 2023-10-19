@@ -76,7 +76,6 @@ const DefaultStyles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      alignContent: 'center',
       marginBottom: 16,
       columnGap: 16,
     },

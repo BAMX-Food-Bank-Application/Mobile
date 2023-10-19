@@ -70,7 +70,10 @@ const Password = () => {
 
   return (
     <SafeAreaView style={DefaultStyles.flexItem}>
+      <View style={{marginLeft: 32}}>
       <ReturnButton/>
+
+      </View>
       <View style={DefaultStyles.screen}>
 
       <View style={{display: 'flex', padding: 24, alignItems: 'center'}}>

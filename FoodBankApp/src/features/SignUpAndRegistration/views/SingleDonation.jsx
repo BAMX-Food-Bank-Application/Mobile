@@ -73,7 +73,7 @@ export default function SingleDonation() {
         }
     
     return ( 
-        <SafeAreaView style={DefaultStyles.screen}>
+        <SafeAreaView style={[DefaultStyles.screen, {marginHorizontal: 16}]}>
             <ReturnButton/>
             <View style={DefaultStyles.flexColumn}>
                 <Text style={DefaultStyles.poppinsTitle}>¿Cómo donar?</Text>

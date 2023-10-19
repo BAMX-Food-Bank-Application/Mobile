@@ -358,6 +358,7 @@ const CreateRequest = () => {
                 style={[styles.flexItem, styles.input]}
                 editable={false}
                 selectTextOnFocus={false}
+                onPressIn={() => triggerDateVisible()}
               />    
             </TouchableOpacity>
             <Modal animationType='fade' transparent={true} visible={dateVisible}>

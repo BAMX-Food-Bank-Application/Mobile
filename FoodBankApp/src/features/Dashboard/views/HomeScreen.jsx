@@ -84,7 +84,7 @@ const HomeScreen = () => {
   return (
     <>
     {isDrawerOpen && <ProfileDrawer setIsDrawerOpen={setIsDrawerOpen} userData={userDoc} userImage={userImage}/>}
-    <SafeAreaView style={[DefaultStyles.screen]}>
+    <SafeAreaView style={[DefaultStyles.screen, {marginHorizontal: 16}]}>
       {
         userDoc.role === "Ally" ? 
         (

@@ -38,7 +38,6 @@ const Login = () => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [isFocused2, setIsFocused2] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword]= useState (''); 
 
@@ -55,7 +54,6 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    setLoading(true);
     if (!validateEmail(email)){
       alertTrigger('Correo inválido', 'El correo ingresado no es válido')
       return;
@@ -68,12 +66,9 @@ const Login = () => {
     .then(async userCredential => {
       // Check if status is true in firestore
       const user = userCredential.user;
-      const userData = await firestore().collection('userData').doc(user.uid).get();
-      const check1 = userData.data().status;
       const check2 = user.emailVerified;
 
-      if (check1 && check2) navigation.navigate('HomeScreen');
-      else if (!check1) navigation.navigate('Wait');
+      if (check2) navigation.navigate('Confirmation');
       else if (!check2) navigation.navigate('Email');
     })
     .catch(error => {
@@ -100,7 +95,6 @@ const Login = () => {
         alertTrigger('Error', errorMessage)
       }
     });
-    setLoading(false);
   }
 
   return (

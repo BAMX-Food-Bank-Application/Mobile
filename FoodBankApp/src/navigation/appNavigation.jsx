@@ -14,6 +14,7 @@ import Email from '../features/SignUpAndRegistration/views/Email';
 import CreateRequest from '../features/Dashboard/views/CreateRequest';
 import RequestDetails from '../features/Dashboard/views/RequestDetails';
 import ProfileDetails from '../features/Dashboard/views/ProfileDetails';
+import Confirmation from '../features/SignUpAndRegistration/views/Confirmation';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,10 +32,11 @@ export default function AppNavigation() {
       verification?
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="HomeScreen"
+          initialRouteName="Confirmation"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen name="CreateRequest" component={CreateRequest} />
+          <Stack.Screen name='Confirmation' component={Confirmation} />
           <Stack.Screen name = "RequestDetails" component = {RequestDetails}/>
           <Stack.Screen name = "ProfileDetails" component = {ProfileDetails}/>
         </Stack.Navigator>
@@ -45,7 +47,6 @@ export default function AppNavigation() {
           initialRouteName="Email"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Email" component={Email} />
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     :      

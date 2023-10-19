@@ -1,4 +1,7 @@
-import React, {useRef, useState} from 'react';
+// BASE
+import React, {useRef, useState, useEffect} from 'react';
+
+// UI
 import {
   View,
   Text,
@@ -8,23 +11,103 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+// COMPONENTS
+import DefaultAlert from '../../Global/components/DefaultAlert';
+import Button from '../../Global/components/Button';
+
+// STYLES
+import Colors from '../../Global/styles/Colors';
+
+// FIREBASE
+import {auth} from '../../../config/FirebaseConnection';
+
+// OTHERS
 import {useNavigation} from '@react-navigation/native';
-import {getAuth} from 'firebase/auth';
-import app from '../../../config/FirebaseConnection';
+import { MailSlurp } from 'mailslurp-client';
+
+const crossFetch = require('cross-fetch');
+
+const mailslurp = new MailSlurp({
+  fetchApi: crossFetch,
+  apiKey: "d71723d9c0d4e4a393450de93e0c5903caf4fc9eecf73d8c564da060732f6c01",
+});
+
+var isaac = require( 'isaac' );
+var verificationCode;
+
+
 
 const Confirmation = ( {route} ) => {
-  const {email, name, password, phoneNumber} = route.params
-  const auth = getAuth(app);
   const navigation = useNavigation();
   const firstInput = useRef();
   const secondInput = useRef();
   const thirdInput = useRef();
   const fourthInput = useRef();
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: ''});
+  const user_email = auth.currentUser.email;
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+
+  const alertTrigger = (title, message) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setShowAlert(!showAlert);
+  };
+
+  const clearCode = (
+    setInterval(() => {
+      verificationCode = ""
+    }, 60000)
+  )
+
+  clearCode
+
+  const handleOTP = (otp, verificationCode) => {
+    const input_otp = otp[1] + otp[2] + otp[3] + otp[4] 
+    if(input_otp == verificationCode){
+      navigation.navigate("HomeScreen")
+    }
+    else if(verificationCode == ""){
+      alertTrigger('Codigo expirado', 'Por favor intenta de nuevo');
+    }
+    else{
+      alertTrigger('Codigo incorrecto', 'Por favor intenta de nuevo');
+    }
+  }
+
+  const emailSent = async (inbox, options) => {
+    await mailslurp.sendEmail(inbox.id, options);
+    console.log("Sent")
+  }
+
+  const sendCode = async () => {
+      try{
+        console.log("Sending")
+        const random_number = isaac.random( ) * 100000000;        
+        verificationCode = (random_number.toString());
+        verificationCode = verificationCode.substring(0,4);
+        const inbox = await mailslurp.createInbox();
+        const options = {
+          to: [user_email],
+          subject: 'Bienvenid@ a BAMX, ',
+          body: 'Tu código para acceder a la aplicación es: ' + verificationCode,
+        };
+        emailSent(inbox, options); 
+      } catch (error) {
+        alertTrigger('Error en envío', error);
+      }
+  };
+
+  useEffect(() => {
+    sendCode();
+  }, []);
+
 
   return (
     <View style={styles.screen}>
-      <TouchableOpacity onPress={() => navigation.navigate('Registration')} style={styles.arrowbtn}>
+      <TouchableOpacity onPress={() => auth.signOut()} style={styles.arrowbtn}>
         <Image
               source={{uri: 'https://firebasestorage.googleapis.com/v0/b/bamx-cc64f.appspot.com/o/Mobile%2Ficons%2Farrow_left.png?alt=media&token=34784200-c05c-4ea5-a182-97adeead9a9b'}}
               style={styles.arrow}
@@ -38,8 +121,8 @@ const Confirmation = ( {route} ) => {
       />
       <Text style={styles.poppinssemibold}>Verificación OTP</Text>
       <Text style={styles.codeText}>
-        Ingresa el código que se ha enviado a {''}
-        <Text style={styles.phoneNumberText}>{phoneNumber}</Text>
+        Ingresa el código que se ha enviado por email a {''} {''}
+        <Text style={styles.phoneNumberText}>{user_email}</Text>
       </Text>
       <View style={styles.otpContainer}>
         <View style={styles.otpBox}>
@@ -91,19 +174,27 @@ const Confirmation = ( {route} ) => {
           />
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => console.log(otp)}>
-        <Text style={styles.poppinsmedium}>Verificar</Text>
-      </TouchableOpacity>
+        <Button
+                content="Verificar"
+                bgColor={Colors.textSecondary}
+                fontColor={Colors.textPrimary}
+                functionality={() => handleOTP(otp, verificationCode)}
+        />
       <View style={[styles.flexRow]}>
           <Text style={[styles.flex]}>¿No recibiste un mensaje? </Text>
           <TouchableOpacity
             style={[styles.flex]}
-            onPress={() => navigation.navigate('Login')}>
+            onPress={() => sendCode()}>
             <Text style={[styles.linkedText]}>Reenviar</Text>
           </TouchableOpacity>
         </View>
+        <DefaultAlert
+          alertTitle={alertTitle}
+          alertContent={alertMessage}
+          btnContent={'Aceptar'}
+          modalVisible={showAlert}
+          onHide={() => setShowAlert(false)}
+        />
     </View>
   );
 };

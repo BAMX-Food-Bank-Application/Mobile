@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   icon: {
     alignItems: 'center',
     padding: 16,
-    marginTop: '5%',
+    marginTop: '15%',
   },
   image: {
     width: 40,
